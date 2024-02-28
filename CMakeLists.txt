@@ -51,6 +51,8 @@ set(SRC_FILES
     ${SRC_DIR}/Giraffe.cpp
     ${SRC_DIR}/GiraffeText.cpp
     ${SRC_DIR}/Cat.cpp
+    ${SRC_DIR}/Stone.cpp
+    ${SRC_DIR}/Enchant.cpp
 )
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
 set(INCLUDE_FILES
@@ -88,12 +90,15 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/GiraffeText.hpp
     ${INCLUDE_DIR}/Cat.hpp
     ${INCLUDE_DIR}/config.hpp
+    ${INCLUDE_DIR}/AnimatedCharacter.hpp
+    ${INCLUDE_DIR}/Enchant.hpp
 )
 set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 set(TEST_FILES
     ${TEST_DIR}/SimpleTest.cpp
     ${TEST_DIR}/NotSimpleTest.cpp
     ${TEST_DIR}/TransformTest.cpp
+        src/stone.cpp
 )
 
 add_executable(Sample

@@ -17,7 +17,7 @@ public:
     void Start();
 
     void Update();
-
+    void Update(Util::Transform follows);
 private:
     std::string m_Font;
     int m_Size;

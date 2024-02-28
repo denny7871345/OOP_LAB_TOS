@@ -8,9 +8,10 @@
 #include "config.hpp"
 
 void Giraffe::Start() {
+
     m_GiraffeText =
         std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 50);
-    m_GiraffeText->SetZIndex(this->GetZIndex() - 1);
+    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
     m_GiraffeText->Start();
     this->AddChild(m_GiraffeText);
 }
@@ -43,5 +44,6 @@ void Giraffe::Update() {
     pos += deltaTransform.translation;
     rotation += deltaTransform.rotation;
     scale = deltaTransform.scale;
-    m_GiraffeText->Update();
+    this->Draw();
+    m_GiraffeText->Update(m_Transform);
 }

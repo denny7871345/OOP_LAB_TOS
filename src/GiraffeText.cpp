@@ -2,15 +2,24 @@
 
 #include "Util/Color.hpp"
 #include "Util/Time.hpp"
-
+#include "Util/Transform.hpp"
 void GiraffeText::Start() {
-    m_Text = std::make_unique<Util::Text>(m_Font, m_Size, "0",
-                                          Util::Color::FromRGB(255, 255, 255));
+
+    m_Text = std::make_unique<Util::Text>(m_Font, m_Size, "TEST",
+                                          Util::Color::FromRGB(255, 0, 0));
     SetDrawable(m_Text);
 }
 
 void GiraffeText::Update() {
-    m_Text->SetText(fmt::format("{:.02f}", 1.0F / Util::Time::GetDeltaTime()));
+    //m_Text->SetText(fmt::format("{:.02f}", 1.0F / Util::Time::GetDeltaTime()));
 
     m_Text->SetColor(Util::Color::FromName(Util::Colors::RED));
+    this->Draw();
+}
+
+void GiraffeText::Update(Util::Transform follows) {
+    //m_Text->SetText(fmt::format("{:.02f}", 1.0F / Util::Time::GetDeltaTime()));
+    m_Transform = follows;
+    m_Text->SetColor(Util::Color::FromName(Util::Colors::BLUE));
+    this->Draw();
 }

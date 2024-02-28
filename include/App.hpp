@@ -4,11 +4,12 @@
 #include "pch.hpp" // IWYU pragma: export
 
 #include "Util/Root.hpp"
-
+#include "BackgroundImage.hpp"
+#include "AnimatedCharacter.hpp"
 #include "Cat.hpp"
 #include "Giraffe.hpp"
 #include "GiraffeText.hpp"
-
+#include "Enchant.hpp"
 class App {
 public:
     enum class State {
@@ -25,12 +26,11 @@ public:
 
 private:
     State m_CurrentState = State::START;
-
+    std::shared_ptr<Enchant> m_enchant = std::make_shared<Enchant>();
     std::shared_ptr<Giraffe> m_Giraffe = std::make_shared<Giraffe>();
     //    std::shared_ptr<GiraffeText> m_GiraffeText =
     //    std::make_shared<GiraffeText>();
-
-    std::shared_ptr<Cat> m_Cat = std::make_shared<Cat>();
+    std::shared_ptr<BackgroundImage> m_BG = std::make_shared<BackgroundImage>();
     Util::Root m_Root;
 };
 

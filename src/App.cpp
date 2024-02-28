@@ -9,60 +9,46 @@
 
 void App::Start() {
     LOG_TRACE("Start");
-
+    m_enchant->Start();
     m_Giraffe->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
-    m_Giraffe->SetZIndex(5);
+    m_Giraffe->SetZIndex(10);
     m_Giraffe->Start();
 
-    m_Root.AddChild(m_Giraffe);
-    m_Root.AddChild(m_Cat);
-
+    m_BG->SetZIndex(-50);
+    m_Root.AddChild(m_BG);
+    //m_Root.AddChild(m_stone);
     m_CurrentState = State::UPDATE;
 }
 
 void App::Update() {
-    if (Util::Input::IsKeyPressed(Util::Keycode::MOUSE_LB)) {
-        LOG_DEBUG("Left button pressed");
-    }
     if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB)) {
-        LOG_DEBUG("Right button down");
+        auto cursorPos = Util::Input::GetCursorPosition();
+        LOG_DEBUG("Mouse clicking! x:{}, y{}", cursorPos.x, cursorPos.y);
     }
-    if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_RB)) {
+    /*if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_RB)) {
         LOG_DEBUG("Right button up");
-    }
-    if (Util::Input::IfScroll()) {
+    }*/
+    /*if (Util::Input::IfScroll()) {
         auto delta = Util::Input::GetScrollDistance();
         LOG_DEBUG("Scrolling: x: {}, y: {}", delta.x, delta.y);
-    }
-    if (Util::Input::IsMouseMoving()) {
+    }*/
+    /*if (Util::Input::IsMouseMoving()) {
         //LOG_DEBUG("Mouse moving! x:{}, y{}", cursorPos.x, cursorPos.y);
-    }
+    }*/
 
     if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) ||
         Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
 
-    if (Util::Input::IsKeyDown(Util::Keycode::A)) {
-        LOG_DEBUG("A Down");
-    }
-    if (Util::Input::IsKeyUp(Util::Keycode::A)) {
-        auto cursorPos = Util::Input::GetCursorPosition();
-        std::shared_ptr<Cat> NewCat = std::make_shared<Cat>(cursorPos.x,cursorPos.y);
-        m_Root.AddChild(NewCat);
-        LOG_DEBUG("A Up");
-    }
-    if (Util::Input::IsKeyPressed(Util::Keycode::B)) {
+    /*if (Util::Input::IsKeyPressed(Util::Keycode::B)) {
         LOG_DEBUG("B Pressed. Setting the cursor to (0, 0).");
         Util::Input::SetCursorPosition({0.0F, 0.0F});
         LOG_DEBUG("Cursor set to {}.", glm::to_string(Util::Input::GetCursorPosition()));
-
-    }
-
+    }*/
     m_Giraffe->Update();
-    m_Cat->Update();
-
+    m_enchant->Update();
     m_Root.Update();
 }
 
