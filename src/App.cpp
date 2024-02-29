@@ -10,10 +10,10 @@
 void App::Start() {
     LOG_TRACE("Start");
     m_enchant->Start();
-    m_Giraffe->SetDrawable(
+    /*m_Giraffe->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
     m_Giraffe->SetZIndex(10);
-    m_Giraffe->Start();
+    m_Giraffe->Start();*/
 
     m_BG->SetZIndex(-50);
     m_Root.AddChild(m_BG);
@@ -24,7 +24,7 @@ void App::Start() {
 void App::Update() {
     if (Util::Input::IsKeyDown(Util::Keycode::MOUSE_RB)) {
         auto cursorPos = Util::Input::GetCursorPosition();
-        LOG_DEBUG("Mouse clicking! x:{}, y{}", cursorPos.x, cursorPos.y);
+        LOG_DEBUG("Mouse clicking! x:{}, y{}", (cursorPos.x + 225 ) / 75, (cursorPos.y + 350) / 78);
     }
     /*if (Util::Input::IsKeyUp(Util::Keycode::MOUSE_RB)) {
         LOG_DEBUG("Right button up");
@@ -47,7 +47,7 @@ void App::Update() {
         Util::Input::SetCursorPosition({0.0F, 0.0F});
         LOG_DEBUG("Cursor set to {}.", glm::to_string(Util::Input::GetCursorPosition()));
     }*/
-    m_Giraffe->Update();
+   // m_Giraffe->Update();
     m_enchant->Update();
     m_Root.Update();
 }

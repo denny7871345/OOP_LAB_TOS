@@ -92,6 +92,7 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/config.hpp
     ${INCLUDE_DIR}/AnimatedCharacter.hpp
     ${INCLUDE_DIR}/Enchant.hpp
+    ${INCLUDE_DIR}/Type.hpp
 )
 set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)
 set(TEST_FILES

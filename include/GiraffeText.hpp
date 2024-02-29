@@ -15,9 +15,10 @@ public:
     ~GiraffeText() override = default;
 
     void Start();
-
+    void SetText(const std::string text);
     void Update();
     void Update(Util::Transform follows);
+    void SetColor(Util::Colors colors);
 private:
     std::string m_Font;
     int m_Size;
