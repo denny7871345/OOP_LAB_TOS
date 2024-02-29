@@ -26,33 +26,25 @@ void Enchant::Update() {
     switch (m_state) {
     case state::Keeping:
         if (Util::Input::IsKeyDown(Util::Keycode::E)){
-            for (int i = 0; i < row; ++i) {
-                for (int j = 0; j < column; ++j) {
-                    if(m_Array[i][j]->IsBeClicked()){
-                        m_Array[i][j]->SetDragging(true);
-                        m_StartPos = glm::vec2(i,j);
-                        m_NowPos = m_StartPos;
-                        LOG_DEBUG("you got the {} row,{} column Stone",i+1,j+1);
-                        m_state = state::Dragging;
-                    }
-                }
-            }
+            auto cursorPos = Util::Input::GetCursorPosition();
+            int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
+            m_Array[i][j]->SetDragging(true);
+            m_StartPos = glm::vec2(i,j);
+            m_NowPos = m_StartPos;
+            LOG_DEBUG("you got the {} row,{} column Stone",i+1,j+1);
+            m_state = state::Dragging;
         }
         break;
     case state::Dragging:
         if (Util::Input::IsMouseMoving()){
-            for (int i = 0; i < row; ++i) {
-                for (int j = 0; j < column; ++j) {
-                    if(m_Array[i][j]->IsBeClicked()){
-                        if(!(m_StartPos == glm::vec2(i,j))){
-                            LOG_DEBUG("Let's Moving to [{},{}] from [{},{}]",i+1,j+1,m_NowPos.x+1,m_NowPos.y+1);
-                            Change(m_StartPos,glm::vec2 (i,j));
-                            m_NowPos = glm::vec2 (i,j);
-                            m_state = state::Moving;
-                            break;
-                        }
-                    }
-                }
+            auto cursorPos = Util::Input::GetCursorPosition();
+            int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
+            if(!(m_StartPos == glm::vec2(i,j))){
+                LOG_DEBUG("Let's Moving to [{},{}] from [{},{}]",i+1,j+1,m_NowPos.x+1,m_NowPos.y+1);
+                Change(m_StartPos,glm::vec2 (i,j));
+                m_NowPos = glm::vec2 (i,j);
+                m_state = state::Moving;
+                break;
             }
         }
         if (Util::Input::IsKeyUp(Util::Keycode::E)){
@@ -64,17 +56,14 @@ void Enchant::Update() {
     case state::Moving:
 
         if (Util::Input::IsMouseMoving()){
-            for (int i = 0; i < row; ++i) {
-                for (int j = 0; j < column; ++j) {
-                    if (m_Array[i][j]->IsBeClicked()) {
-                        if (!(m_NowPos == glm::vec2(i, j))) {
-                            Change(m_NowPos, glm::vec2(i, j));
-                            m_NowPos = glm::vec2(i, j);
-                            LOG_DEBUG("You are now at [{},{}]", int(m_NowPos.x) + 1, int(m_NowPos.y) + 1);
-                            break;
-                        }
-                    }
-                }
+            auto cursorPos = Util::Input::GetCursorPosition();
+            int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
+            if (!(m_NowPos == glm::vec2(i, j))) {
+                Change(m_NowPos, glm::vec2(i, j));
+                m_NowPos = glm::vec2(i, j);
+                LOG_DEBUG("You are now at [{},{}]", int(m_NowPos.x) + 1,
+                          int(m_NowPos.y) + 1);
+                break;
             }
         }
         if (Util::Input::IsKeyUp(Util::Keycode::E)){
