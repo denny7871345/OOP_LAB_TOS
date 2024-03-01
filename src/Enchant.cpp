@@ -28,6 +28,7 @@ void Enchant::Update() {
         if (Util::Input::IsKeyDown(Util::Keycode::E)){
             auto cursorPos = Util::Input::GetCursorPosition();
             int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
+            if(i>5) i=5; if(i<0) i=0; if(j>4)j=4;if(j<0)j=0;
             m_Array[i][j]->SetDragging(true);
             m_StartPos = glm::vec2(i,j);
             m_NowPos = m_StartPos;
@@ -39,6 +40,7 @@ void Enchant::Update() {
         if (Util::Input::IsMouseMoving()){
             auto cursorPos = Util::Input::GetCursorPosition();
             int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
+            if(i>5) i=5; if(i<0) i=0; if(j>4)j=4;if(j<0)j=0;
             if(!(m_StartPos == glm::vec2(i,j))){
                 LOG_DEBUG("Let's Moving to [{},{}] from [{},{}]",i+1,j+1,m_NowPos.x+1,m_NowPos.y+1);
                 Change(m_StartPos,glm::vec2 (i,j));
@@ -58,6 +60,7 @@ void Enchant::Update() {
         if (Util::Input::IsMouseMoving()){
             auto cursorPos = Util::Input::GetCursorPosition();
             int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
+            if(i>5) i=5; if(i<0) i=0; if(j>4)j=4;if(j<0)j=0;
             if (!(m_NowPos == glm::vec2(i, j))) {
                 Change(m_NowPos, glm::vec2(i, j));
                 m_NowPos = glm::vec2(i, j);
