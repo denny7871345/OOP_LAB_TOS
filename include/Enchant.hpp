@@ -3,7 +3,7 @@
 
 #include "Stone.hpp"
 #include "Util/GameObject.hpp"
-class Enchant:public Util::GameObject{
+class Enchant : public Util::GameObject{
 public:
     enum class state{
         Falling,
@@ -15,6 +15,7 @@ public:
     void Update();
     void Start();
     void Change(glm::vec2 pos1,glm::vec2 pos2);
+    Enchant() : Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/Giraffe.png"), 1){};
 
 
 private:
@@ -23,7 +24,15 @@ private:
     glm::vec2 m_StartPos;
     glm::vec2 m_NowPos;
     glm::vec2 m_EndPos;
+
+    /*method*/
+    void KeepingStateUpdate();
+    void DraggingStateUpdate();
+    void MovingStateUpdate();
+    void CheckingStateUpdate();
+    void FallingStateUpdate();
 };
+
 
 
 #endif

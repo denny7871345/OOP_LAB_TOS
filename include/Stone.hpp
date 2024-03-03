@@ -18,7 +18,7 @@ public:
         Keeping,
         Dragging
     };
-    Stone():Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/gray.png"), 5){
+    Stone() : Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/Gray.png"), 5){
 
     }
     void Update();
