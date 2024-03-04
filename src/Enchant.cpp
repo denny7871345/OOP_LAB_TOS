@@ -84,16 +84,18 @@ void Enchant::Update() {
                 if(m_Array[i][j] != nullptr)m_Array[i][j]->SetDragging(false);
             }
         }
-        LOG_DEBUG("Checking");
+
         while(CheckMatch()){
-            LOG_DEBUG("Keep Checking");
+
         }
         LOG_DEBUG("you are Dragging Start in the {} row,{} column",m_StartPos.x,m_StartPos.y);
         LOG_DEBUG("you are Dragging End in the {} row,{} column",m_EndPos.x,m_EndPos.y);
         m_state = state::Falling;
         break;
     case state::Falling:
+        ShowEnchant();
         DoFall();
+        ShowEnchant();
         m_state = state::Keeping;
         break;
     }
@@ -109,7 +111,7 @@ void Enchant::Change(glm::vec2 pos1,glm::vec2 pos2){
 bool Enchant::CheckMatch() {
     for(int i=0;i<6;++i){
         for(int j=0;j<5;j++){
-            LOG_DEBUG("Checking [{},{}]",i+1,j+1);
+            //LOG_DEBUG("Checking [{},{}]",i+1,j+1);
             if(m_Array[i][j] != nullptr){
                 std::vector<std::shared_ptr<Stone>> breakList;
                 breakList.push_back(m_Array[i][j]);
@@ -126,12 +128,12 @@ bool Enchant::CheckMatch() {
                 }
                 if(breakList.size() >= 3){
                     for(int k=0;k<breakList.size();k++){
-                        LOG_DEBUG("[{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
+                        LOG_DEBUG("erase [{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
                         m_Array[i][j+k].reset();
                     }
                     return true;
                 }else{
-                    LOG_DEBUG("breakList has {} blocks",breakList.size());
+                    //LOG_DEBUG("breakList has {} blocks",breakList.size());
                 }
             }
         }
@@ -147,16 +149,27 @@ void Enchant::DoFall() {
                     if (m_Array[i][j - 1] == nullptr) {
                         m_Array[i][j - 1] = m_Array[i][j];
                         m_Array[i][j - 1]->SetPos(i, j - 1);
+                        m_Array[i][j-1]->SetFalling();
+                        m_Array[i][j].reset();
                     }
                 }
             }
         }
     }
-    for(int i=0;i<6;++i) {
-        for (int j = 0; j < 5; j++) {
-            if (m_Array[i][j] != nullptr) {
-                m_Array[i][j]->SetFalling();
+
+}
+
+void Enchant::ShowEnchant() {
+    for(int i=0;i<5;++i) {
+        std::string lists = "";
+        for (int j = 0; j < 6; j++) {
+            if(m_Array[j][4-i] != nullptr){
+                lists += "V";
+            }else{
+                lists += "X";
             }
         }
+        LOG_DEBUG("{}",lists);
     }
+    LOG_DEBUG("-----------");
 }

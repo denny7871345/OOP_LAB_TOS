@@ -16,6 +16,7 @@ public:
     void Start();
     void Change(glm::vec2 pos1,glm::vec2 pos2);
     bool CheckMatch();
+    void ShowEnchant();
     void DoFall();
     bool CheckFall();
 private:
