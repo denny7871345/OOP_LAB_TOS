@@ -88,15 +88,21 @@ void Enchant::Update() {
         while(CheckMatch()){
 
         }
-        LOG_DEBUG("you are Dragging Start in the {} row,{} column",m_StartPos.x,m_StartPos.y);
-        LOG_DEBUG("you are Dragging End in the {} row,{} column",m_EndPos.x,m_EndPos.y);
-        m_state = state::Falling;
+
+        if(CheckFull()){
+            m_state = state::Keeping;
+        }else{
+            m_state = state::Falling;
+        }
+
         break;
     case state::Falling:
         ShowEnchant();
         DoFall();
         ShowEnchant();
-        m_state = state::Keeping;
+        GenerateFall();
+        ShowEnchant();
+        if(CheckFall())m_state = state::Checking;
         break;
     }
 }
@@ -156,6 +162,11 @@ void Enchant::DoFall() {
             }
         }
     }
+    for(int i=0;i<6;++i) {
+        for (int j = 0; j < 5; j++) {
+
+        }
+    }
 
 }
 
@@ -172,4 +183,38 @@ void Enchant::ShowEnchant() {
         LOG_DEBUG("{}",lists);
     }
     LOG_DEBUG("-----------");
+}
+
+void Enchant::GenerateFall() {
+    for(int i=0;i<6;i++){
+        for(int j=0;j<5;j++){
+            if(m_Array[i][j] == nullptr){
+                m_Array[i][j] = std::make_shared<Stone>(); // 使用 make_shared 創建共享指標
+                m_Array[i][j]->Generate(i,j);
+            }
+        }
+    }
+
+}
+
+bool Enchant::CheckFall() {
+    for(int i=0;i<6;i++) {
+        for (int j = 0; j < 5; j++) {
+            if(m_Array[i][j]->GetState() != Stone::state::Keeping){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool Enchant::CheckFull(){
+    for(int i=0;i<6;i++){
+        for(int j=0;j<5;j++){
+            if(m_Array[i][j] == nullptr){
+                return false;
+            }
+        }
+    }
+    return true;
 }

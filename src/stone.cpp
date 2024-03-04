@@ -15,6 +15,19 @@ void Stone::Start(int row,int column){
     m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
     m_row = row;
     m_column = column;
+    m_state = state::Keeping;
+}
+
+void Stone::Generate(int row,int column) {
+    m_type.Start();
+    m_GiraffeText =
+        std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 100);
+    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
+    m_GiraffeText->Start();
+    m_GiraffeText->SetColor(m_type.TypeColor());
+    m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
+    m_row = row;
+    m_column = column;
     m_Transform.translation = glm::vec2{-225 + (75 * m_row + 37.5), 37.5 + 78 * m_column };
     m_state = state::Falling;
 }
@@ -53,14 +66,7 @@ void Stone::Update() {
 }
 
 
-bool Stone::IsBeClicked() {
-    auto mouse = Util::Input::GetCursorPosition();
-    if(std::abs(mouse.x - m_Transform.translation.x) < 70/2 && std::abs(mouse.y - m_Transform.translation.y) < 70/2 ){
-        return true;
-    }else{
-        return false;
-    }
-}
+
 
 void Stone::SetDragging(bool drag) {
     if(drag){

@@ -19,6 +19,8 @@ public:
     void ShowEnchant();
     void DoFall();
     bool CheckFall();
+    void GenerateFall();
+    bool CheckFull();
 private:
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
     state m_state=state::Falling;

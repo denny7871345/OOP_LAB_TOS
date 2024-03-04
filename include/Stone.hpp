@@ -24,8 +24,10 @@ public:
     void Update();
 
     void Start(int row,int column);
-    bool IsBeClicked();
 
+    state GetState(){
+        return m_state;
+    }
     void SetDragging(bool drag);
     void Change(const std::shared_ptr<Stone>& target){
         int tempRow = m_row , tempColumn = m_column;
@@ -39,6 +41,7 @@ public:
     void SetPos(int row,int column);
     Type::Element_type GetType();
     void SetFalling();
+    void Generate(int row,int column);
 private:
     state m_state;
     int m_row;
