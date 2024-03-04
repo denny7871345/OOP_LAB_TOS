@@ -37,7 +37,8 @@ public:
     [[nodiscard]] int GetColumn() const { return m_column;  }
 
     void SetPos(int row,int column);
-
+    Type::Element_type GetType();
+    void SetFalling();
 private:
     state m_state;
     int m_row;

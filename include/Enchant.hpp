@@ -15,8 +15,9 @@ public:
     void Update();
     void Start();
     void Change(glm::vec2 pos1,glm::vec2 pos2);
-
-
+    bool CheckMatch();
+    void DoFall();
+    bool CheckFall();
 private:
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
     state m_state=state::Falling;

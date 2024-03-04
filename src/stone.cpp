@@ -74,3 +74,11 @@ void Stone::SetPos(int row, int column) {
     m_row = row;
     m_column = column;
 }
+
+Type::Element_type Stone::GetType(){
+    return m_type.GetType();
+}
+
+void Stone::SetFalling() {
+    m_state = state::Falling;
+}

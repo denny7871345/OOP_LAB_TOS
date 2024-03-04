@@ -72,6 +72,9 @@ public:
             return Util::Colors::GRAY;
         }
     }
+    Element_type GetType(){
+        return m_type;
+    }
 private:
     Element_type m_type;
 };
