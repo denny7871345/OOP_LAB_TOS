@@ -12,6 +12,7 @@ public:
         Dragging,
         Moving
     };
+    int CountEmpty();
     void Update();
     void Start();
     void Change(glm::vec2 pos1,glm::vec2 pos2);
@@ -36,8 +37,8 @@ private:
     glm::vec2 m_NowPos;
     glm::vec2 m_EndPos;
     std::vector<int> m_TypeGeneration;
-
-
+    std::vector<int> m_mustFallbyNormal;
+    std::vector<int> m_mustFallbyPowerup;
     /*method*/
     void KeepingStateUpdate();
     void DraggingStateUpdate();

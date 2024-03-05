@@ -2,19 +2,25 @@
 #include "Util/input.hpp"
 #include "Util/SFX.hpp"
 #include <cmath>
+#include <utility>
 void Enchant::Start() {
+    m_TypeGeneration = {20,20,20,20,20,20};
+    m_mustFallbyNormal = {0,0,0,0,0,0};
+    m_mustFallbyPowerup = {0,0,0,0,0,0};
     m_row = 6 , m_column = 5;
     m_Array.resize(m_row);
     for (int i = 0; i < m_row; ++i) {
         m_Array[i].resize(m_column);
         for (int j = 0; j < m_column; ++j) {
             m_Array[i][j] = std::make_shared<Stone>(); // 使用 make_shared 創建共享指標
-            m_Array[i][j]->Start(i,j);
+            m_Array[i][j]->Start(i,j,m_TypeGeneration);
         }
     }
     m_state = state::Keeping;
     this->Draw();
 }
+
+
 
 void Enchant::Update() {
 
@@ -70,8 +76,11 @@ bool Enchant::CheckMatch() {
                     }
                 }
                 if(breakList.size() >= 3){
+                    if(breakList.size() >= 5){
+                        m_mustFallbyPowerup[Type::FindIndex(m_Array[i][j]->GetType())]++;
+                    }
                     for(int k=0;k<breakList.size();k++){
-                        LOG_DEBUG("erase [{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
+                       // LOG_DEBUG("erase [{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
                         m_Array[i][j+k].reset();
                     }
                     return true;
@@ -131,11 +140,6 @@ void Enchant::DoFall() {
             }
         }
     }
-    for(int i=0;i<m_row;++i) {
-        for (int j = 0; j < m_column; j++) {
-
-        }
-    }
 }
 
 void Enchant::ShowEnchant() {
@@ -154,17 +158,47 @@ void Enchant::ShowEnchant() {
 }
 
 void Enchant::GenerateFall() {
+    int checking = 0;
+    std::vector<std::shared_ptr<Stone>> emptyList;
+    std::default_random_engine rng(std::random_device{}());
+
     for(int i=0;i<m_row;i++){
         for(int j=0;j<m_column;j++){
             if(m_Array[i][j] == nullptr){
-                m_Array[i][j] = std::make_shared<Stone>(); // 使用 make_shared 創建共享指標
-                m_Array[i][j]->Generate(i,j);
+                m_Array[i][j] = std::make_shared<Stone>();
+                m_Array[i][j]->Generate(i,j,m_TypeGeneration);
+                emptyList.push_back(m_Array[i][j]);
             }
         }
     }
-
+    std::shuffle(emptyList.begin(), emptyList.end(), rng);
+    int count=0;
+    while(checking < 6 && count < emptyList.size()){
+        if(m_mustFallbyNormal[checking] > 0){
+            emptyList[count]->TurnType(Type::TypeList(checking), false);
+            m_mustFallbyNormal[checking] --;
+            count ++;
+            LOG_DEBUG("still need to fall at least [{},{},{},{},{},{}]", m_mustFallbyNormal[0],m_mustFallbyNormal[1],m_mustFallbyNormal[2],m_mustFallbyNormal[3],m_mustFallbyNormal[4],m_mustFallbyNormal[5] );
+        }else if(m_mustFallbyPowerup[checking] > 0){
+            m_mustFallbyPowerup[checking]--;
+            emptyList[count]->TurnType(Type::TypeList(checking), true);
+            count ++;
+        }else{
+            checking++;
+        }
+    }
 }
-
+int Enchant::CountEmpty() {
+    int count=0;
+    for(int i=0;i<m_row;i++){
+        for(int j=0;j<m_column;j++){
+            if(m_Array[i][j] == nullptr){
+                count++;
+            }
+        }
+    }
+    return count;
+}
 bool Enchant::CheckFall() {
     for(int i=0;i<m_row;i++) {
         for (int j = 0; j < m_column; j++) {
@@ -199,7 +233,7 @@ void Enchant::KeepingStateUpdate() {
         m_Array[i][j]->SetDragging(true);
         m_StartPos = glm::vec2(i, j);
         m_NowPos = m_StartPos;
-        LOG_DEBUG("you got the {} row, {} column Stone", i + 1, j + 1);
+        //LOG_DEBUG("you got the {} row, {} column Stone", i + 1, j + 1);
         m_state = state::Dragging;
     }
 }
@@ -210,7 +244,7 @@ void Enchant::DraggingStateUpdate() {
         int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
         int j = std::clamp(static_cast<int>(std::floor((cursorPos.y + 350) / 78)), 0, 4);
         if (!(m_StartPos == glm::vec2(i, j))) {
-            LOG_DEBUG("Let's Moving to [{}, {}] from [{}, {}]", i + 1, j + 1, static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
+           // LOG_DEBUG("Let's Moving to [{}, {}] from [{}, {}]", i + 1, j + 1, static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
             Change(m_StartPos, glm::vec2(i, j));
             m_NowPos = glm::vec2(i, j);
             m_state = state::Moving;
@@ -220,7 +254,7 @@ void Enchant::DraggingStateUpdate() {
     if (Util::Input::IsKeyUp(Util::Keycode::E)) {
         m_Array[static_cast<int>(m_StartPos.x)][static_cast<int>(m_StartPos.y)]->SetDragging(false);
         m_state = state::Keeping;
-        LOG_DEBUG("you put the {} row, {} column Stone", static_cast<int>(m_StartPos.x) + 1, static_cast<int>(m_StartPos.y) + 1);
+       // LOG_DEBUG("you put the {} row, {} column Stone", static_cast<int>(m_StartPos.x) + 1, static_cast<int>(m_StartPos.y) + 1);
     }
 }
 
@@ -232,7 +266,7 @@ void Enchant::MovingStateUpdate() {
         if (!(m_NowPos == glm::vec2(i, j))) {
             Change(m_NowPos, glm::vec2(i, j));
             m_NowPos = glm::vec2(i, j);
-            LOG_DEBUG("You are now at [{}, {}]", static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
+           // LOG_DEBUG("You are now at [{}, {}]", static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
             return;
         }
     }
@@ -259,11 +293,12 @@ void Enchant::CheckingStateUpdate() {
     }
 }
 void Enchant::FallingStateUpdate() {
-    ShowEnchant();
     DoFall();
-    ShowEnchant();
     GenerateFall();
-    ShowEnchant();
-    if(CheckFall())m_state = state::Checking;
+    if(CheckFall()){
+        if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
+            m_state = state::Checking;
+        }
+    }
 }
 

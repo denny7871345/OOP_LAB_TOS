@@ -23,15 +23,42 @@ void Enchant::StoneTurn(Type::Element_type LValue, Type::Element_type RValue, in
             }
         }
         for(int i=0;i<howmany;i++){
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            // 分布器
-            std::uniform_int_distribution<> dis(0, int(lists.size()));
-            int randomIndex = dis(gen);
-            lists[randomIndex]->TurnType(RValue,powerup);
+            std::default_random_engine rng(std::random_device{}());
+            std::shuffle(lists.begin(),lists.end(),rng);
+            lists[i]->TurnType(RValue,powerup);
         }
     }
 }
+
+void Stone::Start(int row,int column,std::vector<int> TypeGeneration){
+    m_type.RandomTypeGenerator(std::move(TypeGeneration));
+    m_GiraffeText =
+        std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 100);
+    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
+    m_GiraffeText->Start();
+    m_GiraffeText->SetColor(m_type.TypeColor());
+    m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
+    m_row = row;
+    m_column = column;
+    m_state = state::Keeping;
+}
+
+void Stone::Generate(int row,int column,std::vector<int> TypeGeneration) {
+    m_row = row;
+    m_column = column;
+    LOG_DEBUG("({},{})",m_row+1,m_column+1);
+    m_type.RandomTypeGenerator(std::move(TypeGeneration));
+    m_GiraffeText =
+        std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 100);
+    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
+    m_GiraffeText->Start();
+    m_GiraffeText->SetColor(m_type.TypeColor());
+    m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
+
+    m_Transform.translation = glm::vec2{-225 + (75 * m_row + 37.5), 37.5 + 78 * m_column };
+    m_state = state::Falling;
+}
+
 
 void Stone::TurnType(Type::Element_type target, bool powerup) {
     m_type.SetType(target,powerup) ;
