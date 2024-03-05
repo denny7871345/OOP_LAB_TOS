@@ -18,14 +18,16 @@ public:
         Keeping,
         Dragging
     };
-    Stone():Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/gray.png"), 5){
+    Stone() : Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/Gray.png"), 5){
 
     }
     void Update();
 
     void Start(int row,int column);
-    bool IsBeClicked();
 
+    state GetState(){
+        return m_state;
+    }
     void SetDragging(bool drag);
     void Change(const std::shared_ptr<Stone>& target){
         int tempRow = m_row , tempColumn = m_column;
@@ -37,7 +39,10 @@ public:
     [[nodiscard]] int GetColumn() const { return m_column;  }
 
     void SetPos(int row,int column);
-
+    Type::Element_type GetType();
+    void SetFalling();
+    void Generate(int row,int column);
+    void TurnType(Type::Element_type target, bool powerup);
 private:
     state m_state;
     int m_row;
