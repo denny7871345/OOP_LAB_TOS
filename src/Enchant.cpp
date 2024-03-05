@@ -39,7 +39,7 @@ void Enchant::Update() {
         CheckingStateUpdate();
         break;
     case state::Falling:
-        KeepingStateUpdate();
+        FallingStateUpdate();
         break;
     }
 }
@@ -136,7 +136,6 @@ void Enchant::DoFall() {
 
         }
     }
-
 }
 
 void Enchant::ShowEnchant() {
@@ -190,7 +189,9 @@ bool Enchant::CheckFull(){
 
 /*method*/
 void Enchant::KeepingStateUpdate() {
-    const int row = 6, column = 5;
+    if (Util::Input::IsKeyDown(Util::Keycode::R)) {
+        StoneTurn(Type::Element_type::Fire,Type::Element_type::Water,0,true);
+    }
     if (Util::Input::IsKeyDown(Util::Keycode::E)) {
         auto cursorPos = Util::Input::GetCursorPosition();
         int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
@@ -248,11 +249,21 @@ void Enchant::CheckingStateUpdate() {
             m_Array[i][j]->SetDragging(false);
         }
     }
-    LOG_DEBUG("you are Dragging Start in the {} row, {} column", static_cast<int>(m_StartPos.x), static_cast<int>(m_StartPos.y));
-    LOG_DEBUG("you are Dragging End in the {} row, {} column", static_cast<int>(m_EndPos.x), static_cast<int>(m_EndPos.y));
-    m_state = state::Falling;
+    while(CheckMatch()){
+
+    }
+    if(CheckFull()){
+        m_state = state::Keeping;
+    }else{
+        m_state = state::Falling;
+    }
 }
 void Enchant::FallingStateUpdate() {
-    m_state = state::Keeping;
+    ShowEnchant();
+    DoFall();
+    ShowEnchant();
+    GenerateFall();
+    ShowEnchant();
+    if(CheckFall())m_state = state::Checking;
 }
 
