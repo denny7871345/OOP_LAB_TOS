@@ -42,6 +42,7 @@ public:
     Type::Element_type GetType();
     void SetFalling();
     void Generate(int row,int column);
+    void TurnType(Type::Element_type target, bool powerup);
 private:
     state m_state;
     int m_row;

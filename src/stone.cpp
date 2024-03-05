@@ -1,9 +1,8 @@
 #include "stone.hpp"
 #include "Util/Time.hpp"
 #include "Util/Transform.hpp"
-#include <cstdlib>
 #include "Util/Input.hpp"
-#include "config.hpp"
+
 
 void Stone::Start(int row,int column){
     m_type.Start();
@@ -38,11 +37,10 @@ void Stone::Update() {
     switch(m_state){
         case state::Falling:
             if(pos.y > -350 + 78 * m_column + 37.5){
-                dir.y -= 0.01;
+                dir.y -= 0.05;
                 break;
             }else {
-                m_Transform.translation.y = -350 + 78 * m_column + 37.5;
-                dir.y = 0;
+                dir.y=0;
                 m_state = state::Keeping;
                 break;
             }
@@ -59,7 +57,8 @@ void Stone::Update() {
         dir * delta * 100.0F, 2 * delta,
         glm::vec2(0.5, 0.5) };
     pos += deltaTransform.translation;
-    m_GiraffeText->SetText("(" + std::to_string(m_row+1) + "," + std::to_string(m_column+1) + ")");
+    m_GiraffeText->SetText( m_type.TypeString());
+    m_GiraffeText->SetColor(m_type.TypeColor());
     m_GiraffeText->Update(m_Transform);
     this->Draw();
 

@@ -57,6 +57,7 @@ public:
     }
 
     Util::Colors TypeColor(){
+        if(m_powerup) return Util::Colors::WHITE;
         switch(m_type) {
         case Element_type::Fire:
             return Util::Colors::RED;
@@ -75,7 +76,12 @@ public:
     Element_type GetType(){
         return m_type;
     }
+    void SetType(Element_type target,bool powerup){
+        m_type = target;
+        m_powerup = powerup;
+    }
 private:
     Element_type m_type;
+    bool m_powerup;
 };
 #endif

@@ -21,12 +21,18 @@ public:
     bool CheckFall();
     void GenerateFall();
     bool CheckFull();
+    void StoneTurn(Type::Element_type LValue,Type::Element_type RValue,int howmany,bool powerup);
+    std::vector<int> GetTypeGeneration();
+    void SetTypeGeneration(std::vector<int> lists);
 private:
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
     state m_state=state::Falling;
+    int m_row;
+    int m_column;
     glm::vec2 m_StartPos;
     glm::vec2 m_NowPos;
     glm::vec2 m_EndPos;
+    std::vector<int> m_TypeGeneration;
 };
 
 

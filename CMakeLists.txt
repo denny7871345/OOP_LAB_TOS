@@ -52,6 +52,7 @@ set(SRC_FILES
     ${SRC_DIR}/GiraffeText.cpp
     ${SRC_DIR}/Cat.cpp
     ${SRC_DIR}/Stone.cpp
+    ${SRC_DIR}/StoneSystem.cpp
     ${SRC_DIR}/Enchant.cpp
 )
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
