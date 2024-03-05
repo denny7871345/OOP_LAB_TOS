@@ -110,9 +110,10 @@ bool Enchant::CheckMatch() {
                     }
                 }
                 if (breakList.size() >= 3) {
+                    if(breakList.size() >= 5){
+                        m_mustFallbyPowerup[Type::FindIndex(m_Array[i][j]->GetType())]++;
+                    }
                     for (int k = 0; k < breakList.size(); k++) {
-                        LOG_DEBUG("erase [{},{}]", breakList[k]->GetRow() + 1,
-                                  breakList[k]->GetColumn() + 1);
                         m_Array[i+k][j].reset();
                     }
                     return true;
