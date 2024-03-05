@@ -23,7 +23,8 @@ public:
     }
     void Update();
 
-    void Start(int row,int column);
+    void Start(int row,int column,std::vector<int> TypeGeneration);
+    void Generate(int row,int column,std::vector<int> TypeGeneration);
 
     state GetState(){
         return m_state;
@@ -41,7 +42,7 @@ public:
     void SetPos(int row,int column);
     Type::Element_type GetType();
     void SetFalling();
-    void Generate(int row,int column);
+
     void TurnType(Type::Element_type target, bool powerup);
 private:
     state m_state;

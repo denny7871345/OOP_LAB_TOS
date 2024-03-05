@@ -4,40 +4,41 @@
 #include <utility>
 class Type {
 public:
-    void Start(){
-        m_type = RandomTypeGenerator();
-    }
+
     enum Element_type{
         Fire,
         Water,
         Grass,
         Light,
-        Dark
+        Dark,
+        Heart,
+        NUM_ELEMENTS
     };
-
-    Element_type RandomTypeGenerator() {
+    static Type::Element_type TypeList(int index){
+        static Element_type elements[NUM_ELEMENTS] = {Fire, Water, Grass, Light, Dark, Heart};
+        return elements[index];
+    }
+    void RandomTypeGenerator(std::vector<int> lists) {
         std::random_device rd;
         std::mt19937 gen(rd());
         // 分布器
-        std::uniform_int_distribution<> dis(0, 4);
-
+        std::uniform_int_distribution<> dis(1, 120);
         int randomIndex = dis(gen);
-
-        switch(randomIndex) {
-        case 0:
-            return Element_type::Fire;
-        case 1:
-            return Element_type::Water;
-        case 2:
-            return Element_type::Grass;
-        case 3:
-            return Element_type::Light;
-        case 4:
-            return Element_type::Dark;
-        default:
-            // 預設為 Fire
-            return Element_type::Fire;
+        int num=0;
+        m_powerup = false;
+        static Element_type elements[NUM_ELEMENTS] = {Fire, Water, Grass, Light, Dark, Heart};
+        for(int i=0;i<NUM_ELEMENTS;i++){
+            num += lists[i];
+            if(randomIndex < num){
+                m_type = elements[i];
+                LOG_DEBUG("Num is {} and it comes out {} block",randomIndex,TypeString());
+                return;
+            }
         }
+    }
+    static int FindIndex(Element_type target){
+        static Element_type elements[NUM_ELEMENTS] = {Fire, Water, Grass, Light, Dark, Heart};
+        return std::find(elements,elements+NUM_ELEMENTS,target) - elements;
     }
      std::string TypeString() {
         switch(m_type) {
@@ -52,7 +53,7 @@ public:
             case Element_type::Dark:
                 return "Dark";
             default:
-                return "Error";
+                return "Heart";
         }
     }
 
@@ -70,7 +71,7 @@ public:
         case Element_type::Dark:
             return Util::Colors::PURPLE;
         default:
-            return Util::Colors::GRAY;
+            return Util::Colors::PINK;
         }
     }
     Element_type GetType(){
