@@ -101,6 +101,7 @@ set(TEST_FILES
     ${TEST_DIR}/NotSimpleTest.cpp
     ${TEST_DIR}/TransformTest.cpp
         src/stone.cpp
+
 )
 
 add_executable(Sample

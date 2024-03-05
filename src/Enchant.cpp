@@ -13,6 +13,7 @@ void Enchant::Start() {
         }
     }
     m_state = state::Keeping;
+    this->Draw();
 }
 
 void Enchant::Update() {
@@ -26,85 +27,19 @@ void Enchant::Update() {
     }
     switch (m_state) {
     case state::Keeping:
-        if (Util::Input::IsKeyDown(Util::Keycode::R)) {
-            StoneTurn(Type::Element_type::Fire,Type::Element_type::Water,0,true);
-        }
-        if (Util::Input::IsKeyDown(Util::Keycode::E)){
-            auto cursorPos = Util::Input::GetCursorPosition();
-            int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
-            if(i<=m_column && j<=4 && i>=0 && j>=0){
-                m_Array[i][j]->SetDragging(true);
-                m_StartPos = glm::vec2(i,j);
-                m_NowPos = m_StartPos;
-                LOG_DEBUG("you got the {} m_row,{} m_column Stone",i+1,j+1);
-                m_state = state::Dragging;
-            }
-        }
+        KeepingStateUpdate();
         break;
     case state::Dragging:
-        if (Util::Input::IsMouseMoving()){
-            auto cursorPos = Util::Input::GetCursorPosition();
-            int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
-            if(i>m_column) i=m_column; if(i<0) i=0; if(j>4)j=4;if(j<0)j=0;
-            if(!(m_StartPos == glm::vec2(i,j))){
-                LOG_DEBUG("Let's Moving to [{},{}] from [{},{}]",i+1,j+1,m_NowPos.x+1,m_NowPos.y+1);
-                Change(m_StartPos,glm::vec2 (i,j));
-                m_NowPos = glm::vec2 (i,j);
-                m_state = state::Moving;
-                break;
-            }
-        }
-        if (Util::Input::IsKeyUp(Util::Keycode::E)){
-            m_Array[int(m_StartPos.x)][int(m_StartPos.y)]->SetDragging(false);
-            m_state = state::Keeping;
-            LOG_DEBUG("you put the {} m_row,{} m_column Stone",m_StartPos.x+1,m_StartPos.y+1);
-        }
+        DraggingStateUpdate();
         break;
     case state::Moving:
-
-        if (Util::Input::IsMouseMoving()){
-            auto cursorPos = Util::Input::GetCursorPosition();
-            int i = std::floor((cursorPos.x + 225 ) / 75) , j =  std::floor((cursorPos.y + 350) / 78);
-            if(i>m_column) i=m_column; if(i<0) i=0; if(j>4)j=4;if(j<0)j=0;
-            if (!(m_NowPos == glm::vec2(i, j))) {
-                Change(m_NowPos, glm::vec2(i, j));
-                m_NowPos = glm::vec2(i, j);
-                LOG_DEBUG("You are now at [{},{}]", int(m_NowPos.x) + 1,
-                          int(m_NowPos.y) + 1);
-                break;
-            }
-        }
-        if (Util::Input::IsKeyUp(Util::Keycode::E)){
-            m_Array[int(m_StartPos.x)][int(m_StartPos.y)]->SetDragging(false);
-            m_EndPos = m_NowPos;
-            m_state = state::Checking;
-        }
+        MovingStateUpdate();
         break;
     case state::Checking:
-        for (int i = 0; i < m_row; ++i) {
-            for (int j = 0; j < m_column; ++j) {
-                if(m_Array[i][j] != nullptr)m_Array[i][j]->SetDragging(false);
-            }
-        }
-
-        while(CheckMatch()){
-
-        }
-
-        if(CheckFull()){
-            m_state = state::Keeping;
-        }else{
-            m_state = state::Falling;
-        }
-
+        CheckingStateUpdate();
         break;
     case state::Falling:
-        ShowEnchant();
-        DoFall();
-        ShowEnchant();
-        GenerateFall();
-        ShowEnchant();
-        if(CheckFall())m_state = state::Checking;
+        KeepingStateUpdate();
         break;
     }
 }
@@ -252,3 +187,72 @@ bool Enchant::CheckFull(){
     }
     return true;
 }
+
+/*method*/
+void Enchant::KeepingStateUpdate() {
+    const int row = 6, column = 5;
+    if (Util::Input::IsKeyDown(Util::Keycode::E)) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+        int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
+        int j = std::clamp(static_cast<int>(std::floor((cursorPos.y + 350) / 78)), 0, 4);
+        m_Array[i][j]->SetDragging(true);
+        m_StartPos = glm::vec2(i, j);
+        m_NowPos = m_StartPos;
+        LOG_DEBUG("you got the {} row, {} column Stone", i + 1, j + 1);
+        m_state = state::Dragging;
+    }
+}
+
+void Enchant::DraggingStateUpdate() {
+    if (Util::Input::IsMouseMoving()) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+        int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
+        int j = std::clamp(static_cast<int>(std::floor((cursorPos.y + 350) / 78)), 0, 4);
+        if (!(m_StartPos == glm::vec2(i, j))) {
+            LOG_DEBUG("Let's Moving to [{}, {}] from [{}, {}]", i + 1, j + 1, static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
+            Change(m_StartPos, glm::vec2(i, j));
+            m_NowPos = glm::vec2(i, j);
+            m_state = state::Moving;
+            return;
+        }
+    }
+    if (Util::Input::IsKeyUp(Util::Keycode::E)) {
+        m_Array[static_cast<int>(m_StartPos.x)][static_cast<int>(m_StartPos.y)]->SetDragging(false);
+        m_state = state::Keeping;
+        LOG_DEBUG("you put the {} row, {} column Stone", static_cast<int>(m_StartPos.x) + 1, static_cast<int>(m_StartPos.y) + 1);
+    }
+}
+
+void Enchant::MovingStateUpdate() {
+    if (Util::Input::IsMouseMoving()) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+        int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
+        int j = std::clamp(static_cast<int>(std::floor((cursorPos.y + 350) / 78)), 0, 4);
+        if (!(m_NowPos == glm::vec2(i, j))) {
+            Change(m_NowPos, glm::vec2(i, j));
+            m_NowPos = glm::vec2(i, j);
+            LOG_DEBUG("You are now at [{}, {}]", static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
+            return;
+        }
+    }
+    if (Util::Input::IsKeyUp(Util::Keycode::E)) {
+        m_Array[static_cast<int>(m_StartPos.x)][static_cast<int>(m_StartPos.y)]->SetDragging(false);
+        m_EndPos = m_NowPos;
+        m_state = state::Checking;
+    }
+}
+void Enchant::CheckingStateUpdate() {
+    const int row = 6, column = 5;
+    for (int i = 0; i < row; ++i) {
+        for (int j = 0; j < column; ++j) {
+            m_Array[i][j]->SetDragging(false);
+        }
+    }
+    LOG_DEBUG("you are Dragging Start in the {} row, {} column", static_cast<int>(m_StartPos.x), static_cast<int>(m_StartPos.y));
+    LOG_DEBUG("you are Dragging End in the {} row, {} column", static_cast<int>(m_EndPos.x), static_cast<int>(m_EndPos.y));
+    m_state = state::Falling;
+}
+void Enchant::FallingStateUpdate() {
+    m_state = state::Keeping;
+}
+
