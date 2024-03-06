@@ -2,6 +2,7 @@
 #define STONE_HPP
 
 
+#include "AnimatedCharacter.hpp"
 #include "Util/GameObject.hpp"
 #include "Util/Text.hpp"
 #include "Type.hpp"
@@ -10,7 +11,7 @@
 #include "Util/Image.hpp"
 #include "GiraffeText.hpp"
 
-class Stone : public Util::GameObject {
+class Stone : public AnimatedCharacter {
 
 public:
     enum class state{
@@ -18,8 +19,9 @@ public:
         Keeping,
         Dragging
     };
-    Stone() : Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/Gray.png"), 5){
-
+    Stone(std::vector<std::string>& AnimationPaths) : AnimatedCharacter(AnimationPaths){
+        m_Animation->SetLooping(false);
+        m_Animation->Pause();
     }
     void Update();
 

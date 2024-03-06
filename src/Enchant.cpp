@@ -12,7 +12,8 @@ void Enchant::Start() {
     for (int i = 0; i < m_row; ++i) {
         m_Array[i].resize(m_column);
         for (int j = 0; j < m_column; ++j) {
-            m_Array[i][j] = std::make_shared<Stone>(); // 使用 make_shared 創建共享指標
+            std::vector<std::string> paths = {"../assets/sprites/Gray.png"};
+            m_Array[i][j] = std::make_shared<Stone>(paths); // 使用 make_shared 創建共享指標
             m_Array[i][j]->Start(i,j,m_TypeGeneration);
         }
     }
@@ -166,7 +167,8 @@ void Enchant::GenerateFall() {
     for(int i=0;i<m_row;i++){
         for(int j=0;j<m_column;j++){
             if(m_Array[i][j] == nullptr){
-                m_Array[i][j] = std::make_shared<Stone>();
+                std::vector<std::string> paths = {"../assets/sprites/Gray.png"};
+                m_Array[i][j] = std::make_shared<Stone>(paths); // 使用 make_shared 創建共享指標
                 m_Array[i][j]->Generate(i,j,m_TypeGeneration);
                 emptyList.push_back(m_Array[i][j]);
             }
