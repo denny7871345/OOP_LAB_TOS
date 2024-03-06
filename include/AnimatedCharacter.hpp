@@ -34,7 +34,8 @@ public:
 
     }
     [[nodiscard]] bool IfAnimationEnds() const;
-private:
+
+protected:
     std::shared_ptr<Util::Animation> m_Animation;
 };
 

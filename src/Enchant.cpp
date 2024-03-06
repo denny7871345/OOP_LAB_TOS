@@ -297,9 +297,10 @@ void Enchant::FallingStateUpdate() {
     DoFall();
     GenerateFall();
     if(CheckFall()){
-        if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
-            m_state = state::Checking;
-        }
+        /*if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
+
+        }*/
+        m_state = state::Checking;
     }
 }
 
