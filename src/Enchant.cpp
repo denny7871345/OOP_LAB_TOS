@@ -4,7 +4,7 @@
 #include <cmath>
 #include <utility>
 void Enchant::Start() {
-    m_TypeGeneration = {20,20,20,20,20,20};
+    m_TypeGeneration = {120,20,20,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
     m_row = 6 , m_column = 5;
@@ -58,77 +58,39 @@ void Enchant::Change(glm::vec2 pos1,glm::vec2 pos2){
     std::swap(m_Array[int(pos1.x)][int(pos1.y)], m_Array[int(pos2.x)][int(pos2.y)]);
 }
 
-bool Enchant::CheckMatch() {
-    for(int i=0;i<m_row;++i){
+void Enchant::CheckMatch() {
+    for(int i=0;i<m_row;i++){
         for(int j=0;j<m_column;j++){
-            LOG_DEBUG("Checking [{},{}]",i+1,j+1);
-            if(m_Array[i][j] != nullptr){
-                if(! m_Array[i][j]->IsPlaying()){
-                    std::vector<std::shared_ptr<Stone>> breakList;
-                    breakList.push_back(m_Array[i][j]);
-                    while (j + breakList.size() < m_column){
-                        if(m_Array[i][j+breakList.size()] != nullptr){
-                            if(m_Array[i][j]->GetType() == m_Array[i][j+breakList.size()]->GetType()){
-                                breakList.push_back(m_Array[i][j+breakList.size()]);
-                            }else{
-                                break;
-                            }
-                        }else{
-                            break;
-                        }
-                    }
-
-                    if(breakList.size() >= 3){
-                        if(breakList.size() >= 5){
-                            m_mustFallbyPowerup[Type::FindIndex(m_Array[i][j]->GetType())]++;
-                        }
-                        for(int k=0;k<breakList.size();k++){
-                            // LOG_DEBUG("erase [{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
-                            m_Array[i][j+k]->SetPlaying(true);
-                        }
-                        return true;
-                    }
+            //LOG_DEBUG("Checking ({},{})",i+1,j+1);
+            std::vector<std::shared_ptr<Stone>> RowList;
+            RowList.push_back(m_Array[i][j]);
+            while(j + RowList.size() < m_column ){
+                if(m_Array[i][j]->GetType() == m_Array[i][j+RowList.size()]->GetType()){
+                    RowList.push_back(m_Array[i][j+RowList.size()]);
                 }else{
-                    if(m_Array[i][j]->IfAnimationEnds()) m_Array[i][j].reset();
-                    return true;
+                    break;
                 }
             }
-        }
-    }
-    for(int i=0;i<m_row;++i) {
-        for (int j = 0; j < m_column; j++) {
-            // LOG_DEBUG("Checking [{},{}]",i+1,j+1);
-            if (m_Array[i][j] != nullptr) {
-                std::vector<std::shared_ptr<Stone>> breakList;
-                breakList.push_back(m_Array[i][j]);
-                while (i + breakList.size() < m_row) {
-                    if (m_Array[i + breakList.size()][j] != nullptr) {
-                        if (m_Array[i][j]->GetType() ==
-                            m_Array[i + breakList.size()][j]->GetType()) {
-                            breakList.push_back(
-                                m_Array[i + breakList.size()][j]);
-                        } else {
-                            break;
-                        }
-                    } else {
-                        break;
-                    }
-                }
-                if (breakList.size() >= 3) {
-                    if(breakList.size() >= 5){
-                        m_mustFallbyPowerup[Type::FindIndex(m_Array[i][j]->GetType())]++;
-                    }
-                    for (int k = 0; k < breakList.size(); k++) {
-                        m_Array[i+k][j].reset();
-                    }
-                    return true;
-                } else {
-                    // LOG_DEBUG("breakList has {} blocks",breakList.size());
+            if(RowList.size() >= 3){
+                m_explosionBar.push_back(RowList);
+            }
+            //LOG_DEBUG("Checking Rowlist(len):{}",RowList.size());
+            std::vector<std::shared_ptr<Stone>> ColumnList;
+            ColumnList.push_back(m_Array[i][j]);
+            while(i + ColumnList.size() < m_row){
+                if(m_Array[i][j]->GetType() == m_Array[i+ColumnList.size()][j]->GetType()){
+                   // LOG_DEBUG("Add Stone to ({},{})pair",i+ColumnList.size()+1,j+1);
+                    ColumnList.push_back(m_Array[i+ColumnList.size()][j]);
+                }else{
+                    break;
                 }
             }
+            if(ColumnList.size() >= 3){
+                m_explosionBar.push_back(ColumnList);
+            }
+            //LOG_DEBUG("Checking Columnlist(len):{}",ColumnList.size());
         }
     }
-    return false;
 }
 
 void Enchant::DoFall() {
@@ -290,16 +252,34 @@ void Enchant::CheckingStateUpdate() {
             m_Array[i][j]->SetDragging(false);
         }
     }
-    if(CheckMatch()){
-        return;
+    CheckMatch();
+    organizePairs();
+    if(! m_explosionBar.empty()) m_state = state::Explosing;
+    ShowExplosionBar();
+    if(CheckFull()){
+        m_state = state::Keeping;
     }else{
-        if(CheckFull()){
-            m_state = state::Keeping;
-        }else{
-            m_state = state::Falling;
-        }
+        m_state = state::Falling;
     }
 
+}
+
+void Enchant::ExplosingStateUpdate() {
+
+
+
+    if(m_explosionBar.empty())m_state = state::Falling;
+}
+void Enchant::ShowExplosionBar() {
+
+    LOG_DEBUG("there's {} pairs in m_explosionBar",m_explosionBar.size());
+    for(int i=0;i<m_explosionBar.size();i++){
+        std::string pairFor1 = "[";
+        for (int j = 0; j < m_explosionBar[i].size(); ++j) {
+            pairFor1 += ( "(" +  std::to_string(m_explosionBar[i][j]->GetRow())  + "," + std::to_string(m_explosionBar[i][j]->GetColumn()) + "),");
+        }
+        LOG_DEBUG("{}] {} stones",pairFor1,m_explosionBar[i].size());
+    }
 }
 void Enchant::FallingStateUpdate() {
     DoFall();
@@ -310,5 +290,47 @@ void Enchant::FallingStateUpdate() {
         }*/
         m_state = state::Checking;
     }
+}
+
+bool Enchant::checkOverlap(const std::vector<std::shared_ptr<Stone>>& pair1, const std::vector<std::shared_ptr<Stone>>& pair2) {
+    for (const auto& member : pair1) {
+        if (std::find(pair2.begin(), pair2.end(), member) != pair2.end()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+std::vector<std::shared_ptr<Stone>> Enchant::mergePairs(const std::vector<std::shared_ptr<Stone>>& pair1, const std::vector<std::shared_ptr<Stone>>& pair2) {
+    std::vector<std::shared_ptr<Stone>> mergedPair = pair1;
+    for(const auto& member : pair2){
+        if (std::find(pair1.begin(), pair1.end(), member) == pair1.end()) {
+            mergedPair.push_back(member);
+        }
+    }
+    return mergedPair;
+}
+
+
+std::vector<std::vector<std::shared_ptr<Stone>>> Enchant::organizePairs(){
+    bool merged;
+    do {
+        merged = false;
+        for (size_t i = 0; i < m_explosionBar.size(); ++i) {
+            for (size_t j = i + 1; j < m_explosionBar.size(); ++j) {
+                if (checkOverlap(m_explosionBar[i], m_explosionBar[j])) {
+                    m_explosionBar[i] = mergePairs(m_explosionBar[i], m_explosionBar[j]);
+                    m_explosionBar.erase(m_explosionBar.begin() + j);
+                    merged = true;
+                    break;
+                }
+            }
+            if (merged) {
+                break;
+            }
+        }
+    } while (merged);
+    
+    return m_explosionBar;
 }
 

@@ -8,20 +8,19 @@ public:
     enum class state{
         Falling,
         Checking,
+        Explosing,
         Keeping,
         Dragging,
-        Moving
+        Moving,
     };
     int CountEmpty();
     void Update();
     void Start();
-    void Change(glm::vec2 pos1,glm::vec2 pos2);
-    bool CheckMatch();
-    void ShowEnchant();
+    void CheckMatch();
     void DoFall();
     bool CheckFall();
     void GenerateFall();
-    bool CheckFull();
+
     void StoneTurn(Type::Element_type LValue,Type::Element_type RValue,int howmany,bool powerup);
     std::vector<int> GetTypeGeneration();
     void SetTypeGeneration(std::vector<int> lists);
@@ -29,7 +28,11 @@ public:
 
 
 private:
+    std::vector<std::vector<std::shared_ptr<Stone>>> m_explosionBar;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
+    std::vector<std::vector<std::shared_ptr<Stone>>> organizePairs();
+    std::vector<std::shared_ptr<Stone>> mergePairs(const std::vector<std::shared_ptr<Stone>>& pair1, const std::vector<std::shared_ptr<Stone>>& pair2);
+    bool checkOverlap(const std::vector<std::shared_ptr<Stone>>& pair1, const std::vector<std::shared_ptr<Stone>>& pair2);
     state m_state=state::Falling;
     int m_row;
     int m_column;
@@ -45,6 +48,13 @@ private:
     void MovingStateUpdate();
     void CheckingStateUpdate();
     void FallingStateUpdate();
+    void ExplosingStateUpdate();
+
+    bool CheckFull();
+    void ShowEnchant();
+    void Change(glm::vec2 pos1,glm::vec2 pos2);
+    void ShowExplosionBar();
+    void ExplosionBarClean();
 };
 
 
