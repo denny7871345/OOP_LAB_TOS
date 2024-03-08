@@ -48,6 +48,9 @@ void Enchant::Update() {
     case state::Falling:
         FallingStateUpdate();
         break;
+    case state::Explosing:
+        ExplosingStateUpdate();
+        break;
     }
 }
 
