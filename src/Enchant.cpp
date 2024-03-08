@@ -12,7 +12,7 @@ void Enchant::Start() {
     for (int i = 0; i < m_row; ++i) {
         m_Array[i].resize(m_column);
         for (int j = 0; j < m_column; ++j) {
-            std::vector<std::string> paths = {"../assets/sprites/Gray.png"};
+            std::vector<std::string> paths = {"../assets/sprites/Stones/f.png"};
             m_Array[i][j] = std::make_shared<Stone>(paths); // 使用 make_shared 創建共享指標
             m_Array[i][j]->Start(i,j,m_TypeGeneration);
         }
@@ -61,32 +61,36 @@ void Enchant::Change(glm::vec2 pos1,glm::vec2 pos2){
 bool Enchant::CheckMatch() {
     for(int i=0;i<m_row;++i){
         for(int j=0;j<m_column;j++){
-            //LOG_DEBUG("Checking [{},{}]",i+1,j+1);
+            LOG_DEBUG("Checking [{},{}]",i+1,j+1);
             if(m_Array[i][j] != nullptr){
-                std::vector<std::shared_ptr<Stone>> breakList;
-                breakList.push_back(m_Array[i][j]);
-                while (j + breakList.size() < m_column){
-                    if(m_Array[i][j+breakList.size()] != nullptr){
-                        if(m_Array[i][j]->GetType() == m_Array[i][j+breakList.size()]->GetType()){
-                            breakList.push_back(m_Array[i][j+breakList.size()]);
+                if(! m_Array[i][j]->IsPlaying()){
+                    std::vector<std::shared_ptr<Stone>> breakList;
+                    breakList.push_back(m_Array[i][j]);
+                    while (j + breakList.size() < m_column){
+                        if(m_Array[i][j+breakList.size()] != nullptr){
+                            if(m_Array[i][j]->GetType() == m_Array[i][j+breakList.size()]->GetType()){
+                                breakList.push_back(m_Array[i][j+breakList.size()]);
+                            }else{
+                                break;
+                            }
                         }else{
                             break;
                         }
-                    }else{
-                        break;
                     }
-                }
-                if(breakList.size() >= 3){
-                    if(breakList.size() >= 5){
-                        m_mustFallbyPowerup[Type::FindIndex(m_Array[i][j]->GetType())]++;
+
+                    if(breakList.size() >= 3){
+                        if(breakList.size() >= 5){
+                            m_mustFallbyPowerup[Type::FindIndex(m_Array[i][j]->GetType())]++;
+                        }
+                        for(int k=0;k<breakList.size();k++){
+                            // LOG_DEBUG("erase [{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
+                            m_Array[i][j+k]->SetPlaying(true);
+                        }
+                        return true;
                     }
-                    for(int k=0;k<breakList.size();k++){
-                       // LOG_DEBUG("erase [{},{}]",breakList[k]->GetRow()+1,breakList[k]->GetColumn()+1);
-                        m_Array[i][j+k].reset();
-                    }
-                    return true;
                 }else{
-                    //LOG_DEBUG("breakList has {} blocks",breakList.size());
+                    if(m_Array[i][j]->IfAnimationEnds()) m_Array[i][j].reset();
+                    return true;
                 }
             }
         }
@@ -236,7 +240,7 @@ void Enchant::KeepingStateUpdate() {
         m_Array[i][j]->SetDragging(true);
         m_StartPos = glm::vec2(i, j);
         m_NowPos = m_StartPos;
-        //LOG_DEBUG("you got the {} row, {} column Stone", i + 1, j + 1);
+        LOG_DEBUG("you got the {} Stone", Type::TypeString(m_Array[i][j]->GetType()));
         m_state = state::Dragging;
     }
 }
@@ -286,14 +290,16 @@ void Enchant::CheckingStateUpdate() {
             m_Array[i][j]->SetDragging(false);
         }
     }
-    while(CheckMatch()){
-
-    }
-    if(CheckFull()){
-        m_state = state::Keeping;
+    if(CheckMatch()){
+        return;
     }else{
-        m_state = state::Falling;
+        if(CheckFull()){
+            m_state = state::Keeping;
+        }else{
+            m_state = state::Falling;
+        }
     }
+
 }
 void Enchant::FallingStateUpdate() {
     DoFall();

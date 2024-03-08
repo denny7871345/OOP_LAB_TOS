@@ -32,12 +32,8 @@ void Enchant::StoneTurn(Type::Element_type LValue, Type::Element_type RValue, in
 
 void Stone::Start(int row,int column,std::vector<int> TypeGeneration){
     m_type.RandomTypeGenerator(std::move(TypeGeneration));
-    m_GiraffeText =
-        std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 100);
-    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
-    m_GiraffeText->Start();
-    m_GiraffeText->SetColor(m_type.TypeColor());
-    m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
+    SetImg(m_type.GetStoneNormalImage()) ;
+    m_Transform.scale = {0.55,0.55};
     m_row = row;
     m_column = column;
     m_state = state::Keeping;
@@ -46,14 +42,11 @@ void Stone::Start(int row,int column,std::vector<int> TypeGeneration){
 void Stone::Generate(int row,int column,std::vector<int> TypeGeneration) {
     m_row = row;
     m_column = column;
-    LOG_DEBUG("({},{})",m_row+1,m_column+1);
+    //LOG_DEBUG("({},{})",m_row+1,m_column+1);
     m_type.RandomTypeGenerator(std::move(TypeGeneration));
-    m_GiraffeText =
-        std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 100);
-    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
-    m_GiraffeText->Start();
-    m_GiraffeText->SetColor(m_type.TypeColor());
-    m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
+    SetImg(m_type.GetStoneNormalImage());
+    m_Transform.scale = {0.55,0.55};
+
 
     m_Transform.translation = glm::vec2{-225 + (75 * m_row + 37.5), 37.5 + 78 * m_column };
     m_state = state::Falling;
@@ -62,4 +55,5 @@ void Stone::Generate(int row,int column,std::vector<int> TypeGeneration) {
 
 void Stone::TurnType(Type::Element_type target, bool powerup) {
     m_type.SetType(target,powerup) ;
+    SetImg(m_type.GetStoneNormalImage());
 }

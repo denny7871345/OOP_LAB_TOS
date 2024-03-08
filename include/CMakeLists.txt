@@ -87,6 +87,7 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/Giraffe.hpp
     ${INCLUDE_DIR}/GiraffeText.hpp
     ${INCLUDE_DIR}/Cat.hpp
+    ${INCLUDE_DIR}/Type.hpp
     ${INCLUDE_DIR}/config.hpp
 )
 set(TEST_DIR ${CMAKE_SOURCE_DIR}/test)

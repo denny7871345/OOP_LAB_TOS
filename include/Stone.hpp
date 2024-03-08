@@ -50,7 +50,6 @@ private:
     state m_state;
     int m_row;
     int m_column;
-    std::shared_ptr<GiraffeText> m_GiraffeText;
     Type m_type;
 
 };

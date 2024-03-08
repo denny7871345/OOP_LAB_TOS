@@ -33,9 +33,6 @@ void Stone::Update() {
         dir * delta * 100.0F, 2 * delta,
         glm::vec2(0.5, 0.5) };
     pos += deltaTransform.translation;
-    m_GiraffeText->SetText( m_type.TypeString());
-    m_GiraffeText->SetColor(m_type.TypeColor());
-    m_GiraffeText->Update(m_Transform);
     this->Draw();
 
 }

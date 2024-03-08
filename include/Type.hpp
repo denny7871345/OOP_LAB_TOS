@@ -5,7 +5,6 @@
 class Type {
 public:
 
-
     enum Element_type{
         Fire,
         Water,
@@ -32,7 +31,7 @@ public:
             num += lists[i];
             if(randomIndex < num){
                 m_type = elements[i];
-                LOG_DEBUG("Num is {} and it comes out {} block",randomIndex,TypeString());
+                //LOG_DEBUG("Num is {} and it comes out {} block",randomIndex,TypeString());
                 return;
             }
         }
@@ -57,7 +56,22 @@ public:
                 return "Heart";
         }
     }
-
+    static std::string TypeString(Element_type target) {
+        switch(target) {
+        case Element_type::Fire:
+            return "Fire";
+        case Element_type::Water:
+            return "Water";
+        case Element_type::Grass:
+            return "Grass";
+        case Element_type::Light:
+            return "Light";
+        case Element_type::Dark:
+            return "Dark";
+        default:
+            return "Heart";
+        }
+    }
     Util::Colors TypeColor(){
         if(m_powerup) return Util::Colors::WHITE;
         switch(m_type) {
@@ -81,6 +95,32 @@ public:
     void SetType(Element_type target,bool powerup){
         m_type = target;
         m_powerup = powerup;
+    }
+    std::vector<std::string> GetStoneNormalImage(){
+        std::string typeName="";
+        switch(m_type) {
+            case Element_type::Fire:
+                typeName += "f";
+                break;
+            case Element_type::Water:
+                typeName +="w";
+                break;
+            case Element_type::Grass:
+                typeName +="p";
+                break;
+            case Element_type::Light:
+                typeName +="l";
+                break;
+            case Element_type::Dark:
+                typeName +="d";
+                break;
+            default:
+                typeName +="h";
+                break;
+        }
+        if(m_powerup) typeName += "+";
+        return {"../assets/sprites/Stones/" + typeName + ".png",
+                "../assets/sprites/Stones/" + typeName + "_.png"};
     }
 private:
     Element_type m_type;

@@ -11,6 +11,8 @@
 class AnimatedCharacter : public Util::GameObject {
 
 public:
+    void SetImg(const std::vector<std::string>& AnimationPaths);
+
     explicit AnimatedCharacter(const std::vector<std::string>& AnimationPaths);
     [[nodiscard]] bool IsLooping() const {
         return std::dynamic_pointer_cast<Util::Animation>(m_Drawable)->GetLooping();
@@ -30,8 +32,6 @@ public:
         }else{
             m_Animation->Pause();
         }
-
-
     }
     [[nodiscard]] bool IfAnimationEnds() const;
 
