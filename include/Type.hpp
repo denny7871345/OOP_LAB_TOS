@@ -5,6 +5,7 @@
 class Type {
 public:
 
+
     enum Element_type{
         Fire,
         Water,
