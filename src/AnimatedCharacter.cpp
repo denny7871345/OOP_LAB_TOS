@@ -9,7 +9,7 @@ AnimatedCharacter::AnimatedCharacter(const std::vector<std::string>& AnimationPa
 }
 
 void AnimatedCharacter::SetImg(const std::vector<std::string>& AnimationPaths){
-    m_Animation = std::make_shared<Util::Animation>(AnimationPaths, false, 300, false, 0);
+    m_Animation = std::make_shared<Util::Animation>(AnimationPaths, false, 30, false, 0);
     m_Animation->SetLooping(false);
     SetDrawable(m_Animation);
 }
