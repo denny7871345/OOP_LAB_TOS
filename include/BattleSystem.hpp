@@ -1,10 +1,10 @@
 #ifndef BATTLESYSTEM_HPP
 #define BATTLESYSTEM_HPP
 
-#include "Enchant.hpp"
 #include "Stone.hpp"
 #include "Member.hpp"
 
+class Enchant;
 
 class BattleSystem {
 public:

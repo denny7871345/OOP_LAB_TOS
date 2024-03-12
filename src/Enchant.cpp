@@ -4,7 +4,7 @@
 #include <cmath>
 #include <utility>
 void Enchant::Start() {
-    m_TypeGeneration = {120,20,20,20,20,20};
+    m_TypeGeneration = {20,20,20,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
     m_row = 6 , m_column = 5;

@@ -1,7 +1,9 @@
 #ifndef MEMBER_HPP
 #define MEMBER_HPP
 #include <utility>
-#include "Enchant.hpp"
+
+class Enchant;
+
 class Member {
 public:
     virtual void skill(std::shared_ptr<Enchant> target);

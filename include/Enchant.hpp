@@ -3,7 +3,8 @@
 
 #include "Stone.hpp"
 #include "Util/GameObject.hpp"
-class Enchant : public Util::GameObject{
+#include "BattleSystem.hpp"
+class Enchant : public Util::GameObject,std::enable_shared_from_this<Enchant>{
 public:
     enum class state{
         Falling,
@@ -28,6 +29,7 @@ public:
 
 
 private:
+    std::shared_ptr<BattleSystem> m_battleSystem = std::make_shared<BattleSystem>();
     std::vector<std::vector<std::shared_ptr<Stone>>> m_explosionBar;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
     std::vector<std::vector<std::shared_ptr<Stone>>> organizePairs();
