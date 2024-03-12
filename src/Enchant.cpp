@@ -152,7 +152,7 @@ void Enchant::GenerateFall() {
             emptyList[count]->TurnType(Type::TypeList(checking), false);
             m_mustFallbyNormal[checking] --;
             count ++;
-            LOG_DEBUG("still need to fall at least [{},{},{},{},{},{}]", m_mustFallbyNormal[0],m_mustFallbyNormal[1],m_mustFallbyNormal[2],m_mustFallbyNormal[3],m_mustFallbyNormal[4],m_mustFallbyNormal[5] );
+           // LOG_DEBUG("still need to fall at least [{},{},{},{},{},{}]", m_mustFallbyNormal[0],m_mustFallbyNormal[1],m_mustFallbyNormal[2],m_mustFallbyNormal[3],m_mustFallbyNormal[4],m_mustFallbyNormal[5] );
         }else if(m_mustFallbyPowerup[checking] > 0){
             m_mustFallbyPowerup[checking]--;
             emptyList[count]->TurnType(Type::TypeList(checking), true);
@@ -208,7 +208,7 @@ void Enchant::KeepingStateUpdate() {
         m_StartPos = glm::vec2(i, j);
         m_NowPos = m_StartPos;
         m_firstBreak = true;
-        LOG_DEBUG("you got the {} Stone", Type::TypeString(m_Array[i][j]->GetType()));
+       // LOG_DEBUG("you got the {} Stone", Type::TypeString(m_Array[i][j]->GetType()));
         m_state = state::Dragging;
     }
 
@@ -311,7 +311,7 @@ void Enchant::ShowExplosionBar() {
         for (int j = 0; j < m_explosionBar[i].size(); ++j) {
             pairFor1 += ( "(" +  std::to_string(m_explosionBar[i][j]->GetRow())  + "," + std::to_string(m_explosionBar[i][j]->GetColumn()) + "),");
         }
-        LOG_DEBUG("{}] {} stones",pairFor1,m_explosionBar[i].size());
+        //LOG_DEBUG("{}] {} stones",pairFor1,m_explosionBar[i].size());
     }
 }
 void Enchant::FallingStateUpdate() {
