@@ -4,6 +4,7 @@
 #include "Stone.hpp"
 #include "Util/GameObject.hpp"
 #include "BattleSystem.hpp"
+
 class Enchant : public Util::GameObject,std::enable_shared_from_this<Enchant>{
 public:
     enum class state{
@@ -38,6 +39,7 @@ private:
     state m_state=state::Falling;
     int m_row;
     int m_column;
+    bool m_firstBreak;
     glm::vec2 m_StartPos;
     glm::vec2 m_NowPos;
     glm::vec2 m_EndPos;

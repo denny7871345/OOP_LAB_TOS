@@ -3,6 +3,7 @@
 #include "Util/SFX.hpp"
 #include <cmath>
 #include <utility>
+class BattleSystem;
 void Enchant::Start() {
     m_TypeGeneration = {20,20,20,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
@@ -17,6 +18,7 @@ void Enchant::Start() {
             m_Array[i][j]->Start(i,j,m_TypeGeneration);
         }
     }
+    m_battleSystem->Start();
     m_state = state::Keeping;
     this->Draw();
 }
@@ -205,9 +207,11 @@ void Enchant::KeepingStateUpdate() {
         m_Array[i][j]->SetDragging(true);
         m_StartPos = glm::vec2(i, j);
         m_NowPos = m_StartPos;
+        m_firstBreak = true;
         LOG_DEBUG("you got the {} Stone", Type::TypeString(m_Array[i][j]->GetType()));
         m_state = state::Dragging;
     }
+
 }
 
 void Enchant::DraggingStateUpdate() {
@@ -257,9 +261,16 @@ void Enchant::CheckingStateUpdate() {
     }
     CheckMatch();
     organizePairs();
-    if(! m_explosionBar.empty()) m_state = state::Explosing;
     ShowExplosionBar();
+
+    if(! (m_explosionBar.empty())){
+        m_state = state::Explosing;
+        return;
+    }
+
     if(CheckFull()){
+        m_battleSystem->ShowData();
+        m_battleSystem->ResetRound();
         m_state = state::Keeping;
     }else{
         m_state = state::Falling;
@@ -269,13 +280,32 @@ void Enchant::CheckingStateUpdate() {
 
 void Enchant::ExplosingStateUpdate() {
 
+    if(! m_explosionBar.empty()){
+        if(m_firstBreak){
+            if(m_battleSystem->DealFirstPiar(m_explosionBar[0])){
+                for(int i=0;i<m_explosionBar[0].size();i++){
+                    m_Array[m_explosionBar[0][i]->GetRow()][m_explosionBar[0][i]->GetColumn()].reset();
+                }
+                m_explosionBar.erase(m_explosionBar.begin());
+            }
+        }else{
+            if(m_battleSystem->DealPair(m_explosionBar[0])){
+                for(int i=0;i<m_explosionBar[0].size();i++){
+                    m_Array[m_explosionBar[0][i]->GetRow()][m_explosionBar[0][i]->GetColumn()].reset();
+                }
+                m_explosionBar.erase(m_explosionBar.begin());
+            }
+        }
 
+    }
 
-    if(m_explosionBar.empty())m_state = state::Falling;
+    if(m_explosionBar.empty()){
+        m_state = state::Falling;
+    }
 }
 void Enchant::ShowExplosionBar() {
 
-    LOG_DEBUG("there's {} pairs in m_explosionBar",m_explosionBar.size());
+    //LOG_DEBUG("there's {} pairs in m_explosionBar",m_explosionBar.size());
     for(int i=0;i<m_explosionBar.size();i++){
         std::string pairFor1 = "[";
         for (int j = 0; j < m_explosionBar[i].size(); ++j) {
@@ -287,6 +317,7 @@ void Enchant::ShowExplosionBar() {
 void Enchant::FallingStateUpdate() {
     DoFall();
     GenerateFall();
+    m_firstBreak = false;
     if(CheckFall()){
         /*if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
 
