@@ -6,6 +6,8 @@ void BattleSystem::Start() {
     m_Members.push_back(token);
     std::shared_ptr<Sean> token2 = std::make_shared<Sean>(m_Enchant);
     m_Members.push_back(token2);
+    std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(m_Enchant);
+    m_Members.push_back(token3);
 }
 
 void BattleSystem::SkillTrigger(int index) {

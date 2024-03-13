@@ -25,6 +25,8 @@ private:
     int CD;
 };
 
+
+//skill
 class Boom{
 public:
     explicit Boom(std::shared_ptr<Enchant> target):m_Enchant(std::move(target)){};
@@ -32,10 +34,21 @@ public:
 private:
     std::shared_ptr<Enchant> m_Enchant;
 };
+
 class DealDamage{
 public:
     void Strike(std::shared_ptr<Enemy> target,int damage);
 };
+
+class StoneTurn{
+public:
+    explicit StoneTurn(std::shared_ptr<Enchant> target):m_Enchant(std::move(target)){};
+    void Turn(Type::Element_type Lvalue,Type::Element_type Rvalue,bool powerup);
+private:
+    std::shared_ptr<Enchant> m_Enchant;
+};
+
+//Charctor
 class Mori:public Member,Boom,DealDamage{
 public:
     explicit Mori(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1155,1881,384),
@@ -47,10 +60,19 @@ public:
 
 class Sean:public Member,Boom,DealDamage{
 public:
-    explicit Sean(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1107,1980,384),
+    explicit Sean(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1107,1980,384),
           Boom(std::move(target)){};
     void Skill() override{
         StoneBreak(Type::Element_type::Water,true);
+    }
+};
+
+class WaterSlime:public Member,StoneTurn{
+public:
+    explicit WaterSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1107,1980,384),
+          StoneTurn(std::move(target)){};
+    void Skill() override{
+        Turn(Type::Element_type::Fire,Type::Element_type::Heart,true);
     }
 };
 #endif

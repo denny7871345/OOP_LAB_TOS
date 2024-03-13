@@ -207,6 +207,9 @@ void Enchant::KeepingStateUpdate() {
     if (Util::Input::IsKeyDown(Util::Keycode::Y)) {
         m_battleSystem->SkillTrigger(1);
     }
+    if (Util::Input::IsKeyDown(Util::Keycode::U)) {
+        m_battleSystem->SkillTrigger(2);
+    }
     if (Util::Input::IsKeyDown(Util::Keycode::E)) {
         auto cursorPos = Util::Input::GetCursorPosition();
         int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
