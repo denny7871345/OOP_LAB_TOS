@@ -26,6 +26,7 @@ public:
 
 private:
     State m_CurrentState = State::START;
+    std::shared_ptr<BattleSystem> m_battleSystem = std::make_shared<BattleSystem>();
     std::shared_ptr<Enchant> m_enchant = std::make_shared<Enchant>();
     std::shared_ptr<Giraffe> m_Giraffe = std::make_shared<Giraffe>();
     //    std::shared_ptr<GiraffeText> m_GiraffeText =

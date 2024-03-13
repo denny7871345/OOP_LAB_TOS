@@ -24,13 +24,15 @@ public:
     void GenerateFall(bool powerup);
     int StoneBreak(Type::Element_type LValue);
     void StoneTurn(Type::Element_type LValue,Type::Element_type RValue,int howmany,bool powerup);
+    void SetSystem(std::shared_ptr<BattleSystem> target);
     std::vector<int> GetTypeGeneration();
+    std::shared_ptr<Enchant> getEnchant();
     void SetTypeGeneration(std::vector<int> lists);
     Enchant() : Util::GameObject(std::make_unique<Util::Image>("../assets/sprites/Giraffe.png"), 1){};
 
 
 private:
-    std::shared_ptr<BattleSystem> m_battleSystem = std::make_shared<BattleSystem>();
+    std::shared_ptr<BattleSystem> m_battleSystem;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_explosionBar;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
     std::vector<std::vector<std::shared_ptr<Stone>>> organizePairs();

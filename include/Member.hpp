@@ -3,12 +3,13 @@
 #include <utility>
 #include "Stone.hpp"
 class Enchant;
-
+class Enemy;
 class Member {
 public:
     virtual void Skill()=0;
     Member(Type::Element_type type,int attack,int life,int heal):m_type(type),m_attack(attack),m_life(life),m_heal(heal){};
 private:
+    std::shared_ptr<Enemy> m_enemy;
     Type::Element_type m_type;
     int m_attack;
     int m_life;
@@ -31,13 +32,25 @@ public:
 private:
     std::shared_ptr<Enchant> m_Enchant;
 };
-
-class Mori:public Member,Boom{
+class DealDamage{
 public:
-    explicit Mori(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1881,1155,384),
+    void Strike(std::shared_ptr<Enemy> target,int damage);
+};
+class Mori:public Member,Boom,DealDamage{
+public:
+    explicit Mori(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1155,1881,384),
           Boom(std::move(target)){};
     void Skill() override{
-        StoneBreak(Type::Element_type::Fire,true);
+        StoneBreak(Type::Element_type::Grass,true);
+    }
+};
+
+class Sean:public Member,Boom,DealDamage{
+public:
+    explicit Sean(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1107,1980,384),
+          Boom(std::move(target)){};
+    void Skill() override{
+        StoneBreak(Type::Element_type::Water,true);
     }
 };
 #endif

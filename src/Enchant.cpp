@@ -19,7 +19,6 @@ void Enchant::Start() {
             m_Array[i][j]->Start(i,j,m_TypeGeneration);
         }
     }
-    m_battleSystem->Start();
     m_state = state::Keeping;
     this->Draw();
 }
@@ -203,9 +202,10 @@ void Enchant::KeepingStateUpdate() {
         StoneTurn(Type::Element_type::Fire,Type::Element_type::Water,0,true);
     }
     if (Util::Input::IsKeyDown(Util::Keycode::T)) {
-        std::shared_ptr<Mori> token = std::make_shared<Mori>(shared_from_this());
-        token->Skill();
-        token.reset();
+        m_battleSystem->SkillTrigger(0);
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::Y)) {
+        m_battleSystem->SkillTrigger(1);
     }
     if (Util::Input::IsKeyDown(Util::Keycode::E)) {
         auto cursorPos = Util::Input::GetCursorPosition();
@@ -375,3 +375,10 @@ std::vector<std::vector<std::shared_ptr<Stone>>> Enchant::organizePairs(){
     return m_explosionBar;
 }
 
+std::shared_ptr<Enchant> Enchant::getEnchant() {
+    return shared_from_this();
+}
+
+void Enchant::SetSystem(std::shared_ptr<BattleSystem> target) {
+    m_battleSystem = target;
+}

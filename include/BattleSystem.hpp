@@ -8,12 +8,14 @@ class Enchant;
 
 class BattleSystem {
 public:
+    void SetEnchant(std::shared_ptr<Enchant> target);
     void Start();
     void ShowData();
     void ResetRound();
     bool DealPair(std::vector<std::shared_ptr<Stone>> Lists);
     bool DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists);
     void AddCombo(int combo);
+    void SkillTrigger(int index);
     void AddExCombo(int combo);
     void SetCombo(int combo);
 

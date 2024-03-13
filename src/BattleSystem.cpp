@@ -2,6 +2,14 @@
 
 void BattleSystem::Start() {
     ResetRound();
+    std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
+    m_Members.push_back(token);
+    std::shared_ptr<Sean> token2 = std::make_shared<Sean>(m_Enchant);
+    m_Members.push_back(token2);
+}
+
+void BattleSystem::SkillTrigger(int index) {
+    m_Members[index]->Skill();
 }
 
 void BattleSystem::SetCombo(int combo) {
@@ -58,4 +66,8 @@ void BattleSystem::ShowData() {
     LOG_DEBUG("first combo:{}",m_firstCombo);
     LOG_DEBUG("Total combo:{}",m_combo);
 
+}
+
+void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
+    m_Enchant = target;
 }
