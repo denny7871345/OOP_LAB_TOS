@@ -1,5 +1,6 @@
 #include "Enchant.hpp"
 #include "Stone.hpp"
+#include "Member.hpp"
 void Enchant::SetTypeGeneration(std::vector<int> lists){
     m_TypeGeneration = lists;
 }
@@ -28,6 +29,21 @@ void Enchant::StoneTurn(Type::Element_type LValue, Type::Element_type RValue, in
             lists[i]->TurnType(RValue,powerup);
         }
     }
+}
+
+int Enchant::StoneBreak(Type::Element_type LValue) {
+    int count = 0;
+        for (int i = 0; i < m_row; ++i) {
+            for (int j = 0; j < m_column; ++j) {
+                if(m_Array[i][j]->GetType() == LValue ){
+                    m_Array[i][j].reset();
+                    LOG_DEBUG("erase ({},{})",i+1,j+1);
+                }
+                count ++;
+            }
+        }
+        DoFall();
+        return count;
 }
 
 void Stone::Start(int row,int column,std::vector<int> TypeGeneration){

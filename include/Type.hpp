@@ -120,7 +120,8 @@ public:
         }
         if(m_powerup) typeName += "+";
         return {"../assets/sprites/Stones/" + typeName + ".png",
-                "../assets/sprites/Stones/" + typeName + "_.png"};
+                "../assets/sprites/Stones/" + typeName + "_.png",
+            "../assets/sprites/Stones/" + typeName + ".png"};
     }
 private:
     Element_type m_type;

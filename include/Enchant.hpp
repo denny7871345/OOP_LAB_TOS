@@ -21,8 +21,8 @@ public:
     void CheckMatch();
     void DoFall();
     bool CheckFall();
-    void GenerateFall();
-
+    void GenerateFall(bool powerup);
+    int StoneBreak(Type::Element_type LValue);
     void StoneTurn(Type::Element_type LValue,Type::Element_type RValue,int howmany,bool powerup);
     std::vector<int> GetTypeGeneration();
     void SetTypeGeneration(std::vector<int> lists);

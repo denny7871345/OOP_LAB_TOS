@@ -5,6 +5,7 @@
 #include <utility>
 class BattleSystem;
 void Enchant::Start() {
+
     m_TypeGeneration = {20,20,20,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
@@ -130,7 +131,7 @@ void Enchant::ShowEnchant() {
     LOG_DEBUG("-----------");
 }
 
-void Enchant::GenerateFall() {
+void Enchant::GenerateFall(bool powerup) {
     int checking = 0;
     std::vector<std::shared_ptr<Stone>> emptyList;
     std::default_random_engine rng(std::random_device{}());
@@ -141,6 +142,7 @@ void Enchant::GenerateFall() {
                 std::vector<std::string> paths = {"../assets/sprites/Gray.png"};
                 m_Array[i][j] = std::make_shared<Stone>(paths); // 使用 make_shared 創建共享指標
                 m_Array[i][j]->Generate(i,j,m_TypeGeneration);
+                if(powerup) m_Array[i][j]->TurnType(m_Array[i][j]->GetType(),true);
                 emptyList.push_back(m_Array[i][j]);
             }
         }
@@ -199,6 +201,11 @@ bool Enchant::CheckFull(){
 void Enchant::KeepingStateUpdate() {
     if (Util::Input::IsKeyDown(Util::Keycode::R)) {
         StoneTurn(Type::Element_type::Fire,Type::Element_type::Water,0,true);
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::T)) {
+        std::shared_ptr<Mori> token = std::make_shared<Mori>(shared_from_this());
+        token->Skill();
+        token.reset();
     }
     if (Util::Input::IsKeyDown(Util::Keycode::E)) {
         auto cursorPos = Util::Input::GetCursorPosition();
@@ -316,7 +323,7 @@ void Enchant::ShowExplosionBar() {
 }
 void Enchant::FallingStateUpdate() {
     DoFall();
-    GenerateFall();
+    GenerateFall(false);
     m_firstBreak = false;
     if(CheckFall()){
         /*if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
