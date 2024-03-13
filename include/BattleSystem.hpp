@@ -3,6 +3,7 @@
 
 #include "Stone.hpp"
 #include "Member.hpp"
+#include "AudioSystem.hpp"
 
 class Enchant;
 
@@ -20,6 +21,7 @@ public:
     void SetCombo(int combo);
 
 private:
+    AudioSystem m_audioSystem;
     std::vector<int> m_totalErase={0,0,0,0,0,0};
     std::vector<int> m_firstErase={0,0,0,0,0,0};
     std::shared_ptr<Enchant> m_Enchant;

@@ -8,6 +8,7 @@ void BattleSystem::Start() {
     m_Members.push_back(token2);
     std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(m_Enchant);
     m_Members.push_back(token3);
+    m_audioSystem.Start();
 }
 
 void BattleSystem::SkillTrigger(int index) {
@@ -42,6 +43,12 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     for(int i=0;i<Lists.size();i++){
         if(! Lists[i]->IsPlaying()){
             Lists[i]->SetPlaying(true);
+            if(Lists.size() >= 5){
+                static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
+                SFX.Play();
+            }else{
+                m_audioSystem.PlayComboSound(m_combo);
+            }
         }
     }
     return false;
@@ -49,6 +56,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
 bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
         AddCombo(1);
+
         m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
         m_firstCombo +=1 ;
         m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
@@ -57,6 +65,14 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     for(int i=0;i<Lists.size();i++){
         if(! Lists[i]->IsPlaying()){
             Lists[i]->SetPlaying(true);
+            if(i==0){
+                if(Lists.size() >= 5){
+                    static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
+                    SFX.Play();
+                }else{
+                    m_audioSystem.PlayComboSound(m_combo);
+                }
+            }
         }
     }
     return false;
