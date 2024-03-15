@@ -22,6 +22,8 @@ public:
     void DoFall();
     bool CheckFall();
     void GenerateFall(bool powerup);
+    void SetDraggingTime(int time);
+    void SetState(state target);
     int StoneBreak(Type::Element_type LValue);
     void StoneTurn(Type::Element_type LValue,Type::Element_type RValue,int howmany,bool powerup);
     void SetSystem(std::shared_ptr<BattleSystem> target);
@@ -58,7 +60,6 @@ private:
     void CheckingStateUpdate();
     void FallingStateUpdate();
     void ExplosingStateUpdate();
-
     bool CheckFull();
     void ShowEnchant();
     void Change(glm::vec2 pos1,glm::vec2 pos2);

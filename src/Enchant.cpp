@@ -389,3 +389,12 @@ std::shared_ptr<Enchant> Enchant::getEnchant() {
 void Enchant::SetSystem(std::shared_ptr<BattleSystem> target) {
     m_battleSystem = target;
 }
+
+void Enchant::SetDraggingTime(int time) {
+    m_DraggingTime = time;
+}
+
+
+void Enchant::SetState(Enchant::state target) {
+    m_state = target;
+}

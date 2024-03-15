@@ -64,6 +64,14 @@ private:
     std::shared_ptr<Enchant> m_Enchant;
 };
 
+class Dio{
+    Dio(std::shared_ptr<Enchant> target):m_Enchant(std::move(target)){};
+    void TheWorld(int seconds);
+private:
+    std::shared_ptr<Enchant> m_Enchant;
+};
+
+
 //Charctor
 class Mori:public Member,Boom,DealDamage{
 public:

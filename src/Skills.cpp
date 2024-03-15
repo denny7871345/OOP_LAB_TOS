@@ -38,3 +38,8 @@ void Enemy::DealtDamage(int Damage, bool Defence) {
         m_life -= 1;
     }
 }
+
+void Dio::TheWorld(int seconds) {  //排珠系統先不要動
+    m_Enchant->SetDraggingTime(seconds);
+    m_Enchant->SetState(Enchant::state::Dragging);
+}

@@ -4,7 +4,14 @@
 #include <utility>
 class Type {
 public:
-
+    enum Race_type{
+        Protoss,
+        Demon,
+        Mortal,
+        Beast,
+        Dragon,
+        Fairy
+    };
     enum Element_type{
         Fire,
         Water,
