@@ -10,6 +10,8 @@ void BattleSystem::Start() {
     m_team.push_back(token2);
     std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(m_Enchant);
     m_team.push_back(token3);
+    std::shared_ptr<WaterBeast> token4 = std::make_shared<WaterBeast>(m_Enchant);
+    m_team.push_back(token4);
     m_audioSystem.Start();
 }
 
