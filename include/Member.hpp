@@ -7,6 +7,10 @@ class Enemy;
 class Member {
 public:
     virtual void Skill()=0;
+    Type::Element_type GetType(){return m_type;}
+    int GetAtk(){return m_attack;}
+    int GetLife(){return m_life;}
+    int GetHeal(){return m_heal;}
     Member(Type::Element_type type,int attack,int life,int heal):m_type(type),m_attack(attack),m_life(life),m_heal(heal){};
 private:
     std::shared_ptr<Enemy> m_enemy;

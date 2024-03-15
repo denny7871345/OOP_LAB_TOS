@@ -19,9 +19,11 @@ public:
     void SkillTrigger(int index);
     void AddExCombo(int combo);
     void SetCombo(int combo);
-
+    void DamageSettle();
 private:
+
     AudioSystem m_audioSystem;
+    std::vector<float> m_StoneDamage={0,0,0,0,0,0};
     std::vector<int> m_totalErase={0,0,0,0,0,0};
     std::vector<int> m_firstErase={0,0,0,0,0,0};
     std::shared_ptr<Enchant> m_Enchant;
@@ -32,6 +34,8 @@ private:
     int m_exCombo;
     int m_firstCombo;
     int m_nowerase;
+    float m_addCombo;
+    float m_ComboAddition;
 };
 
 #endif
