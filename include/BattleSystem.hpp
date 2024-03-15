@@ -3,13 +3,14 @@
 
 #include "Stone.hpp"
 #include "Member.hpp"
+#include "AudioSystem.hpp"
 
 class Enchant;
 
 class BattleSystem {
 public:
     void SetEnchant(std::shared_ptr<Enchant> target);
-    void Start(std::weak_ptr<Enchant> target);
+    void Start();
     void ShowData();
     void ResetRound();
     bool DealPair(std::vector<std::shared_ptr<Stone>> Lists);
@@ -20,6 +21,7 @@ public:
     void SetCombo(int combo);
 
 private:
+    AudioSystem m_audioSystem;
     std::vector<int> m_totalErase={0,0,0,0,0,0};
     std::vector<int> m_firstErase={0,0,0,0,0,0};
     std::shared_ptr<Enchant> m_Enchant;

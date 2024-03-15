@@ -5,9 +5,7 @@
 #include <utility>
 class BattleSystem;
 void Enchant::Start() {
-    m_weakptr = shared_from_this();
-    m_battleSystem->Start(getWeakPtr());
-    m_TypeGeneration = {20,20,20,20,20,20};
+    m_TypeGeneration = {40,40,40,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
     m_row = 6 , m_column = 5;
@@ -58,7 +56,7 @@ void Enchant::Update() {
 }
 
 void Enchant::Change(glm::vec2 pos1,glm::vec2 pos2){
-    static auto SFX = Util::SFX("../assets/audio/Click.wav");
+    static auto SFX = Util::SFX("../assets/audio/moveGem.wav");
     SFX.Play();
     m_Array[pos1.x][pos1.y]->Change(m_Array[pos2.x][pos2.y]);
     std::swap(m_Array[int(pos1.x)][int(pos1.y)], m_Array[int(pos2.x)][int(pos2.y)]);
@@ -375,7 +373,7 @@ std::vector<std::vector<std::shared_ptr<Stone>>> Enchant::organizePairs(){
             }
         }
     } while (merged);
-    
+
     return m_explosionBar;
 }
 
@@ -385,8 +383,4 @@ std::shared_ptr<Enchant> Enchant::getEnchant() {
 
 void Enchant::SetSystem(std::shared_ptr<BattleSystem> target) {
     m_battleSystem = target;
-}
-
-std::weak_ptr<Enchant> Enchant::getWeakPtr(){
-    return m_weakptr;
 }

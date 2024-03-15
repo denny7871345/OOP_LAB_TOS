@@ -55,6 +55,7 @@ set(SRC_FILES
         ${SRC_DIR}/Skills.cpp
     ${SRC_DIR}/Stone.cpp
     ${SRC_DIR}/StoneSystem.cpp
+        ${SRC_DIR}/AudioSystem.cpp
         ${SRC_DIR}/BattleSystem.cpp
     ${SRC_DIR}/Enchant.cpp
 )
@@ -95,6 +96,7 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/Cat.hpp
     ${INCLUDE_DIR}/config.hpp
     ${INCLUDE_DIR}/AnimatedCharacter.hpp
+        ${INCLUDE_DIR}/AudioSystem.hpp
     ${INCLUDE_DIR}/BattleSystem.hpp
     ${INCLUDE_DIR}/Enchant.hpp
     ${INCLUDE_DIR}/Type.hpp
