@@ -1,6 +1,11 @@
 #include "BattleSystem.hpp"
 
-void BattleSystem::Start() {
+void BattleSystem::Start(std::weak_ptr<Enchant> target) {
+    if(auto targetptr = target.lock()){
+        m_Enchant = targetptr;
+    }else{
+        LOG_DEBUG("bad weak_ptr");
+    }
     ResetRound();
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
     m_Members.push_back(token);

@@ -9,7 +9,7 @@ class Enchant;
 class BattleSystem {
 public:
     void SetEnchant(std::shared_ptr<Enchant> target);
-    void Start();
+    void Start(std::weak_ptr<Enchant> target);
     void ShowData();
     void ResetRound();
     bool DealPair(std::vector<std::shared_ptr<Stone>> Lists);

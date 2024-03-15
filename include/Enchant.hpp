@@ -32,6 +32,7 @@ public:
 
 
 private:
+    std::weak_ptr<Enchant> m_weakptr;
     std::shared_ptr<BattleSystem> m_battleSystem;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_explosionBar;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
@@ -49,6 +50,7 @@ private:
     std::vector<int> m_mustFallbyNormal;
     std::vector<int> m_mustFallbyPowerup;
     /*method*/
+    std::weak_ptr<Enchant> getWeakPtr();
     void KeepingStateUpdate();
     void DraggingStateUpdate();
     void MovingStateUpdate();

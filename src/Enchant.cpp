@@ -5,7 +5,8 @@
 #include <utility>
 class BattleSystem;
 void Enchant::Start() {
-
+    m_weakptr = shared_from_this();
+    m_battleSystem->Start(getWeakPtr());
     m_TypeGeneration = {20,20,20,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
@@ -384,4 +385,8 @@ std::shared_ptr<Enchant> Enchant::getEnchant() {
 
 void Enchant::SetSystem(std::shared_ptr<BattleSystem> target) {
     m_battleSystem = target;
+}
+
+std::weak_ptr<Enchant> Enchant::getWeakPtr(){
+    return m_weakptr;
 }
