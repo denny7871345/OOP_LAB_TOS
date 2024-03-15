@@ -10,6 +10,8 @@ class Enchant;
 class BattleSystem {
 public:
     void SetEnchant(std::shared_ptr<Enchant> target);
+    float GetDraggingTime();
+    void AddDraggingTime();
     void Start();
     void ShowData();
     void ResetRound();
@@ -21,21 +23,21 @@ public:
     void SetCombo(int combo);
     void DamageSettle();
 private:
-
+    std::shared_ptr<Enemy> m_enemy;
     AudioSystem m_audioSystem;
     std::vector<float> m_StoneDamage={0,0,0,0,0,0};
     std::vector<int> m_totalErase={0,0,0,0,0,0};
     std::vector<int> m_firstErase={0,0,0,0,0,0};
     std::shared_ptr<Enchant> m_Enchant;
-    std::vector<std::shared_ptr<Member>> m_Members;
+    std::vector<std::shared_ptr<Member>> m_team;
     int m_life;
     int m_MaxLife;
     int m_combo;
     int m_exCombo;
     int m_firstCombo;
-    int m_nowerase;
     float m_addCombo;
     float m_ComboAddition;
+    float m_DraggingTime;
 };
 
 #endif

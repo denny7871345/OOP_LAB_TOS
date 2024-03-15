@@ -2,17 +2,19 @@
 
 void BattleSystem::Start() {
     ResetRound();
+    m_DraggingTime = 5;
+    m_enemy = std::make_shared<Enemy>(Type::Element_type::Fire,100000,3000,10000,2);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
-    m_Members.push_back(token);
+    m_team.push_back(token);
     std::shared_ptr<Sean> token2 = std::make_shared<Sean>(m_Enchant);
-    m_Members.push_back(token2);
+    m_team.push_back(token2);
     std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(m_Enchant);
-    m_Members.push_back(token3);
+    m_team.push_back(token3);
     m_audioSystem.Start();
 }
 
 void BattleSystem::SkillTrigger(int index) {
-    m_Members[index]->Skill();
+    m_team[index]->Skill();
 }
 
 void BattleSystem::SetCombo(int combo) {
@@ -38,7 +40,6 @@ void BattleSystem::AddExCombo(int combo) {
 void BattleSystem::ResetRound() {
     m_ComboAddition = 0;
     m_addCombo = 0.25;
-    m_nowerase = 0;
     m_firstCombo = 0;
     m_combo = 0;
     m_exCombo = 0;
@@ -106,8 +107,14 @@ void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
 }
 
 void BattleSystem::DamageSettle() {
-    for(int i=0;i<3;i++){
-        LOG_DEBUG("Member{} deals {} damage",1,m_Members[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_Members[i]->GetType())]);
+    for(int i=0;i < m_team.size() ;i++){
+        int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())];
+        LOG_DEBUG("Member{} deals {} damage",i,Damage);
+        m_enemy->DealtDamage(Damage, true);
     }
+    LOG_DEBUG("Enemy has {} life left.",m_enemy->GetLife());
+}
 
+float BattleSystem::GetDraggingTime() {
+    return m_DraggingTime;
 }

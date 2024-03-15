@@ -1,5 +1,6 @@
 #include "Enchant.hpp"
 #include "Util/input.hpp"
+#include "Util/Time.hpp"
 #include "Util/SFX.hpp"
 #include <cmath>
 #include <utility>
@@ -232,6 +233,7 @@ void Enchant::DraggingStateUpdate() {
            // LOG_DEBUG("Let's Moving to [{}, {}] from [{}, {}]", i + 1, j + 1, static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
             Change(m_StartPos, glm::vec2(i, j));
             m_NowPos = glm::vec2(i, j);
+            m_DraggingTime = m_battleSystem->GetDraggingTime();
             m_state = state::Moving;
             return;
         }
@@ -255,11 +257,14 @@ void Enchant::MovingStateUpdate() {
             return;
         }
     }
-    if (Util::Input::IsKeyUp(Util::Keycode::E)) {
+    if (Util::Input::IsKeyUp(Util::Keycode::E) || m_DraggingTime <= 0) {
         m_Array[static_cast<int>(m_StartPos.x)][static_cast<int>(m_StartPos.y)]->SetDragging(false);
         m_EndPos = m_NowPos;
         m_state = state::Checking;
     }
+    auto delta = static_cast<float>(Util::Time::GetDeltaTime());
+    m_DraggingTime -= delta;
+    LOG_DEBUG("U have {} S left",m_DraggingTime);
 }
 void Enchant::CheckingStateUpdate() {
     const int row = 6, column = 5;

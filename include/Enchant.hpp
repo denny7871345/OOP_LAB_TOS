@@ -42,6 +42,7 @@ private:
     state m_state=state::Falling;
     int m_row;
     int m_column;
+    float m_DraggingTime;
     bool m_firstBreak;
     glm::vec2 m_StartPos;
     glm::vec2 m_NowPos;
