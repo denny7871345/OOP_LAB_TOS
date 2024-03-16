@@ -257,6 +257,14 @@ public:
         Turn(Type::Element_type::Water,Type::Element_type::Water, true);
     }
 };
+class Tyr:public Member,StoneTurn{
+public:
+    explicit Tyr(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1402,3161,442,target),
+          StoneTurn(std::move(target)){};
+    void Skill() override{
+        Turn(Type::Element_type::Water,Type::Element_type::Water, true);
+    }
+};
 //Slime
 class WaterSlime:public Member,StoneTurn{
 public:
