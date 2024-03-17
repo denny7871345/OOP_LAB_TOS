@@ -259,10 +259,34 @@ public:
 };
 class Tyr:public Member,StoneTurn{
 public:
-    explicit Tyr(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1402,3161,442,target),
+    explicit Tyr(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1499,3326,392,target),
           StoneTurn(std::move(target)){};
     void Skill() override{
-        Turn(Type::Element_type::Water,Type::Element_type::Water, true);
+        Turn(Type::Element_type::Fire,Type::Element_type::Fire, true);
+    }
+};
+class Freyja:public Member,StoneTurn{
+public:
+    explicit Freyja(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,1291,3655,412,target),
+          StoneTurn(std::move(target)){};
+    void Skill() override{
+        Turn(Type::Element_type::Grass,Type::Element_type::Grass, true);
+    }
+};
+class Thor:public Member,StoneTurn{
+public:
+    explicit Thor(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,1305,3293,453,target),
+          StoneTurn(std::move(target)){};
+    void Skill() override{
+        Turn(Type::Element_type::Light,Type::Element_type::Light, true);
+    }
+};
+class Loki:public Member,StoneTurn{
+public:
+    explicit Loki(std::shared_ptr<Enchant> target): Member(Type::Element_type::Dark,1540,3096,409,target),
+          StoneTurn(std::move(target)){};
+    void Skill() override{
+        Turn(Type::Element_type::Dark,Type::Element_type::Dark, true);
     }
 };
 //Slime
