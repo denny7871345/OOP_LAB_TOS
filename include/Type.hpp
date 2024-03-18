@@ -100,8 +100,10 @@ public:
         return m_type;
     }
     void SetType(Element_type target,bool powerup){
+        int flag = false;
+        if(m_powerup) flag = true;
         m_type = target;
-        m_powerup = powerup;
+        m_powerup = (powerup || flag) ;
     }
     std::vector<std::string> GetStoneNormalImage(){
         std::string typeName="";
