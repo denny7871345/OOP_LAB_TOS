@@ -12,7 +12,6 @@ void BattleSystem::Start() {
     m_team.push_back(token3);
     std::shared_ptr<WaterBeast> token4 = std::make_shared<WaterBeast>(m_Enchant);
     m_team.push_back(token4);
-
     for(int i=0;i<m_team.size();i++){
         m_MaxLife += m_team[i]->GetLife();
     }
@@ -79,13 +78,6 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
 }
 bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
-        if(Lists.size() >= 5)
-        m_Enchant->MustFall(Lists[0]->GetType(), true);
-        AddCombo(1);
-        m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
-        m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
-        m_firstCombo +=1 ;
-        m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
         return true;
     }
     for(int i=0;i<Lists.size();i++){
@@ -96,6 +88,13 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
                 }else{
+                    if(Lists.size() >= 5)
+                        m_Enchant->MustFall(Lists[0]->GetType(), true);
+                    AddCombo(1);
+                    m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
+                    m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+                    m_firstCombo +=1 ;
+                    m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
                     m_audioSystem.PlayComboSound(m_combo);
                 }
             }
