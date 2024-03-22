@@ -43,6 +43,7 @@ public:
             }
         }
     }
+    bool IsPowerUp(){return m_powerup;}
     static int FindIndex(Element_type target){
         static Element_type elements[NUM_ELEMENTS] = {Fire, Water, Grass, Light, Dark, Heart};
         return std::find(elements,elements+NUM_ELEMENTS,target) - elements;

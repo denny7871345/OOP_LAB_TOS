@@ -32,6 +32,7 @@ public:
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
     int GetCD(){return m_CD;}
+    void AddCD(int num){m_CD += num;}
     int GetDefence(){return m_defence;}
     void DealtDamage(int Damage,bool Defence);
     virtual bool Skills(){return true;}
