@@ -11,7 +11,6 @@ class Giraffe : public Util::GameObject {
 
 public:
     void Update();
-
     void Start();
 
 private:

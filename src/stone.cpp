@@ -49,7 +49,6 @@ void Stone::Update() {
     m_GiraffeText->SetText("(" + std::to_string(m_row+1) + "," + std::to_string(m_column+1) + ")");
     m_GiraffeText->Update(m_Transform);
     this->Draw();
-
 }
 
 
