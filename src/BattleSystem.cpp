@@ -3,7 +3,8 @@
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
-    m_enemy = std::make_shared<Enemy>(Type::Element_type::Fire,100000,3000,10000,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,100000,3000,10000,2);
+    m_enemy.push_back(Enemytoken);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
     m_team.push_back(token);
     std::shared_ptr<Sean> token2 = std::make_shared<Sean>(m_Enchant);
@@ -14,6 +15,7 @@ void BattleSystem::Start() {
     m_team.push_back(token4);
     for(int i=0;i<m_team.size();i++){
         m_MaxLife += m_team[i]->GetLife();
+        m_team[i]->SetEnemy(m_enemy);
     }
     m_life = m_MaxLife;
     m_audioSystem.Start();
@@ -52,6 +54,7 @@ void BattleSystem::ResetRound() {
     m_firstErase = {0,0,0,0,0,0};
     m_totalErase = {0,0,0,0,0,0};
     m_StoneDamage = {0,0,0,0,0,0};
+    m_powerUpBeenErase = {false,false,false,false,false,false};
 }
 bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
@@ -64,11 +67,15 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     }
     for(int i=0;i<Lists.size();i++){
         if(! Lists[i]->IsPlaying()){
+            if(Lists[i]->IsPowerUp()){
+                m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.3;
+                m_powerUpBeenErase[Type::FindIndex(Lists[i]->GetType())] = true;
+            }
             Lists[i]->SetPlaying(true);
             if(Lists.size() >= 5){
                 static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
+                SFX.SetVolume(50);
                 SFX.Play();
-
             }else{
                 m_audioSystem.PlayComboSound(m_combo);
             }
@@ -82,6 +89,10 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     }
     for(int i=0;i<Lists.size();i++){
         if(! Lists[i]->IsPlaying()){
+            if(Lists[i]->IsPowerUp()){
+                m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.3;
+                m_powerUpBeenErase[Type::FindIndex(Lists[i]->GetType())] = true;
+            }
             Lists[i]->SetPlaying(true);
             if(i==0){
                 if(Lists.size() >= 5){
@@ -123,19 +134,29 @@ void BattleSystem::DamageSettle() {
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())];
         LOG_DEBUG("Member{} deals {} damage",i,Damage);
-        m_enemy->DealtDamage(Damage, true);
+        m_team[i]->Strike(false,Damage,true);
     }
     if(m_life + totalHeal * m_ComboAddition > m_MaxLife){
         m_life = m_MaxLife;
         LOG_DEBUG("you are full of Life");
     }else{
         m_life += totalHeal * m_ComboAddition ;
+
         LOG_DEBUG("U heal {} life.",totalHeal);
     }
+    //Enemy's turn
+    for(int i=0; i < m_enemy.size();i++){
+        LOG_DEBUG("Enemy{}'s Turn!!!",i);
+        m_enemy[i]->AddCD(-1);
+        if(m_enemy[i]->GetCD() == 0){
+            LOG_DEBUG("Enemy Attack!!!");
+            m_life -= m_enemy[i]->GetAtk();
+            LOG_DEBUG("U have {} life left.",m_life);
+            m_enemy[i]->AddCD(2);
+        }
+        LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
+    }
 
-    LOG_DEBUG("Enemy has {} life left.",m_enemy->GetLife());
-    m_life -= m_enemy->GetAtk();
-    LOG_DEBUG("U have {} life left.",m_life);
 
 }
 

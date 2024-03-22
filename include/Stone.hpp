@@ -46,12 +46,14 @@ public:
     void SetFalling();
 
     void TurnType(Type::Element_type target, bool powerup);
+
+    bool IsPowerUp(){return m_type.IsPowerUp();}
+
 private:
     state m_state;
     int m_row;
     int m_column;
     Type m_type;
-
 };
 
 #endif

@@ -23,11 +23,12 @@ public:
     void SetCombo(int combo);
     void DamageSettle();
 private:
-    std::shared_ptr<Enemy> m_enemy;
+    std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
     std::vector<float> m_StoneDamage={0,0,0,0,0,0};
     std::vector<int> m_totalErase={0,0,0,0,0,0};
     std::vector<int> m_firstErase={0,0,0,0,0,0};
+    std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
     std::shared_ptr<Enchant> m_Enchant;
     std::vector<std::shared_ptr<Member>> m_team;
     int m_life;
