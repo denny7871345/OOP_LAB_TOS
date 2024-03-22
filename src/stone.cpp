@@ -1,23 +1,11 @@
 #include "stone.hpp"
+
+#include <utility>
 #include "Util/Time.hpp"
 #include "Util/Transform.hpp"
-#include <cstdlib>
 #include "Util/Input.hpp"
-#include "config.hpp"
 
-void Stone::Start(int row,int column){
-    m_type.Start();
-    m_GiraffeText =
-        std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf", 100);
-    m_GiraffeText->SetZIndex(this->GetZIndex() + 1);
-    m_GiraffeText->Start();
-    m_GiraffeText->SetColor(m_type.TypeColor());
-    m_GiraffeText->SetText(m_type.TypeString()); //此行有問題
-    m_row = row;
-    m_column = column;
-    m_Transform.translation = glm::vec2{-225 + (75 * m_row + 37.5), 37.5 + 78 * m_column };
-    m_state = state::Falling;
-}
+
 
 void Stone::Update() {
     static glm::vec2 dir = {0, 0};
@@ -25,11 +13,10 @@ void Stone::Update() {
     switch(m_state){
         case state::Falling:
             if(pos.y > -350 + 78 * m_column + 37.5){
-                dir.y -= 0.01;
+                dir.y -= 0.05;
                 break;
             }else {
-                m_Transform.translation.y = -350 + 78 * m_column + 37.5;
-                dir.y = 0;
+                dir.y=0;
                 m_state = state::Keeping;
                 break;
             }
@@ -46,20 +33,11 @@ void Stone::Update() {
         dir * delta * 100.0F, 2 * delta,
         glm::vec2(0.5, 0.5) };
     pos += deltaTransform.translation;
-    m_GiraffeText->SetText("(" + std::to_string(m_row+1) + "," + std::to_string(m_column+1) + ")");
-    m_GiraffeText->Update(m_Transform);
     this->Draw();
 }
 
 
-bool Stone::IsBeClicked() {
-    auto mouse = Util::Input::GetCursorPosition();
-    if(std::abs(mouse.x - m_Transform.translation.x) < 70/2 && std::abs(mouse.y - m_Transform.translation.y) < 70/2 ){
-        return true;
-    }else{
-        return false;
-    }
-}
+
 
 void Stone::SetDragging(bool drag) {
     if(drag){
@@ -72,4 +50,12 @@ void Stone::SetDragging(bool drag) {
 void Stone::SetPos(int row, int column) {
     m_row = row;
     m_column = column;
+}
+
+Type::Element_type Stone::GetType(){
+    return m_type.GetType();
+}
+
+void Stone::SetFalling() {
+    m_state = state::Falling;
 }

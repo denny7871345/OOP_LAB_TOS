@@ -19,7 +19,7 @@ void GiraffeText::Update() {
 
 void GiraffeText::Update(Util::Transform follows) {
     m_Transform = follows;
-    m_Transform.scale = glm::vec2 (0.4,0.4);
+    m_Transform.scale = glm::vec2 (0.2,0.2);
     m_Size = 1;
     this->Draw();
 }

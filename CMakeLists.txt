@@ -50,8 +50,13 @@ set(SRC_FILES
     ${SRC_DIR}/App.cpp
     ${SRC_DIR}/Giraffe.cpp
     ${SRC_DIR}/GiraffeText.cpp
+    ${SRC_DIR}/AnimatedCharacter.cpp
     ${SRC_DIR}/Cat.cpp
+        ${SRC_DIR}/Skills.cpp
     ${SRC_DIR}/Stone.cpp
+    ${SRC_DIR}/StoneSystem.cpp
+        ${SRC_DIR}/AudioSystem.cpp
+        ${SRC_DIR}/BattleSystem.cpp
     ${SRC_DIR}/Enchant.cpp
 )
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
@@ -91,6 +96,8 @@ set(INCLUDE_FILES
     ${INCLUDE_DIR}/Cat.hpp
     ${INCLUDE_DIR}/config.hpp
     ${INCLUDE_DIR}/AnimatedCharacter.hpp
+        ${INCLUDE_DIR}/AudioSystem.hpp
+    ${INCLUDE_DIR}/BattleSystem.hpp
     ${INCLUDE_DIR}/Enchant.hpp
     ${INCLUDE_DIR}/Type.hpp
 )
@@ -100,6 +107,7 @@ set(TEST_FILES
     ${TEST_DIR}/NotSimpleTest.cpp
     ${TEST_DIR}/TransformTest.cpp
         src/stone.cpp
+
 )
 
 add_executable(Sample
