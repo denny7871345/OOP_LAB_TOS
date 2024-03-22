@@ -1,5 +1,5 @@
 #include "BattleSystem.hpp"
-
+#include "Enchant.hpp"
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
@@ -12,6 +12,10 @@ void BattleSystem::Start() {
     m_team.push_back(token3);
     std::shared_ptr<WaterBeast> token4 = std::make_shared<WaterBeast>(m_Enchant);
     m_team.push_back(token4);
+    for(int i=0;i<m_team.size();i++){
+        m_MaxLife += m_team[i]->GetLife();
+    }
+    m_life = m_MaxLife;
     m_audioSystem.Start();
 }
 
@@ -54,6 +58,8 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
         AddCombo(1);
         m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
         m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+        if(Lists.size() >= 5)
+        m_Enchant->MustFall(Lists[0]->GetType(), true);
         return true;
     }
     for(int i=0;i<Lists.size();i++){
@@ -62,6 +68,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
             if(Lists.size() >= 5){
                 static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                 SFX.Play();
+
             }else{
                 m_audioSystem.PlayComboSound(m_combo);
             }
@@ -71,11 +78,6 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
 }
 bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
-        AddCombo(1);
-        m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
-        m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
-        m_firstCombo +=1 ;
-        m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
         return true;
     }
     for(int i=0;i<Lists.size();i++){
@@ -86,6 +88,13 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
                 }else{
+                    if(Lists.size() >= 5)
+                        m_Enchant->MustFall(Lists[0]->GetType(), true);
+                    AddCombo(1);
+                    m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
+                    m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+                    m_firstCombo +=1 ;
+                    m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
                     m_audioSystem.PlayComboSound(m_combo);
                 }
             }
@@ -109,12 +118,25 @@ void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
 }
 
 void BattleSystem::DamageSettle() {
+    int totalHeal=0;
     for(int i=0;i < m_team.size() ;i++){
+        totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())];
         LOG_DEBUG("Member{} deals {} damage",i,Damage);
         m_enemy->DealtDamage(Damage, true);
     }
+    if(m_life + totalHeal * m_ComboAddition > m_MaxLife){
+        m_life = m_MaxLife;
+        LOG_DEBUG("you are full of Life");
+    }else{
+        m_life += totalHeal * m_ComboAddition ;
+        LOG_DEBUG("U heal {} life.",totalHeal);
+    }
+
     LOG_DEBUG("Enemy has {} life left.",m_enemy->GetLife());
+    m_life -= m_enemy->GetAtk();
+    LOG_DEBUG("U have {} life left.",m_life);
+
 }
 
 float BattleSystem::GetDraggingTime() {

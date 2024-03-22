@@ -14,6 +14,7 @@ public:
         Keeping,
         Dragging,
         Moving,
+        Unlimited
     };
     int CountEmpty();
     void Update();
@@ -21,6 +22,7 @@ public:
     void CheckMatch();
     void DoFall();
     bool CheckFall();
+    void MustFall(Type::Element_type type,bool powerup);
     void GenerateFall(bool powerup);
     void SetDraggingTime(int time);
     void SetState(state target);
@@ -46,6 +48,7 @@ private:
     int m_column;
     float m_DraggingTime;
     bool m_firstBreak;
+    bool m_unlimited;
     glm::vec2 m_StartPos;
     glm::vec2 m_NowPos;
     glm::vec2 m_EndPos;
@@ -60,6 +63,7 @@ private:
     void CheckingStateUpdate();
     void FallingStateUpdate();
     void ExplosingStateUpdate();
+    void UnlimitedStateUpdate();
     bool CheckFull();
     void ShowEnchant();
     void Change(glm::vec2 pos1,glm::vec2 pos2);

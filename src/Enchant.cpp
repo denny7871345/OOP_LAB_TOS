@@ -6,10 +6,11 @@
 #include <utility>
 class BattleSystem;
 void Enchant::Start() {
-    m_TypeGeneration = {40,40,40,20,20,20};
+    m_TypeGeneration = {45,45,0,0,0,30};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
     m_row = 6 , m_column = 5;
+    m_unlimited = false;
     m_Array.resize(m_row);
     for (int i = 0; i < m_row; ++i) {
         m_Array[i].resize(m_column);
@@ -52,6 +53,9 @@ void Enchant::Update() {
         break;
     case state::Explosing:
         ExplosingStateUpdate();
+        break;
+    case state::Unlimited:
+        UnlimitedStateUpdate();
         break;
     }
 }
@@ -213,6 +217,10 @@ void Enchant::KeepingStateUpdate() {
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         m_battleSystem->SkillTrigger(3);
     }
+    if (Util::Input::IsKeyDown(Util::Keycode::M)) {
+        SetDraggingTime(20);
+        SetState(state::Unlimited);
+    }
     if (Util::Input::IsKeyDown(Util::Keycode::E)) {
         auto cursorPos = Util::Input::GetCursorPosition();
         int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
@@ -236,14 +244,20 @@ void Enchant::DraggingStateUpdate() {
            // LOG_DEBUG("Let's Moving to [{}, {}] from [{}, {}]", i + 1, j + 1, static_cast<int>(m_NowPos.x) + 1, static_cast<int>(m_NowPos.y) + 1);
             Change(m_StartPos, glm::vec2(i, j));
             m_NowPos = glm::vec2(i, j);
-            m_DraggingTime = m_battleSystem->GetDraggingTime();
+            if(! m_unlimited)m_DraggingTime = m_battleSystem->GetDraggingTime();
+
             m_state = state::Moving;
             return;
         }
     }
     if (Util::Input::IsKeyUp(Util::Keycode::E)) {
         m_Array[static_cast<int>(m_StartPos.x)][static_cast<int>(m_StartPos.y)]->SetDragging(false);
-        m_state = state::Keeping;
+        if(m_unlimited){
+            m_state = state::Unlimited;
+        }else{
+            m_state = state::Keeping;
+        }
+
        // LOG_DEBUG("you put the {} row, {} column Stone", static_cast<int>(m_StartPos.x) + 1, static_cast<int>(m_StartPos.y) + 1);
     }
 }
@@ -263,7 +277,16 @@ void Enchant::MovingStateUpdate() {
     if (Util::Input::IsKeyUp(Util::Keycode::E) || m_DraggingTime <= 0) {
         m_Array[static_cast<int>(m_StartPos.x)][static_cast<int>(m_StartPos.y)]->SetDragging(false);
         m_EndPos = m_NowPos;
-        m_state = state::Checking;
+        if(m_unlimited){
+            auto cursorPos = Util::Input::GetCursorPosition();
+            int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
+            int j = std::clamp(static_cast<int>(std::floor((cursorPos.y + 350) / 78)), 0, 4);
+            m_Array[i][j]->SetDragging(false);
+            m_state = state::Unlimited;
+        }else{
+            m_state = state::Checking;
+        }
+
     }
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     m_DraggingTime -= delta;
@@ -296,7 +319,6 @@ void Enchant::CheckingStateUpdate() {
 }
 
 void Enchant::ExplosingStateUpdate() {
-
     if(! m_explosionBar.empty()){
         if(m_firstBreak){
             if(m_battleSystem->DealFirstPiar(m_explosionBar[0])){
@@ -340,6 +362,27 @@ void Enchant::FallingStateUpdate() {
 
         }*/
         m_state = state::Checking;
+    }
+}
+
+void Enchant::UnlimitedStateUpdate() {
+    auto delta = static_cast<float>(Util::Time::GetDeltaTime());
+    m_DraggingTime -= delta;
+    LOG_DEBUG("U have {} S left",m_DraggingTime);
+    if(m_DraggingTime <= 0){
+        m_state = state::Checking;
+        m_unlimited = false;
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::E)) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+        int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
+        int j = std::clamp(static_cast<int>(std::floor((cursorPos.y + 350) / 78)), 0, 4);
+        m_Array[i][j]->SetDragging(true);
+        m_StartPos = glm::vec2(i, j);
+        m_NowPos = m_StartPos;
+        m_firstBreak = true;
+        // LOG_DEBUG("you got the {} Stone", Type::TypeString(m_Array[i][j]->GetType()));
+        m_state = state::Dragging;
     }
 }
 
@@ -400,4 +443,13 @@ void Enchant::SetDraggingTime(int time) {
 
 void Enchant::SetState(Enchant::state target) {
     m_state = target;
+    if(m_state == state::Unlimited) m_unlimited = true;
+}
+
+void Enchant::MustFall(Type::Element_type type, bool powerup) {
+    if(powerup){
+        m_mustFallbyPowerup[Type::FindIndex(type)] ++;
+    }else{
+        m_mustFallbyNormal[Type::FindIndex(type)] ++;
+    }
 }

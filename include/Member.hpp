@@ -4,18 +4,21 @@
 #include "Stone.hpp"
 class Enchant;
 class Enemy;
-class Member {
+class Member{
 public:
     virtual void Skill()=0;
     Type::Element_type GetType(){return m_type;}
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
     int GetHeal(){return m_heal;}
+    void Strike(bool onlyone,int damage,bool defence);
+    void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
+        m_enemies = target;}
     Member(Type::Element_type type,int attack,int life,int heal,std::shared_ptr<Enchant> Enchant):m_type(type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(Enchant){};
 private:
     std::shared_ptr<Enchant> m_Enchant;
     std::vector<std::shared_ptr<Member>> m_team;
-    std::shared_ptr<Enemy> m_enemy;
+    std::vector<std::shared_ptr<Enemy>> m_enemies;
     Type::Element_type m_type;
     int m_attack;
     int m_life;
@@ -51,11 +54,6 @@ private:
     std::shared_ptr<Enchant> m_Enchant;
 };
 
-class DealDamage{
-public:
-    void Strike(std::shared_ptr<Enemy> target,int damage,bool defence);
-};
-
 class StoneTurn{
 public:
     explicit StoneTurn(std::shared_ptr<Enchant> target):m_Enchant(std::move(target)){};
@@ -74,16 +72,17 @@ private:
 
 //Charctor
 //MainCharacter
-class Mori:public Member,Boom,DealDamage{
+class Mori:public Member,Boom{
 public:
     explicit Mori(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1035,1881,364,target),
           Boom(std::move(target)){};
     void Skill() override{
+
         StoneBreak(Type::Element_type::Grass,true);
     }
 };
 
-class Sean:public Member,Boom,DealDamage{
+class Sean:public Member,Boom{
 public:
     explicit Sean(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1107,1980,324,target),
           Boom(std::move(target)){};
@@ -91,7 +90,7 @@ public:
         StoneBreak(Type::Element_type::Water,true);
     }
 };
-class Dunkan:public Member,Boom,DealDamage{
+class Dunkan:public Member,Boom{
 public:
     explicit Dunkan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,953,2176,340,target),
           Boom(std::move(target)){};
@@ -99,7 +98,7 @@ public:
         StoneBreak(Type::Element_type::Fire,true);
     }
 };
-class Nathaniel:public Member,Boom,DealDamage{
+class Nathaniel:public Member,Boom{
 public:
     explicit Nathaniel(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,963,1960,374,target),
           Boom(std::move(target)){};
@@ -107,7 +106,7 @@ public:
         StoneBreak(Type::Element_type::Dark,true);
     }
 };
-class Ando:public Member,Boom,DealDamage{
+class Ando:public Member,Boom{
 public:
     explicit Ando(std::shared_ptr<Enchant> target): Member(Type::Element_type::Dark,1137,1843,337,target),
           Boom(std::move(target)){};
@@ -155,7 +154,7 @@ class DarkBeast:public Member,StoneTurn{
 };
 
 /*DefentDragon
-class WDefentDragon:public Member,DealDamage{
+class WDefentDragon:public Member{
     explicit WDefentDragon(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1068,3489,30,target),
           DealDamage(std::move(target), this->GetAtk(), this.){};
     void Skill() override{
