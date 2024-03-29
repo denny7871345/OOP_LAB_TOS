@@ -59,3 +59,4 @@ Type::Element_type Stone::GetType(){
 void Stone::SetFalling() {
     m_state = state::Falling;
 }
+
