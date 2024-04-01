@@ -1,9 +1,11 @@
 #ifndef MEMBER_HPP
 #define MEMBER_HPP
+#include "Enemy.hpp"
+#include "Skills.hpp"
 #include <utility>
 #include "Stone.hpp"
+#include "Datas.hpp"
 class Enchant;
-class Enemy;
 class Member{
 public:
     virtual void Skill()=0;
@@ -11,7 +13,7 @@ public:
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
     int GetHeal(){return m_heal;}
-    void Strike(bool onlyone,int damage,bool defence);
+    void Strike(bool onlyone,int damage,bool defence,DragingDatas datas);
     void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
         m_enemies = target;}
     Member(Type::Element_type type,int attack,int life,int heal,std::shared_ptr<Enchant> Enchant):m_type(type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(Enchant){};
@@ -24,27 +26,6 @@ private:
     int m_life;
     int m_heal;
 };
-
-class Enemy{
-public:
-    Enemy(Type::Element_type type,int life,int attack,int defence,int CD);
-    Type::Element_type GetType(){return m_type;}
-    int GetAtk(){return m_attack;}
-    int GetLife(){return m_life;}
-    int GetCD(){return m_CD;}
-    void AddCD(int num){m_CD += num;}
-    int GetDefence(){return m_defence;}
-    void DealtDamage(int Damage,bool Defence);
-    virtual bool Skills(){return true;}
-private:
-    bool EffectiveDamage;
-    Type::Element_type m_type;
-    int m_life;
-    int m_attack;
-    int m_defence;
-    int m_CD;
-};
-
 
 //skill
 class Boom{

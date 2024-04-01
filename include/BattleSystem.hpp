@@ -23,6 +23,7 @@ public:
     void SetCombo(int combo);
     void DamageSettle();
 private:
+    DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
     std::vector<float> m_StoneDamage={0,0,0,0,0,0};

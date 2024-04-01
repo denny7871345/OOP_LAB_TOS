@@ -1,5 +1,6 @@
 #include "BattleSystem.hpp"
 #include "Enchant.hpp"
+#include "Enemy.hpp"
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
@@ -134,7 +135,7 @@ void BattleSystem::DamageSettle() {
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())];
         LOG_DEBUG("Member{} deals {} damage",i,Damage);
-        m_team[i]->Strike(false,Damage,true);
+        m_team[i]->Strike(false,Damage,true,GetDragDatas());
     }
     if(m_life + totalHeal * m_ComboAddition > m_MaxLife){
         m_life = m_MaxLife;
@@ -162,4 +163,14 @@ void BattleSystem::DamageSettle() {
 
 float BattleSystem::GetDraggingTime() {
     return m_DraggingTime;
+}
+
+DragingDatas BattleSystem::GetDragDatas() {
+    DragingDatas token;
+    token.m_totalErase = m_totalErase;
+    token.m_firstCombo = m_firstCombo;
+    token.m_powerUpBeenErase = m_powerUpBeenErase;
+    token.m_combo = m_combo;
+    token.m_exCombo = m_exCombo;
+    return token;
 }

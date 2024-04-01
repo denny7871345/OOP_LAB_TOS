@@ -1,5 +1,6 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
+#include "Util/Color.hpp"
 #include <random>
 #include <utility>
 class Type {
