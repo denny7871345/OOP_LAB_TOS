@@ -20,11 +20,13 @@ void StoneTurn::Turn(Type::Element_type Lvalue, Type::Element_type Rvalue, bool 
 }
 
 bool Skills::SkillsCheck(DragingDatas datas) {
+    LOG_DEBUG("NothingHappens!!");
     return true;
 }
 
 bool ComboShield::SkillsCheck(DragingDatas datas) {
-    if(datas.m_combo > m_num){
+    LOG_DEBUG("ComboCheck!!");
+    if(datas.m_combo >= m_num){
         return true;
     } else{
         return false;
@@ -32,7 +34,9 @@ bool ComboShield::SkillsCheck(DragingDatas datas) {
 }
 
 bool PowerShield::SkillsCheck(DragingDatas datas) {
-    //保留
+    LOG_DEBUG("CheckPowerUP!! = {}",datas.m_powerUpBeenErase[Type::FindIndex(datas.m_Attackertype)]);
+
+    return datas.m_powerUpBeenErase[Type::FindIndex(datas.m_Attackertype)];
 }
 
 bool FirstComboShield::SkillsCheck(DragingDatas datas) {

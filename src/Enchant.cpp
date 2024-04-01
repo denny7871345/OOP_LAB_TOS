@@ -6,7 +6,7 @@
 #include <utility>
 class BattleSystem;
 void Enchant::Start() {
-    m_TypeGeneration = {45,45,0,0,0,30};
+    m_TypeGeneration = {20,20,20,20,20,20};
     m_mustFallbyNormal = {0,0,0,0,0,0};
     m_mustFallbyPowerup = {0,0,0,0,0,0};
     m_row = 6 , m_column = 5;
@@ -290,7 +290,7 @@ void Enchant::MovingStateUpdate() {
     }
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     m_DraggingTime -= delta;
-    LOG_DEBUG("U have {} S left",m_DraggingTime);
+    //LOG_DEBUG("U have {} S left",m_DraggingTime);
 }
 void Enchant::CheckingStateUpdate() {
     const int row = 6, column = 5;
@@ -368,7 +368,7 @@ void Enchant::FallingStateUpdate() {
 void Enchant::UnlimitedStateUpdate() {
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     m_DraggingTime -= delta;
-    LOG_DEBUG("U have {} S left",m_DraggingTime);
+    //LOG_DEBUG("U have {} S left",m_DraggingTime);
     if(m_DraggingTime <= 0){
         m_state = state::Checking;
         m_unlimited = false;

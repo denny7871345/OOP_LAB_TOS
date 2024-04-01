@@ -4,7 +4,11 @@
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,100000,3000,10000,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,100000,3000,10,2);
+    auto ShieldToken = std::make_shared<PowerShield>();
+    Enemytoken->AddSkill(ShieldToken);
+    auto ShieldToken1 = std::make_shared<ComboShield>(5);
+    Enemytoken->AddSkill(ShieldToken1);
     m_enemy.push_back(Enemytoken);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
     m_team.push_back(token);
@@ -77,6 +81,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
                 static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                 SFX.SetVolume(50);
                 SFX.Play();
+
             }else{
                 m_audioSystem.PlayComboSound(m_combo);
             }
@@ -97,11 +102,10 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
             Lists[i]->SetPlaying(true);
             if(i==0){
                 if(Lists.size() >= 5){
+                    m_Enchant->MustFall(Lists[0]->GetType(), true);
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
                 }else{
-                    if(Lists.size() >= 5)
-                        m_Enchant->MustFall(Lists[0]->GetType(), true);
                     AddCombo(1);
                     m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
                     m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
@@ -119,6 +123,7 @@ void BattleSystem::ShowData() {
     LOG_DEBUG("first erase:[{},{},{},{},{},{}]",m_firstErase[0],m_firstErase[1],m_firstErase[2],m_firstErase[3],m_firstErase[4],m_firstErase[5]);
     LOG_DEBUG("total erase:[{},{},{},{},{},{}]",m_totalErase[0],m_totalErase[1],m_totalErase[2],m_totalErase[3],m_totalErase[4],m_totalErase[5]);
     LOG_DEBUG("total StoneDamage:[{}%,{}%,{}%,{}%,{}%,{}%]",m_StoneDamage[0]*100,m_StoneDamage[1]*100,m_StoneDamage[2]*100,m_StoneDamage[3]*100,m_StoneDamage[4]*100,m_StoneDamage[5]*100);
+    LOG_DEBUG("PowerUP Erase:[{},{},{},{},{},{}]",m_powerUpBeenErase[0],m_powerUpBeenErase[1],m_powerUpBeenErase[2],m_powerUpBeenErase[3],m_powerUpBeenErase[4],m_powerUpBeenErase[5]);
     LOG_DEBUG("first combo:{}",m_firstCombo);
     LOG_DEBUG("Total combo:{}",m_combo);
     LOG_DEBUG("Combo Addition:{}%",m_ComboAddition * 100);
@@ -131,11 +136,13 @@ void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
 
 void BattleSystem::DamageSettle() {
     int totalHeal=0;
+    DragingDatas token = GetDragDatas();
     for(int i=0;i < m_team.size() ;i++){
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())];
         LOG_DEBUG("Member{} deals {} damage",i,Damage);
-        m_team[i]->Strike(false,Damage,true,GetDragDatas());
+        token.m_Attackertype = m_team[i]->GetType();
+        m_team[i]->Strike(false,Damage,true,token);
     }
     if(m_life + totalHeal * m_ComboAddition > m_MaxLife){
         m_life = m_MaxLife;

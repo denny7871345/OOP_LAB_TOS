@@ -4,9 +4,12 @@ Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD)
 ,m_defence(defence),m_CD(CD){}
 
 void Enemy::DealtDamage(int Damage, bool Defence, DragingDatas datas) {
+    if(Damage ==0)
+        return;
+
     bool effectedDamage = true;
     for(int i=0;i<m_SkillList.size();i++){
-        effectedDamage = (effectedDamage && m_SkillList[i].SkillsCheck(datas));
+        effectedDamage = (effectedDamage && m_SkillList[i]->SkillsCheck(datas));
     }
     if(effectedDamage){
         if(Defence){
