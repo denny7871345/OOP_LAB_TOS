@@ -4,16 +4,14 @@
 #include "Datas.hpp"
 #include "Type.hpp"
 
-
-
-
-//敵技(轉珠方面)
+//敵技(消珠方面)
 class Skills{
 public:
     virtual bool SkillsCheck(DragingDatas datas);
+    virtual void SkillsRoundReset(){}
 };
 
-class ComboShield:public Skills{
+class ComboShield:public Skills{ //v
 public:
     explicit ComboShield(int num):m_num(num){}
     bool SkillsCheck(DragingDatas datas) override;
@@ -21,12 +19,12 @@ private:
     int m_num;
 };
 
-class PowerShield:public Skills{
+class PowerShield:public Skills{ //v
 public:
     bool SkillsCheck(DragingDatas datas) override;
 };
 
-class FirstComboShield:public Skills{
+class FirstComboShield:public Skills{//V
 public:
     explicit FirstComboShield(int num):m_num(num){}
     bool SkillsCheck(DragingDatas datas) override;
@@ -34,36 +32,40 @@ private:
     int m_num;
 };
 
-class EraseShield:public Skills{
+class EraseShield:public Skills{ //v
 public:
     explicit EraseShield(Type::Element_type type, int howmuch):m_type(type), m_howmuch(howmuch){}
     bool SkillsCheck(DragingDatas datas) override;
+    void SkillsRoundReset() override;
     void ResetHowmuch(int num);
 private:
     Type::Element_type m_type;
     int m_howmuch;
+    bool m_firstCount = true;
 };
+
+
 //敵技(攻擊方面)
 class AttackSkill{
 public:
-    virtual std::vector<int> Attack(EnemyDatas datas);
+    virtual std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas);
 };
 
 class StrongerSilver:public AttackSkill{
 public:
-    std::vector<int> Attack(EnemyDatas datas) override;
+    std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) override;
 };
 
 class StrongerGold:public AttackSkill{
 public:
-    std::vector<int> Attack(EnemyDatas datas) override;
+    std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) override;
 };
 
 class KeepFight:public AttackSkill{
 public:
-    std::vector<int> Attack(EnemyDatas datas) override;
+    std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) override;
 private:
-    int m_times=0;
+    float m_times=1;
 };
 //敵技(反擊)
 class Counter{

@@ -24,7 +24,7 @@ bool Skills::SkillsCheck(DragingDatas datas) {
     return true;
 }
 
-bool ComboShield::SkillsCheck(DragingDatas datas) {
+bool ComboShield::SkillsCheck(DragingDatas datas) { //V
     LOG_DEBUG("ComboCheck!!");
     if(datas.m_combo >= m_num){
         return true;
@@ -33,13 +33,13 @@ bool ComboShield::SkillsCheck(DragingDatas datas) {
     }
 }
 
-bool PowerShield::SkillsCheck(DragingDatas datas) {
+bool PowerShield::SkillsCheck(DragingDatas datas) { //V
     LOG_DEBUG("CheckPowerUP!! = {}",datas.m_powerUpBeenErase[Type::FindIndex(datas.m_Attackertype)]);
 
     return datas.m_powerUpBeenErase[Type::FindIndex(datas.m_Attackertype)];
 }
 
-bool FirstComboShield::SkillsCheck(DragingDatas datas) {
+bool FirstComboShield::SkillsCheck(DragingDatas datas) { //V
     if(datas.m_firstCombo == m_num){
         return true;
     }else{
@@ -47,41 +47,50 @@ bool FirstComboShield::SkillsCheck(DragingDatas datas) {
     }
 }
 
-bool EraseShield::SkillsCheck(DragingDatas datas) {
-    m_howmuch -= datas.m_totalErase[Type::FindIndex(m_type)];
+bool EraseShield::SkillsCheck(DragingDatas datas) { //V
+    if(m_firstCount){
+        m_howmuch -= datas.m_totalErase[Type::FindIndex(m_type)];
+        m_firstCount = false;
+    }
+
+    LOG_DEBUG("still need erase {} {} stone!!",m_howmuch,Type::TypeString(m_type));
     return (m_howmuch <= 0);
+}
+
+void EraseShield::SkillsRoundReset() { //V
+    m_firstCount = true;
 }
 
 void EraseShield::ResetHowmuch(int num) {
     m_howmuch = num;
 }
-
-std::vector<int> AttackSkill::Attack(EnemyDatas datas) {
+//敵技(攻擊)
+std::vector<int> AttackSkill::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) { //V
     std::vector<int> damages;
-    damages.push_back(datas.m_attack);
+    damages.push_back(enemyDatas.m_attack);
     return damages;
 }
 
-std::vector<int> StrongerSilver::Attack(EnemyDatas datas) {
+std::vector<int> StrongerSilver::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) {  
     std::vector<int> damages;
-    float Addition = (1 - (datas.m_life / datas.m_firstLife)) * 10 + 1;
-    damages.push_back((int(datas.m_attack * Addition)));
+    float Addition = (1 - (enemyDatas.m_life / enemyDatas.m_firstLife)) * 10 + 1;
+    damages.push_back((int(enemyDatas.m_attack * Addition)));
     return damages ;
 }
 
-std::vector<int> StrongerGold::Attack(EnemyDatas datas) {
+std::vector<int> StrongerGold::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) {
     std::vector<int> damages;
-    float Addition = (1 - (datas.m_life / datas.m_firstLife)) * 10 + 1;
-    damages.push_back((int(datas.m_attack * Addition)));
-    if(Addition >= 8)     damages.push_back((int(datas.m_attack * Addition)));
+    float Addition = (1 - (enemyDatas.m_life / enemyDatas.m_firstLife)) * 10 + 1;
+    damages.push_back((int(enemyDatas.m_attack * Addition)));
+    if(Addition >= 8)     damages.push_back((int(enemyDatas.m_attack * Addition)));
     return damages;
 }
 
-std::vector<int> KeepFight::Attack(EnemyDatas datas) {
+std::vector<int> KeepFight::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) { //V
     std::vector<int> damages;
-    m_times++;
-    damages.push_back(datas.m_attack * m_times);
-    if(m_times >= 6) damages.push_back(datas.m_attack * m_times);
+    damages.push_back(enemyDatas.m_attack * m_times);
+    if(m_times >= 8) damages.push_back(enemyDatas.m_attack * m_times);
+    m_times*= 1.414;
     return damages;
 }
 
@@ -89,10 +98,10 @@ Counter::Counter(int percentage) {
     m_percentage = percentage;
 }
 
-std::vector<int> Counter::CounterActivate(EnemyDatas datas) {
+std::vector<int> Counter::CounterActivate(EnemyDatas enemyDatas) {
     std::vector<int> damage = {};
-    if(datas.DealtDamage){
-        damage.push_back(datas.m_attack * float(m_percentage * 0.01));
+    if(enemyDatas.DealtDamage){
+        damage.push_back(enemyDatas.m_attack * float(m_percentage * 0.01));
     }else{
         return {};
     }

@@ -4,11 +4,11 @@
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,100000,3000,10,2);
-    auto ShieldToken = std::make_shared<PowerShield>();
-    Enemytoken->AddSkill(ShieldToken);
-    auto ShieldToken1 = std::make_shared<ComboShield>(5);
-    Enemytoken->AddSkill(ShieldToken1);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,20000,2300,10,2);
+    /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
+    Enemytoken->AddSkill(ShieldToken1);*/
+    auto Attacking = std::make_shared<StrongerSilver>();
+    Enemytoken->SetAttackingMethod(Attacking);
     m_enemy.push_back(Enemytoken);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
     m_team.push_back(token);
@@ -66,8 +66,6 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
         AddCombo(1);
         m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
         m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
-        if(Lists.size() >= 5)
-        m_Enchant->MustFall(Lists[0]->GetType(), true);
         return true;
     }
     for(int i=0;i<Lists.size();i++){
@@ -77,12 +75,16 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
                 m_powerUpBeenErase[Type::FindIndex(Lists[i]->GetType())] = true;
             }
             Lists[i]->SetPlaying(true);
-            if(Lists.size() >= 5){
-                static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
-                SFX.SetVolume(50);
-                SFX.Play();
-
-            }else{
+            if(i==0){
+                if(Lists.size() >= 5){
+                    m_Enchant->MustFall(Lists[0]->GetType(), true);
+                    static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
+                    SFX.Play();
+                }else{
+                    AddCombo(1);
+                }
+                m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
+                m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
                 m_audioSystem.PlayComboSound(m_combo);
             }
         }
@@ -107,12 +109,12 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
                     SFX.Play();
                 }else{
                     AddCombo(1);
-                    m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
-                    m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
-                    m_firstCombo +=1 ;
-                    m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
                     m_audioSystem.PlayComboSound(m_combo);
                 }
+                m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
+                m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+                m_firstCombo +=1 ;
+                m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
             }
         }
     }
@@ -149,7 +151,6 @@ void BattleSystem::DamageSettle() {
         LOG_DEBUG("you are full of Life");
     }else{
         m_life += totalHeal * m_ComboAddition ;
-
         LOG_DEBUG("U heal {} life.",totalHeal);
     }
     //Enemy's turn
@@ -158,10 +159,18 @@ void BattleSystem::DamageSettle() {
         m_enemy[i]->AddCD(-1);
         if(m_enemy[i]->GetCD() == 0){
             LOG_DEBUG("Enemy Attack!!!");
-            m_life -= m_enemy[i]->GetAtk();
-            LOG_DEBUG("U have {} life left.",m_life);
+
+            auto damage = m_enemy[i]->Attack(token);
+
+            for(int j=0;j<damage.size();j++){
+                LOG_DEBUG("U are dealt {} damages.",damage[j]);
+                m_life -= damage[j];
+                LOG_DEBUG("U have {} life left.",m_life);
+            }
+
             m_enemy[i]->AddCD(2);
         }
+        m_enemy[i]->RoundUp();
         LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
     }
 
