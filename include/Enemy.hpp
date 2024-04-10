@@ -8,6 +8,7 @@
 #include "GiraffeText.hpp"
 class Enemy:public AnimatedCharacter{
 public:
+    void SetPos(int x,int y);
     void Update();
     Enemy(Type::Element_type type,int life,int attack,int defence,int CD);
     void RoundUp();
@@ -34,6 +35,7 @@ private:
     int m_CD;
     bool m_hasBeenHit = false;
     std::shared_ptr<GiraffeText> m_text;
+    glm::vec2 m_pos;
 };
 
 

@@ -2,6 +2,7 @@
 #include "Util/Logger.hpp"
 #include "Util/Time.hpp"
 #include "GiraffeText.hpp"
+#include "config.hpp"
 Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD):m_type(type),m_life(life),m_attack(attack)
 ,m_defence(defence),m_CD(CD),AnimatedCharacter({"../assets/sprites/cat/cat-0.bmp",
                          "../assets/sprites/cat/cat-1.bmp"
@@ -75,7 +76,9 @@ void Enemy::SetAttackingMethod(std::shared_ptr<AttackSkill> target) {
 void Enemy::Update() {
     static glm::vec2 dir = {0, 0};
     auto &pos = m_Transform.translation;
-    m_Transform.translation = {0,200};
+    auto x_pos = WINDOW_WIDTH / (m_pos.y) ;
+    m_Transform.translation = { 0 + x_pos * (0.5 + m_pos.x) ,200};
+    m_Transform.scale = { 1.0 / m_pos.y, 1.0 / m_pos.y};
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     Util::Transform deltaTransform{
         dir * delta * 100.0F, 2 * delta,
@@ -86,4 +89,8 @@ void Enemy::Update() {
     token = std::to_string(m_life * 100 / m_firstLife) + "%";
     m_text->SetText(token);
     m_text->Update(m_Transform);
+}
+
+void Enemy::SetPos(int x, int y) {
+    m_pos = {x,y};
 }

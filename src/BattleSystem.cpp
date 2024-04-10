@@ -4,12 +4,16 @@
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Grass,10000,2300,10,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,10000,2300,10,2);
+    Enemytoken->SetPos(0,1);
+    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,10000,2300,10,2);
+    Enemytoken2->SetPos(1,2);
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
-    auto Attacking = std::make_shared<DoubleStrike>();
-    Enemytoken->SetAttackingMethod(Attacking);
+    /*auto Attacking = std::make_shared<DoubleStrike>();
+    Enemytoken->SetAttackingMethod(Attacking); */
     m_enemy.push_back(Enemytoken);
+    //m_enemy.push_back(Enemytoken2);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
     m_team.push_back(token);
     std::shared_ptr<Sean> token2 = std::make_shared<Sean>(m_Enchant);
@@ -196,6 +200,9 @@ DragingDatas BattleSystem::GetDragDatas() {
 
 void BattleSystem::Update() {
     for(int i=0;i<m_enemy.size();i++){
-        m_enemy[i]->Update();
+        if(m_enemy[i] != nullptr){
+            m_enemy[i]->Update();
+            if(m_enemy[i]->IfAnimationEnds()) m_enemy.erase(m_enemy.begin() + i);
+        }
     }
 }
