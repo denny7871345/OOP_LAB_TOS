@@ -37,9 +37,9 @@ int Enchant::StoneBreak(Type::Element_type LValue) {
         for (int j = 0; j < m_column; ++j) {
             if(m_Array[i][j]->GetType() == LValue ){
                 m_Array[i][j].reset();
+                count ++;
                 LOG_DEBUG("erase ({},{})",i+1,j+1);
             }
-            count ++;
         }
     }
     DoFall();

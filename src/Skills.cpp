@@ -71,6 +71,13 @@ std::vector<int> AttackSkill::Attack(EnemyDatas enemyDatas,DragingDatas dragingD
     return damages;
 }
 
+std::vector<int> DoubleStrike::Attack(EnemyDatas enemyDatas, DragingDatas dragingDatas) {
+    std::vector<int> damages;
+    damages.push_back(enemyDatas.m_attack);
+    damages.push_back(enemyDatas.m_attack);
+    return damages;
+}
+
 std::vector<int> StrongerSilver::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) {  
     std::vector<int> damages;
     float Addition = (1 - (enemyDatas.m_life * 1.0 / enemyDatas.m_firstLife)) * 10 + 1;

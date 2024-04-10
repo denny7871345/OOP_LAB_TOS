@@ -14,7 +14,7 @@ Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD)
     SetZIndex(5);
     m_Animation->SetLooping(true);
     m_Animation->SetInterval(100);
-    m_Animation->Play();
+    m_Animation->Pause();
     m_firstLife = m_life;
     m_text = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",200);
     m_text->SetZIndex(GetZIndex()+1);

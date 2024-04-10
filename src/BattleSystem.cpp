@@ -4,10 +4,10 @@
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Grass,10000,2300,10,2);
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
-    auto Attacking = std::make_shared<StrongerGold>();
+    auto Attacking = std::make_shared<DoubleStrike>();
     Enemytoken->SetAttackingMethod(Attacking);
     m_enemy.push_back(Enemytoken);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
@@ -155,7 +155,11 @@ void BattleSystem::DamageSettle() {
     }
     //Enemy's turn
     for(int i=0; i < m_enemy.size();i++){
-        LOG_DEBUG("Enemy{}'s Turn!!!",i);
+        LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
+        if(m_enemy[i]->GetLife() <= 0){
+            m_enemy[i]->SetPlaying(true);
+            continue;
+        }
         m_enemy[i]->AddCD(-1);
         if(m_enemy[i]->GetCD() == 0){
             LOG_DEBUG("Enemy Attack!!!");
@@ -167,11 +171,10 @@ void BattleSystem::DamageSettle() {
                 m_life -= damage[j];
                 LOG_DEBUG("U have {} life left.",m_life);
             }
-
             m_enemy[i]->AddCD(2);
         }
         m_enemy[i]->RoundUp();
-        LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
+
     }
 
 

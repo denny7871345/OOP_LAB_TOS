@@ -59,8 +59,12 @@ public:
     explicit Mori(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1035,1881,364,target),
           Boom(std::move(target)){};
     void Skill() override{
-
-        StoneBreak(Type::Element_type::Grass,true);
+        float Addition = 0.5 + 0.25 * ( StoneBreak(Type::Element_type::Grass,true) - 1);
+        LOG_DEBUG("{} stones are erased",Addition);
+        int Damage = GetAtk() * Addition;
+        DragingDatas token;
+        token.m_Attackertype = GetType();
+        Strike(false,Damage,true,token);
     }
 };
 

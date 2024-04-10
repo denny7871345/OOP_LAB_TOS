@@ -51,6 +51,11 @@ public:
     virtual std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas);
 };
 
+class DoubleStrike:public AttackSkill{
+public:
+    std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) override;
+};
+
 class StrongerSilver:public AttackSkill{
 public:
     std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) override;
