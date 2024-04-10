@@ -4,10 +4,10 @@
 void BattleSystem::Start() {
     ResetRound();
     m_DraggingTime = 5;
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,20000,2300,10,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
-    auto Attacking = std::make_shared<StrongerSilver>();
+    auto Attacking = std::make_shared<StrongerGold>();
     Enemytoken->SetAttackingMethod(Attacking);
     m_enemy.push_back(Enemytoken);
     std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
@@ -189,4 +189,10 @@ DragingDatas BattleSystem::GetDragDatas() {
     token.m_combo = m_combo;
     token.m_exCombo = m_exCombo;
     return token;
+}
+
+void BattleSystem::Update() {
+    for(int i=0;i<m_enemy.size();i++){
+        m_enemy[i]->Update();
+    }
 }

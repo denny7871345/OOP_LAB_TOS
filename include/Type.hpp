@@ -98,6 +98,24 @@ public:
             return Util::Colors::PINK;
         }
     }
+
+    static Util::Colors TypeColor(Element_type type){
+        switch(type) {
+        case Element_type::Fire:
+            return Util::Colors::RED;
+        case Element_type::Water:
+            return Util::Colors::BLUE;
+        case Element_type::Grass:
+            return Util::Colors::GREEN;
+        case Element_type::Light:
+            return Util::Colors::YELLOW;
+        case Element_type::Dark:
+            return Util::Colors::PURPLE;
+        default:
+            return Util::Colors::PINK;
+        }
+    }
+
     Element_type GetType(){
         return m_type;
     }

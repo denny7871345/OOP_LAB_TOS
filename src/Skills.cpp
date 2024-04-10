@@ -73,14 +73,14 @@ std::vector<int> AttackSkill::Attack(EnemyDatas enemyDatas,DragingDatas dragingD
 
 std::vector<int> StrongerSilver::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) {  
     std::vector<int> damages;
-    float Addition = (1 - (enemyDatas.m_life / enemyDatas.m_firstLife)) * 10 + 1;
+    float Addition = (1 - (enemyDatas.m_life * 1.0 / enemyDatas.m_firstLife)) * 10 + 1;
     damages.push_back((int(enemyDatas.m_attack * Addition)));
     return damages ;
 }
 
 std::vector<int> StrongerGold::Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) {
     std::vector<int> damages;
-    float Addition = (1 - (enemyDatas.m_life / enemyDatas.m_firstLife)) * 10 + 1;
+    float Addition = (1 - (enemyDatas.m_life * 1.0 / enemyDatas.m_firstLife)) * 10 + 1;
     damages.push_back((int(enemyDatas.m_attack * Addition)));
     if(Addition >= 8)     damages.push_back((int(enemyDatas.m_attack * Addition)));
     return damages;

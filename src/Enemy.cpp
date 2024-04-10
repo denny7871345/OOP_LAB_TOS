@@ -1,8 +1,25 @@
 #include "Enemy.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Time.hpp"
+#include "GiraffeText.hpp"
 Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD):m_type(type),m_life(life),m_attack(attack)
-,m_defence(defence),m_CD(CD){
+,m_defence(defence),m_CD(CD),AnimatedCharacter({"../assets/sprites/cat/cat-0.bmp",
+                         "../assets/sprites/cat/cat-1.bmp"
+                         ,"../assets/sprites/cat/cat-2.bmp"
+                         ,"../assets/sprites/cat/cat-3.bmp"
+                         ,"../assets/sprites/cat/cat-4.bmp"
+                         ,"../assets/sprites/cat/cat-5.bmp"
+                         ,"../assets/sprites/cat/cat-6.bmp"
+                         ,"../assets/sprites/cat/cat-7.bmp"}){
+    SetZIndex(5);
+    m_Animation->SetLooping(true);
+    m_Animation->SetInterval(100);
+    m_Animation->Play();
     m_firstLife = m_life;
+    m_text = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",200);
+    m_text->SetZIndex(GetZIndex()+1);
+    m_text->Start();
+    m_text->SetColor(Type::TypeColor(m_type));
 }
 
 void Enemy::DealtDamage(int Damage, bool Defence, DragingDatas datas) {
@@ -53,4 +70,20 @@ std::vector<int> Enemy::Attack( DragingDatas Datas) {
 
 void Enemy::SetAttackingMethod(std::shared_ptr<AttackSkill> target) {
     m_attackSkill = target;
+}
+
+void Enemy::Update() {
+    static glm::vec2 dir = {0, 0};
+    auto &pos = m_Transform.translation;
+    m_Transform.translation = {0,200};
+    auto delta = static_cast<float>(Util::Time::GetDeltaTime());
+    Util::Transform deltaTransform{
+        dir * delta * 100.0F, 2 * delta,
+        glm::vec2(0.5, 0.5) };
+    pos += deltaTransform.translation;
+    this->Draw();
+    std::string token;
+    token = std::to_string(m_life * 100 / m_firstLife) + "%";
+    m_text->SetText(token);
+    m_text->Update(m_Transform);
 }

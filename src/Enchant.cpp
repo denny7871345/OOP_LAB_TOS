@@ -27,7 +27,7 @@ void Enchant::Start() {
 
 
 void Enchant::Update() {
-
+    m_battleSystem->Update();
     for (int i = 0; i < m_row; ++i) {
         for (int j = 0; j < m_column; ++j) {
             if(m_Array[i][j] != nullptr){

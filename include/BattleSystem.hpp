@@ -9,6 +9,7 @@ class Enchant;
 
 class BattleSystem {
 public:
+    void Update();
     void SetEnchant(std::shared_ptr<Enchant> target);
     float GetDraggingTime();
     void AddDraggingTime();

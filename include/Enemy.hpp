@@ -1,12 +1,14 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
+#include "AnimatedCharacter.hpp"
 #include "pch.hpp"
 #include "Skills.hpp"
 #include "Datas.hpp"
 #include "Type.hpp"
-
-class Enemy{
+#include "GiraffeText.hpp"
+class Enemy:public AnimatedCharacter{
 public:
+    void Update();
     Enemy(Type::Element_type type,int life,int attack,int defence,int CD);
     void RoundUp();
     void SetAttackingMethod(std::shared_ptr<AttackSkill> target);
@@ -31,6 +33,7 @@ private:
     int m_defence;
     int m_CD;
     bool m_hasBeenHit = false;
+    std::shared_ptr<GiraffeText> m_text;
 };
 
 
