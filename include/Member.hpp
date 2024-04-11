@@ -174,8 +174,8 @@ class GrassBeast:public Member,StoneTurn{
     }
 };
 class LightBeast:public Member,StoneTurn{
-    explicit LightBeast(MemberSettingData data): Member(Type::Element_type::Light,874,2416,321,data),
-          StoneTurn(std::move(data)){
+    explicit LightBeast(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,874,2416,321,data),
+          StoneTurn(std::move(data.m_Enchant)){
         std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2.5);
         m_LeaderSkill.push_back(token);
           };
@@ -184,13 +184,13 @@ class LightBeast:public Member,StoneTurn{
     }
 };
 class DarkBeast:public Member,StoneTurn{
-    explicit DarkBeast(std::shared_ptr<Enchant> target): Member(Type::Element_type::Dark,1033,2271,289,target),
-          StoneTurn(std::move(target)){};
+    explicit DarkBeast(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,1033,2271,289,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Heart, false);
     }
 };
-*/
+
 /*DefentDragon
 class WDefentDragon:public Member{
     explicit WDefentDragon(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1068,3489,30,target),
