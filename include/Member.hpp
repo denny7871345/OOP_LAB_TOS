@@ -65,10 +65,11 @@ public:
               m_LeaderSkill.push_back(token);
           };
     void Skill() override{
-        float Addition = 0.5 + 0.25 * ( StoneBreak(Type::Element_type::Grass,true) - 1);
-        LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = m_attack * Addition;
+        float Addition = m_attack * StoneBreak(Type::Element_type::Grass,true);
+        LOG_DEBUG("skill deals {} damage!!!",Addition);
+        int Damage = Addition;
         DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Water;
         token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
