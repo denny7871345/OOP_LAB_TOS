@@ -31,13 +31,17 @@ void Enchant::StoneTurn(Type::Element_type LValue, Type::Element_type RValue, in
     }
 }
 
-int Enchant::StoneBreak(Type::Element_type LValue) {
-    int count = 0;
+float Enchant::StoneBreak(Type::Element_type LValue) {
+    float count = 0;
     for (int i = 0; i < m_row; ++i) {
         for (int j = 0; j < m_column; ++j) {
             if(m_Array[i][j]->GetType() == LValue ){
+                if(m_Array[i][j]->IsPowerUp()){
+                    count += 1.5;
+                }else{
+                    count ++;
+                }
                 m_Array[i][j].reset();
-                count ++;
                 LOG_DEBUG("erase ({},{})",i+1,j+1);
             }
         }

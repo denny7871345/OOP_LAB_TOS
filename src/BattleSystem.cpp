@@ -8,19 +8,19 @@ void BattleSystem::Start() {
     m_DraggingTime = 5;
 
     //Enemy Setting
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,10000,2300,10,2);
-    Enemytoken->SetPos(0,3);
-    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,50000,2300,10,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,1000000,1000,1,1);
+    Enemytoken->SetPos(0,1);
+    /*auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
     Enemytoken2->SetPos(1,3);
-    auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,50000,2300,10,2);
-    Enemytoken3->SetPos(2,3);
+    auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,200000,2300,10,2);
+    Enemytoken3->SetPos(2,3);*/
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
     /*auto Attacking = std::make_shared<DoubleStrike>();
     Enemytoken->SetAttackingMethod(Attacking); */
     m_enemy.push_back(Enemytoken);
-    m_enemy.push_back(Enemytoken2);
-    m_enemy.push_back(Enemytoken3);
+    /*m_enemy.push_back(Enemytoken2);
+    m_enemy.push_back(Enemytoken3);*/
 
     //member Setting
     auto Membertoken = CreateMemberData();
@@ -55,8 +55,12 @@ void BattleSystem::Start() {
             m_LeaderSkill[i]->Skill();
         }
     }
-
     ResetRound();
+    std::string lifeToken = std::to_string(m_life) + "/"  +std::to_string(m_MaxLife);
+    m_LifeDisplay->Start();
+    m_LifeDisplay->SetColor(Util::Colors::PINK);
+    m_LifeDisplay->SetZIndex(5);
+    m_LifeDisplay->SetText(lifeToken);
 }
 
 void BattleSystem::SkillTrigger(int index) {
@@ -212,15 +216,15 @@ void BattleSystem::DamageSettle() {
             for(int j=0;j<damage.size();j++){
                 //LOG_DEBUG("U are dealt {} damages.",damage[j]);
                 m_life -= damage[j];
-                LOG_DEBUG("U have {} life left.",m_life);
+                //LOG_DEBUG("U have {} life left.",m_life);
             }
             m_enemy[i]->AddCD(2);
         }
-
         m_enemy[i]->RoundUp();
         LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
     }
-
+    std::string lifeToken = std::to_string(m_life) + "/"  +std::to_string(m_MaxLife);
+    m_LifeDisplay->SetText(lifeToken);
 
 }
 
@@ -245,6 +249,8 @@ void BattleSystem::Update() {
             if(m_enemy[i]->IfAnimationEnds()) m_enemy.erase(m_enemy.begin() + i);
         }
     }
+    glm::vec2 lifePosition = {135,45};
+    m_LifeDisplay->Update(lifePosition);
 }
 
 void BattleSystem::AddStatus(std::shared_ptr<AbilityStatus> target) {

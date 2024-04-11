@@ -24,6 +24,7 @@ void GiraffeText::Update(Util::Transform follows) {
     this->Draw();
 }
 
+
 void GiraffeText::SetText(const std::string text) {
     m_Text->SetText(fmt::format(text) );
 
@@ -31,4 +32,10 @@ void GiraffeText::SetText(const std::string text) {
 
 void GiraffeText::SetColor(Util::Colors colors) {
     m_Text->SetColor(Util::Color::FromName(colors) );
+}
+
+void GiraffeText::Update(glm::vec2 pos) {
+    m_Transform.translation = pos;
+    //m_Text->SetText(fmt::format("{:.02f}", 1.0F / Util::Time::GetDeltaTime()));
+    this->Draw();
 }
