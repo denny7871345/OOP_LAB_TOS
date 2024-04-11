@@ -10,7 +10,7 @@ class Enchant;
 class Member{
 public:
     virtual void Skill()=0;
-    Type::Element_type GetType(){return m_type;}
+    Type::Element_type GetType(){return m_Etype;}
     std::vector<std::shared_ptr<LeaderSkill>> GetLeaderSkill(){return m_LeaderSkill;};
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
@@ -18,13 +18,14 @@ public:
     void Strike(bool onlyone,int damage,bool defence,DragingDatas datas);
     void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
         m_enemies = target;}
-    Member(Type::Element_type type,int attack,int life,int heal,MemberSettingData data):m_type(type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(data.m_Enchant){};
+    Member(Type::Element_type e_type, Type::Race_type r_type ,int attack,int life,int heal,MemberSettingData data): m_Etype(e_type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(data.m_Enchant){};
 protected:
     std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
     std::shared_ptr<Enchant> m_Enchant;
     std::vector<std::shared_ptr<Member>> m_team;
     std::vector<std::shared_ptr<Enemy>> m_enemies;
-    Type::Element_type m_type;
+    Type::Element_type m_Etype;
+    Type::Race_type m_Rtype;
     int m_attack;
     int m_life;
     int m_heal;
@@ -59,7 +60,7 @@ private:
 //MainCharacter
 class Mori:public Member,Boom{
 public:
-    explicit Mori(MemberSettingData data): Member(Type::Element_type::Water,1035,1881,364,data),
+    explicit Mori(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Mortal,1035,1881,364,data),
           Boom(std::move(data.m_Enchant)){
               std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2);
               m_LeaderSkill.push_back(token);
@@ -77,7 +78,7 @@ public:
 
 class Sean:public Member,Boom{
 public:
-    explicit Sean(MemberSettingData data): Member(Type::Element_type::Fire,1107,1980,324,data),
+    explicit Sean(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Mortal,1107,1980,324,data),
           Boom(std::move(data.m_Enchant)){
         std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2);
         m_LeaderSkill.push_back(token);
@@ -114,7 +115,7 @@ public:
 //ChineseBeast
 class WaterBeast:public Member,StoneTurn{
 public:
-    explicit WaterBeast(MemberSettingData data): Member(Type::Element_type::Water,979,3199,78,data),
+    explicit WaterBeast(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,979,3199,78,data),
           StoneTurn(std::move(data.m_Enchant)){
         std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2.5);
         m_LeaderSkill.push_back(token);
@@ -292,7 +293,7 @@ public:
 //Slime
 class WaterSlime:public Member,StoneTurn{
 public:
-    explicit WaterSlime(MemberSettingData data): Member(Type::Element_type::Water,387,736,406,data),
+    explicit WaterSlime(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Fairy,387,736,406,data),
           StoneTurn(std::move(data.m_Enchant)){
         std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
         m_LeaderSkill.push_back(token);
