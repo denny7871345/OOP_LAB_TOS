@@ -2,32 +2,61 @@
 #include "Enchant.hpp"
 #include "Enemy.hpp"
 void BattleSystem::Start() {
-    ResetRound();
+    std::vector<float> vec = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    m_FirstAddition = std::make_shared<std::vector<float>>(vec);
+
     m_DraggingTime = 5;
+
+    //Enemy Setting
     auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,10000,2300,10,2);
-    Enemytoken->SetPos(0,1);
-    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,10000,2300,10,2);
-    Enemytoken2->SetPos(1,2);
+    Enemytoken->SetPos(0,3);
+    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,50000,2300,10,2);
+    Enemytoken2->SetPos(1,3);
+    auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,50000,2300,10,2);
+    Enemytoken3->SetPos(2,3);
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
     /*auto Attacking = std::make_shared<DoubleStrike>();
     Enemytoken->SetAttackingMethod(Attacking); */
     m_enemy.push_back(Enemytoken);
-    //m_enemy.push_back(Enemytoken2);
-    std::shared_ptr<Mori> token = std::make_shared<Mori>(m_Enchant);
+    m_enemy.push_back(Enemytoken2);
+    m_enemy.push_back(Enemytoken3);
+
+    //member Setting
+    auto Membertoken = CreateMemberData();
+    std::shared_ptr<Mori> token = std::make_shared<Mori>(Membertoken);
     m_team.push_back(token);
-    std::shared_ptr<Sean> token2 = std::make_shared<Sean>(m_Enchant);
+    std::shared_ptr<Sean> token2 = std::make_shared<Sean>(Membertoken);
     m_team.push_back(token2);
-    std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(m_Enchant);
+    std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(Membertoken);
     m_team.push_back(token3);
-    std::shared_ptr<WaterBeast> token4 = std::make_shared<WaterBeast>(m_Enchant);
+    std::shared_ptr<WaterSlime> token4 = std::make_shared<WaterSlime>(Membertoken);
     m_team.push_back(token4);
-    for(int i=0;i<m_team.size();i++){
+    std::shared_ptr<WaterBeast> token5 = std::make_shared<WaterBeast>(Membertoken);
+    m_team.push_back(token5);
+    std::shared_ptr<Mori> token6 = std::make_shared<Mori>(Membertoken);
+    m_team.push_back(token6);
+
+    // Leader Skill Setting
+    auto LeaderToken = m_team[0]->GetLeaderSkill();
+    for(int i=0;i<LeaderToken.size();i++) m_LeaderSkill.push_back(LeaderToken[i]);
+    LeaderToken = m_team[5]->GetLeaderSkill();
+    for(int i=0;i<LeaderToken.size();i++) m_LeaderSkill.push_back(LeaderToken[i]);
+
+    for(int i=0;i < m_team.size();i++){
         m_MaxLife += m_team[i]->GetLife();
         m_team[i]->SetEnemy(m_enemy);
     }
     m_life = m_MaxLife;
     m_audioSystem.Start();
+
+    for(int i=0;i<m_LeaderSkill.size();i++){
+        if(m_LeaderSkill[i]->GetType() == AbilityType::Setting){
+            m_LeaderSkill[i]->Skill();
+        }
+    }
+
+    ResetRound();
 }
 
 void BattleSystem::SkillTrigger(int index) {
@@ -45,9 +74,9 @@ void BattleSystem::AddCombo(int combo) {
     }
     m_combo += combo;
     if(flag){
-        m_ComboAddition += m_addCombo * (combo-1);
+        m_ComboAddition += *(m_addCombo) * (combo-1);
     }else{
-        m_ComboAddition += m_addCombo * combo;
+        m_ComboAddition += *(m_addCombo) * combo;
     }
 }
 void BattleSystem::AddExCombo(int combo) {
@@ -55,15 +84,23 @@ void BattleSystem::AddExCombo(int combo) {
 }
 
 void BattleSystem::ResetRound() {
-    m_ComboAddition = 0;
-    m_addCombo = 0.25;
+    m_ComboAddition = 1;
     m_firstCombo = 0;
     m_combo = 0;
     m_exCombo = 0;
+    m_Addition = m_FirstAddition;
     m_firstErase = {0,0,0,0,0,0};
     m_totalErase = {0,0,0,0,0,0};
     m_StoneDamage = {0,0,0,0,0,0};
     m_powerUpBeenErase = {false,false,false,false,false,false};
+
+    for(int i=0;i<m_status.size();i++){
+        if(m_status[i]->RoundUp()){
+            m_status[i]->Reset();
+            m_status.erase(m_status.begin()+i);
+        }
+    }
+
 }
 bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
@@ -133,7 +170,8 @@ void BattleSystem::ShowData() {
     LOG_DEBUG("first combo:{}",m_firstCombo);
     LOG_DEBUG("Total combo:{}",m_combo);
     LOG_DEBUG("Combo Addition:{}%",m_ComboAddition * 100);
-    DamageSettle();
+    std::vector<float> &vecRef = *m_Addition;
+    LOG_DEBUG("Leader Addition:[{},{},{},{},{}]", vecRef[0],vecRef[1],vecRef[2],vecRef[3],vecRef[4] );
 }
 
 void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
@@ -145,40 +183,42 @@ void BattleSystem::DamageSettle() {
     DragingDatas token = GetDragDatas();
     for(int i=0;i < m_team.size() ;i++){
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
-        int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())];
+        std::vector<float> &vecRef = *m_Addition;
+        int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] * vecRef[Type::FindIndex(m_team[i]->GetType())];
         LOG_DEBUG("Member{} deals {} damage",i,Damage);
         token.m_Attackertype = m_team[i]->GetType();
-        m_team[i]->Strike(false,Damage,true,token);
+        m_team[i]->Strike(true,Damage,true,token);
     }
     if(m_life + totalHeal * m_ComboAddition > m_MaxLife){
         m_life = m_MaxLife;
-        LOG_DEBUG("you are full of Life");
+        //LOG_DEBUG("you are full of Life");
     }else{
         m_life += totalHeal * m_ComboAddition ;
-        LOG_DEBUG("U heal {} life.",totalHeal);
+        //LOG_DEBUG("U heal {} life.",totalHeal);
     }
     //Enemy's turn
     for(int i=0; i < m_enemy.size();i++){
-        LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
+
         if(m_enemy[i]->GetLife() <= 0){
             m_enemy[i]->SetPlaying(true);
             continue;
         }
         m_enemy[i]->AddCD(-1);
         if(m_enemy[i]->GetCD() == 0){
-            LOG_DEBUG("Enemy Attack!!!");
+            //LOG_DEBUG("Enemy Attack!!!");
 
             auto damage = m_enemy[i]->Attack(token);
 
             for(int j=0;j<damage.size();j++){
-                LOG_DEBUG("U are dealt {} damages.",damage[j]);
+                //LOG_DEBUG("U are dealt {} damages.",damage[j]);
                 m_life -= damage[j];
                 LOG_DEBUG("U have {} life left.",m_life);
             }
             m_enemy[i]->AddCD(2);
         }
-        m_enemy[i]->RoundUp();
 
+        m_enemy[i]->RoundUp();
+        LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
     }
 
 
@@ -205,4 +245,23 @@ void BattleSystem::Update() {
             if(m_enemy[i]->IfAnimationEnds()) m_enemy.erase(m_enemy.begin() + i);
         }
     }
+}
+
+void BattleSystem::AddStatus(std::shared_ptr<AbilityStatus> target) {
+    m_status.push_back(target);
+}
+
+void BattleSystem::AddStatusToEnemy(std::shared_ptr<AbilityStatus> target) {
+    for(int i=0;i<m_enemy.size();i++){
+        m_enemy[i]->AddStatus(target);
+    }
+}
+
+MemberSettingData BattleSystem::CreateMemberData() {
+    MemberSettingData token;
+    token.m_Enchant = m_Enchant;
+    token.m_dealtDamageDecrease = m_dealtDamageDecrease;
+    token.m_FirstAddition = m_FirstAddition;
+    token.m_addCombo = m_addCombo;
+    return token;
 }

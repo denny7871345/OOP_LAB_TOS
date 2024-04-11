@@ -5,19 +5,22 @@
 #include <utility>
 #include "Stone.hpp"
 #include "Datas.hpp"
+#include "AbilityStatus.hpp"
 class Enchant;
 class Member{
 public:
     virtual void Skill()=0;
     Type::Element_type GetType(){return m_type;}
+    std::vector<std::shared_ptr<LeaderSkill>> GetLeaderSkill(){return m_LeaderSkill;};
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
     int GetHeal(){return m_heal;}
     void Strike(bool onlyone,int damage,bool defence,DragingDatas datas);
     void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
         m_enemies = target;}
-    Member(Type::Element_type type,int attack,int life,int heal,std::shared_ptr<Enchant> Enchant):m_type(type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(Enchant){};
-private:
+    Member(Type::Element_type type,int attack,int life,int heal,MemberSettingData data):m_type(type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(data.m_Enchant){};
+protected:
+    std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
     std::shared_ptr<Enchant> m_Enchant;
     std::vector<std::shared_ptr<Member>> m_team;
     std::vector<std::shared_ptr<Enemy>> m_enemies;
@@ -56,12 +59,15 @@ private:
 //MainCharacter
 class Mori:public Member,Boom{
 public:
-    explicit Mori(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1035,1881,364,target),
-          Boom(std::move(target)){};
+    explicit Mori(MemberSettingData data): Member(Type::Element_type::Water,1035,1881,364,data),
+          Boom(std::move(data.m_Enchant)){
+              std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2);
+              m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         float Addition = 0.5 + 0.25 * ( StoneBreak(Type::Element_type::Grass,true) - 1);
         LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = GetAtk() * Addition;
+        int Damage = m_attack * Addition;
         DragingDatas token;
         token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
@@ -70,13 +76,16 @@ public:
 
 class Sean:public Member,Boom{
 public:
-    explicit Sean(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1107,1980,324,target),
-          Boom(std::move(target)){};
+    explicit Sean(MemberSettingData data): Member(Type::Element_type::Fire,1107,1980,324,data),
+          Boom(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         StoneBreak(Type::Element_type::Water,true);
     }
 };
-class Dunkan:public Member,Boom{
+/*class Dunkan:public Member,Boom{
 public:
     explicit Dunkan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,953,2176,340,target),
           Boom(std::move(target)){};
@@ -100,16 +109,20 @@ public:
         StoneBreak(Type::Element_type::Light,true);
     }
 };
-
+*/
 //ChineseBeast
 class WaterBeast:public Member,StoneTurn{
 public:
-    explicit WaterBeast(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,979,3199,78,target),
-          StoneTurn(std::move(target)){};
+    explicit WaterBeast(MemberSettingData data): Member(Type::Element_type::Water,979,3199,78,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2.5);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Heart,Type::Element_type::Water, false);
     }
 };
+/*
 class FireBeast:public Member,StoneTurn{
     explicit FireBeast(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1105,2684,305,target),
           StoneTurn(std::move(target)){};
@@ -138,7 +151,7 @@ class DarkBeast:public Member,StoneTurn{
         Turn(Type::Element_type::Light,Type::Element_type::Heart, false);
     }
 };
-
+*/
 /*DefentDragon
 class WDefentDragon:public Member{
     explicit WDefentDragon(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1068,3489,30,target),
@@ -148,7 +161,7 @@ class WDefentDragon:public Member{
     }
 };
 */
-
+/*
 //Titan
 class WaterTitan:public Member,StoneTurn{
 public:
@@ -274,15 +287,20 @@ public:
         Turn(Type::Element_type::Dark,Type::Element_type::Dark, true);
     }
 };
+*/
 //Slime
 class WaterSlime:public Member,StoneTurn{
 public:
-    explicit WaterSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1107,1980,384,target),
-          StoneTurn(std::move(target)){};
+    explicit WaterSlime(MemberSettingData data): Member(Type::Element_type::Water,387,736,406,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Fire,Type::Element_type::Heart,true);
     }
 };
+/*
 class FireSlime:public Member,StoneTurn{
 public:
     explicit FireSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1107,1980,384,target),
@@ -315,4 +333,5 @@ public:
         Turn(Type::Element_type::Light,Type::Element_type::Heart,true);
     }
 };
+ */
 #endif

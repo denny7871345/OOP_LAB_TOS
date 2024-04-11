@@ -52,6 +52,7 @@ set(SRC_FILES
     ${SRC_DIR}/GiraffeText.cpp
     ${SRC_DIR}/AnimatedCharacter.cpp
     ${SRC_DIR}/Cat.cpp
+        ${SRC_DIR}/AbilityStatus.cpp
         ${SRC_DIR}/Skills.cpp
     ${SRC_DIR}/Stone.cpp
         ${SRC_DIR}/Enemy.cpp
@@ -101,6 +102,7 @@ set(INCLUDE_FILES
         ${INCLUDE_DIR}/AudioSystem.hpp
         ${INCLUDE_DIR}/Skills.hpp
         ${INCLUDE_DIR}/Enemy.hpp
+        ${INCLUDE_DIR}/AbilityStatus.hpp
     ${INCLUDE_DIR}/BattleSystem.hpp
     ${INCLUDE_DIR}/Enchant.hpp
         ${INCLUDE_DIR}/Datas.hpp
@@ -112,6 +114,7 @@ set(TEST_FILES
     ${TEST_DIR}/NotSimpleTest.cpp
     ${TEST_DIR}/TransformTest.cpp
         src/stone.cpp
+        src/AbilityStatus.cpp
 
 )
 

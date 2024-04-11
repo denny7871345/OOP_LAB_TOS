@@ -4,6 +4,7 @@
 #include <utility>
 #include "pch.hpp"
 #include "Type.hpp"
+class Enchant;
 
 struct DragingDatas{
     std::vector<int> m_totalErase={0,0,0,0,0,0};
@@ -24,6 +25,11 @@ struct EnemyDatas{
     bool DealtDamage;
 };
 
-
+struct MemberSettingData{
+    std::shared_ptr<Enchant> m_Enchant;
+    std::shared_ptr<std::vector<float>> m_FirstAddition;
+    std::shared_ptr<float> m_dealtDamageDecrease = std::make_shared<float>(0.0f);
+    std::shared_ptr<float> m_addCombo;
+};
 
 #endif

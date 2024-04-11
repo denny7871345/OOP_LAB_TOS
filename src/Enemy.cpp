@@ -17,6 +17,11 @@ Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD)
     m_Animation->SetInterval(100);
     m_Animation->Pause();
     m_firstLife = m_life;
+    m_FirstAttack = m_attack;
+    m_FirstCD = m_CD;
+    m_FirstDefence = m_defence;
+    m_firstType = m_type;
+    m_FirstCD = m_CD;
     m_text = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",200);
     m_text->SetZIndex(GetZIndex()+1);
     m_text->Start();
@@ -77,7 +82,7 @@ void Enemy::Update() {
     static glm::vec2 dir = {0, 0};
     auto &pos = m_Transform.translation;
     auto x_pos = WINDOW_WIDTH / (m_pos.y) ;
-    m_Transform.translation = { 0 + x_pos * (0.5 + m_pos.x) ,200};
+    m_Transform.translation = { -225 + x_pos * (0.5 + m_pos.x) ,200};
     m_Transform.scale = { 1.0 / m_pos.y, 1.0 / m_pos.y};
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     Util::Transform deltaTransform{
@@ -93,4 +98,24 @@ void Enemy::Update() {
 
 void Enemy::SetPos(int x, int y) {
     m_pos = {x,y};
+}
+
+void Enemy::SetDef(float value) {
+    m_defence = m_FirstDefence * value;
+}
+
+void Enemy::SetAtk(float value) {
+    m_attack = m_FirstAttack * value;
+}
+
+void Enemy::DefReset() {
+    m_defence = m_FirstDefence;
+}
+
+void Enemy::AtkReset() {
+    m_attack = m_FirstAttack;
+}
+
+void Enemy::AddStatus(const std::shared_ptr<AbilityStatus>& target) {
+    m_status.push_back(target);
 }

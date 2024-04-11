@@ -6,6 +6,8 @@
 #include "Datas.hpp"
 #include "Type.hpp"
 #include "GiraffeText.hpp"
+#include "AbilityStatus.hpp"
+
 class Enemy:public AnimatedCharacter{
 public:
     void SetPos(int x,int y);
@@ -18,20 +20,30 @@ public:
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
     int GetCD(){return m_CD;}
+    void SetDef(float value);
+    void SetAtk(float value);
     void AddCD(int num){m_CD += num;}
     int GetDefence(){return m_defence;}
     std::vector<int> Attack(DragingDatas dragingDatas);
     void DealtDamage(int Damage,bool Defence,DragingDatas datas);
+    void DefReset();
+    void AtkReset();
+    void AddStatus(const std::shared_ptr<AbilityStatus>& target);
 private:
     void SkillReset();
     EnemyDatas MyData();
+    std::vector<std::shared_ptr<AbilityStatus>> m_status;
     std::shared_ptr<AttackSkill> m_attackSkill = std::make_shared<AttackSkill>();
     std::vector<std::shared_ptr<Skills>> m_SkillList;
+    Type::Element_type m_firstType;
     Type::Element_type m_type;
     int m_firstLife;
     int m_life;
+    int m_FirstAttack;
     int m_attack;
+    int m_FirstDefence;
     int m_defence;
+    int m_FirstCD;
     int m_CD;
     bool m_hasBeenHit = false;
     std::shared_ptr<GiraffeText> m_text;

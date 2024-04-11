@@ -4,11 +4,13 @@
 #include "Stone.hpp"
 #include "Member.hpp"
 #include "AudioSystem.hpp"
+#include "AbilityStatus.hpp"
 
 class Enchant;
 
 class BattleSystem {
 public:
+    MemberSettingData CreateMemberData();
     void Update();
     void SetEnchant(std::shared_ptr<Enchant> target);
     float GetDraggingTime();
@@ -23,22 +25,30 @@ public:
     void AddExCombo(int combo);
     void SetCombo(int combo);
     void DamageSettle();
+    void AddStatus(std::shared_ptr<AbilityStatus> target);
+    void AddStatusToEnemy(std::shared_ptr<AbilityStatus> target);
+
 private:
     DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
+    std::vector<std::shared_ptr<AbilityStatus>> m_status;
+    std::shared_ptr<std::vector<float>> m_Addition;
+    std::shared_ptr<std::vector<float>> m_FirstAddition;
+    std::shared_ptr<float> m_dealtDamageDecrease = std::make_shared<float>(0.0f);
     std::vector<float> m_StoneDamage={0,0,0,0,0,0};
     std::vector<int> m_totalErase={0,0,0,0,0,0};
     std::vector<int> m_firstErase={0,0,0,0,0,0};
     std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
     std::shared_ptr<Enchant> m_Enchant;
     std::vector<std::shared_ptr<Member>> m_team;
+    std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
     int m_life;
     int m_MaxLife;
     int m_combo;
     int m_exCombo;
     int m_firstCombo;
-    float m_addCombo;
+    std::shared_ptr<float> m_addCombo = std::make_shared<float>(0.25);
     float m_ComboAddition;
     float m_DraggingTime;
 };

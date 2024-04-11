@@ -1,9 +1,16 @@
 #include "Skills.hpp"
 #include "Member.hpp"
 #include "Enchant.hpp"
+#include "AbilityStatus.hpp"
+
 void Member::Strike(bool onlyone, int damage, bool defence,DragingDatas datas) {
     if(onlyone){
-        m_enemies[0]->DealtDamage(damage,defence,datas);
+        for(int i=0;i<m_enemies.size();i++){
+            if(m_enemies[i]->GetLife() > 0){
+                m_enemies[i]->DealtDamage(damage,defence,datas);
+                return;
+            }
+        }
     }else{
         for(int i=0;i<m_enemies.size();i++) m_enemies[i]->DealtDamage(damage,defence,datas);
     }

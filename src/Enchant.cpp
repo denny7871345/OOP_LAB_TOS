@@ -202,9 +202,7 @@ bool Enchant::CheckFull(){
 
 /*method*/
 void Enchant::KeepingStateUpdate() {
-    if (Util::Input::IsKeyDown(Util::Keycode::R)) {
-        StoneTurn(Type::Element_type::Fire,Type::Element_type::Water,0,true);
-    }
+
     if (Util::Input::IsKeyDown(Util::Keycode::T)) {
         m_battleSystem->SkillTrigger(0);
     }
@@ -310,6 +308,7 @@ void Enchant::CheckingStateUpdate() {
 
     if(CheckFull()){
         m_battleSystem->ShowData();
+        m_battleSystem->DamageSettle();
         m_battleSystem->ResetRound();
         m_state = state::Keeping;
     }else{
