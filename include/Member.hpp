@@ -62,13 +62,13 @@ class Mori:public Member,Boom{
 public:
     explicit Mori(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Mortal,1035,1881,364,data),
           Boom(std::move(data.m_Enchant)){
-              std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2);
-              m_LeaderSkill.push_back(token);
-          };
+            std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2);
+            m_LeaderSkill.push_back(token);
+    };
     void Skill() override{
-        float Addition = 0.5 + 0.25 * ( StoneBreak(Type::Element_type::Grass,true) - 1);
+        float Addition = m_attack *  StoneBreak(Type::Element_type::Grass,true);
         LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = m_attack * Addition;
+        int Damage = Addition;
         DragingDatas token;
         token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
@@ -81,36 +81,65 @@ public:
           Boom(std::move(data.m_Enchant)){
         std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2);
         m_LeaderSkill.push_back(token);
-          };
+    };
     void Skill() override{
-        StoneBreak(Type::Element_type::Water,true);
+        float Addition = m_attack *  StoneBreak(Type::Element_type::Water,true);
+        LOG_DEBUG("{} stones are erased",Addition);
+        int Damage = Addition;
+        DragingDatas token;
+        token.m_Attackertype = GetType();
+        Strike(false,Damage,true,token);
     }
 };
-/*class Dunkan:public Member,Boom{
+class Dunkan:public Member,Boom{
 public:
-    explicit Dunkan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,953,2176,340,target),
-          Boom(std::move(target)){};
+    explicit Dunkan(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Mortal,953,2176,340,data),
+          Boom(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Grass,2);
+        m_LeaderSkill.push_back(token);
+    };
     void Skill() override{
-        StoneBreak(Type::Element_type::Fire,true);
+        float Addition = m_attack *  StoneBreak(Type::Element_type::Fire,true);
+        LOG_DEBUG("{} stones are erased",Addition);
+        int Damage = Addition;
+        DragingDatas token;
+        token.m_Attackertype = GetType();
+        Strike(false,Damage,true,token);
     }
 };
 class Nathaniel:public Member,Boom{
 public:
-    explicit Nathaniel(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,963,1960,374,target),
-          Boom(std::move(target)){};
+    explicit Nathaniel(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Mortal,963,1960,374,data),
+          Boom(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Light,2);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
-        StoneBreak(Type::Element_type::Dark,true);
+        float Addition = m_attack *  StoneBreak(Type::Element_type::Dark,true);
+        LOG_DEBUG("{} stones are erased",Addition);
+        int Damage = Addition;
+        DragingDatas token;
+        token.m_Attackertype = GetType();
+        Strike(false,Damage,true,token);
     }
 };
 class Ando:public Member,Boom{
 public:
-    explicit Ando(std::shared_ptr<Enchant> target): Member(Type::Element_type::Dark,1137,1843,337,target),
-          Boom(std::move(target)){};
+    explicit Ando(MemberSettingData data): Member(Type::Element_type::Dark,1137,1843,337,data),
+          Boom(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Dark,2);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
-        StoneBreak(Type::Element_type::Light,true);
+        float Addition = m_attack *  StoneBreak(Type::Element_type::Light,true);
+        LOG_DEBUG("{} stones are erased",Addition);
+        int Damage = Addition;
+        DragingDatas token;
+        token.m_Attackertype = GetType();
+        Strike(false,Damage,true,token);
     }
 };
-*/
+
 //ChineseBeast
 class WaterBeast:public Member,StoneTurn{
 public:
@@ -123,24 +152,33 @@ public:
         Turn(Type::Element_type::Heart,Type::Element_type::Water, false);
     }
 };
-/*
+
 class FireBeast:public Member,StoneTurn{
-    explicit FireBeast(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1105,2684,305,target),
-          StoneTurn(std::move(target)){};
+    explicit FireBeast(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Beast,1105,2684,305,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2.5);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Grass,Type::Element_type::Heart, false);
     }
 };
 class GrassBeast:public Member,StoneTurn{
-    explicit GrassBeast(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,952,2949,322,target),
-          StoneTurn(std::move(target)){};
+    explicit GrassBeast(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,952,2949,322,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Grass,2.5);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
-        Turn(Type::Element_type::Heart,Type::Element_type::Grass, false);
+        //todo
     }
 };
 class LightBeast:public Member,StoneTurn{
-    explicit LightBeast(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,874,2416,321,target),
-          StoneTurn(std::move(target)){};
+    explicit LightBeast(MemberSettingData data): Member(Type::Element_type::Light,874,2416,321,data),
+          StoneTurn(std::move(data)){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2.5);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         //Todo
     }
