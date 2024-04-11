@@ -10,6 +10,7 @@
 
 class Enemy:public AnimatedCharacter{
 public:
+    int Conflict(Type::Element_type type,int Damage);
     void SetPos(int x,int y);
     void Update();
     Enemy(Type::Element_type type,int life,int attack,int defence,int CD);
@@ -25,7 +26,7 @@ public:
     void AddCD(int num){m_CD += num;}
     int GetDefence(){return m_defence;}
     std::vector<int> Attack(DragingDatas dragingDatas);
-    void DealtDamage(int Damage,bool Defence,DragingDatas datas);
+    void DealtDamage(int damage,bool Defence,DragingDatas datas);
     void DefReset();
     void AtkReset();
     void AddStatus(const std::shared_ptr<AbilityStatus>& target);

@@ -66,10 +66,13 @@ public:
             m_LeaderSkill.push_back(token);
     };
     void Skill() override{
-        float Addition = m_attack *  StoneBreak(Type::Element_type::Grass,true);
-        LOG_DEBUG("{} stones are erased",Addition);
+
+        float Addition = m_attack * StoneBreak(Type::Element_type::Grass,true);
+        LOG_DEBUG("skill deals {} damage!!!",Addition);
+
         int Damage = Addition;
         DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Water;
         token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
@@ -125,7 +128,7 @@ public:
 };
 class Ando:public Member,Boom{
 public:
-    explicit Ando(MemberSettingData data): Member(Type::Element_type::Dark,1137,1843,337,data),
+    explicit Ando(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Mortal,1137,1843,337,data),
           Boom(std::move(data.m_Enchant)){
         std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Dark,2);
         m_LeaderSkill.push_back(token);

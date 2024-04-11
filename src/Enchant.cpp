@@ -215,6 +215,16 @@ void Enchant::KeepingStateUpdate() {
     if (Util::Input::IsKeyDown(Util::Keycode::I)) {
         m_battleSystem->SkillTrigger(3);
     }
+    if (Util::Input::IsKeyDown(Util::Keycode::O)) {
+        m_battleSystem->SkillTrigger(4);
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::P)) {
+        m_battleSystem->SkillTrigger(5);
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
+        auto cursorPos = Util::Input::GetCursorPosition();
+        LOG_DEBUG("[{},{}]",cursorPos.x,cursorPos.y);
+    }
     if (Util::Input::IsKeyDown(Util::Keycode::M)) {
         SetDraggingTime(20);
         SetState(state::Unlimited);

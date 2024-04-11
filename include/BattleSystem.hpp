@@ -41,6 +41,7 @@ private:
     std::vector<int> m_firstErase={0,0,0,0,0,0};
     std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
     std::shared_ptr<Enchant> m_Enchant;
+    std::shared_ptr<GiraffeText> m_LifeDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",15);
     std::vector<std::shared_ptr<Member>> m_team;
     std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
     int m_life;
@@ -51,6 +52,7 @@ private:
     std::shared_ptr<float> m_addCombo = std::make_shared<float>(0.25);
     float m_ComboAddition;
     float m_DraggingTime;
+
 };
 
 #endif

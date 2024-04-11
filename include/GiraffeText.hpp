@@ -18,6 +18,7 @@ public:
     void SetText(const std::string text);
     void Update();
     void Update(Util::Transform follows);
+    void Update(glm::vec2 pos);
     void SetColor(Util::Colors colors);
 private:
     std::string m_Font;

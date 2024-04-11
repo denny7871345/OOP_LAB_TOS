@@ -26,7 +26,7 @@ public:
     void GenerateFall(bool powerup);
     void SetDraggingTime(int time);
     void SetState(state target);
-    int StoneBreak(Type::Element_type LValue);
+    float StoneBreak(Type::Element_type LValue);
     void StoneTurn(Type::Element_type LValue,Type::Element_type RValue,int howmany,bool powerup);
     void SetSystem(std::shared_ptr<BattleSystem> target);
     std::vector<int> GetTypeGeneration();
