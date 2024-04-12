@@ -11,6 +11,7 @@ class Member{
 public:
     virtual void Skill()=0;
     Type::Element_type GetType(){return m_Etype;}
+    Type::Race_type GetRace(){return m_Rtype;}
     std::vector<std::shared_ptr<LeaderSkill>> GetLeaderSkill(){return m_LeaderSkill;};
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}

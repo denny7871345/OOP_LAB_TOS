@@ -3,7 +3,9 @@
 #include "Enemy.hpp"
 void BattleSystem::Start() {
     std::vector<float> vec = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
-    m_FirstAddition = std::make_shared<std::vector<float>>(vec);
+    m_FirstElementAddition = std::make_shared<std::vector<float>>(vec);
+    std::vector<float> vec2 = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    m_FirstRaceAddition = std::make_shared<std::vector<float>>(vec2);
 
     m_DraggingTime = 5;
 
@@ -92,7 +94,8 @@ void BattleSystem::ResetRound() {
     m_firstCombo = 0;
     m_combo = 0;
     m_exCombo = 0;
-    m_Addition = m_FirstAddition;
+    m_ElementAddition = m_FirstElementAddition;
+    m_RaceAddition = m_FirstRaceAddition;
     m_firstErase = {0,0,0,0,0,0};
     m_totalErase = {0,0,0,0,0,0};
     m_StoneDamage = {0,0,0,0,0,0};
@@ -174,7 +177,7 @@ void BattleSystem::ShowData() {
     LOG_DEBUG("first combo:{}",m_firstCombo);
     LOG_DEBUG("Total combo:{}",m_combo);
     LOG_DEBUG("Combo Addition:{}%",m_ComboAddition * 100);
-    std::vector<float> &vecRef = *m_Addition;
+    std::vector<float> &vecRef = *m_ElementAddition;
     LOG_DEBUG("Leader Addition:[{},{},{},{},{}]", vecRef[0],vecRef[1],vecRef[2],vecRef[3],vecRef[4] );
 }
 
@@ -187,8 +190,10 @@ void BattleSystem::DamageSettle() {
     DragingDatas token = GetDragDatas();
     for(int i=0;i < m_team.size() ;i++){
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
-        std::vector<float> &vecRef = *m_Addition;
-        int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] * vecRef[Type::FindIndex(m_team[i]->GetType())];
+        std::vector<float> &ElementAddition = *m_ElementAddition;
+        std::vector<float> &RaceAddition = *m_RaceAddition;
+        int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] *
+                     ElementAddition[Type::FindIndex(m_team[i]->GetType())] * RaceAddition[Type::FindIndex(m_team[i]->GetRace())];
         LOG_DEBUG("Member{} deals {} damage",i,Damage);
         token.m_Attackertype = m_team[i]->GetType();
         m_team[i]->Strike(true,Damage,true,token);
@@ -267,7 +272,8 @@ MemberSettingData BattleSystem::CreateMemberData() {
     MemberSettingData token;
     token.m_Enchant = m_Enchant;
     token.m_dealtDamageDecrease = m_dealtDamageDecrease;
-    token.m_FirstAddition = m_FirstAddition;
+    token.m_FirstAddition = m_FirstElementAddition;
+    token.m_FirstRaceAddition = m_FirstRaceAddition;
     token.m_addCombo = m_addCombo;
     return token;
 }

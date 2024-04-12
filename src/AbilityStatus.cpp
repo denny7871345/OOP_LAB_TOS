@@ -29,6 +29,7 @@ void PowerRaise::Trigger() {
         (*m_Addition)[Type::FindIndex(m_type)] *= m_Increase;
 }
 
+
 DamageDecrease::DamageDecrease(std::shared_ptr<float> target, float Decrease, int CountDown):
       AbilityStatus(AbilityType::DealtDamageEffect,CountDown),m_DamageDecrease(target),m_value(Decrease){
 
@@ -59,6 +60,14 @@ PowerUp::PowerUp(std::shared_ptr<std::vector<float>> target, Type::Element_type 
 }
 
 void PowerUp::Skill() {
+    (*m_Addition)[Type::FindIndex(m_type)] *= m_increase;
+}
+
+RaceUp::RaceUp(std::shared_ptr<std::vector<float>> target, Type::Race_type type, float increase):m_Addition(target),m_type(type),m_increase(increase) {
+    m_abilityType = AbilityType::Setting;
+}
+
+void RaceUp::Skill() {
     (*m_Addition)[Type::FindIndex(m_type)] *= m_increase;
 }
 
