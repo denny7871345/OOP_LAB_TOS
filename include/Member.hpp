@@ -71,7 +71,7 @@ public:
         float Addition = m_attack * StoneBreak(Type::Element_type::Grass,true);
         LOG_DEBUG("skill deals {} damage!!!",Addition);
 
-        int Damage = Addition;
+        int Damage = (int)Addition;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Water;
         Strike(false,Damage,true,token);
@@ -88,7 +88,7 @@ public:
     void Skill() override{
         float Addition = m_attack *  StoneBreak(Type::Element_type::Water,true);
         LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = Addition;
+        int Damage = (int)Addition;
         DragingDatas token;
         Strike(false,Damage,true,token);
     }
@@ -103,7 +103,7 @@ public:
     void Skill() override{
         float Addition = m_attack *  StoneBreak(Type::Element_type::Fire,true);
         LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = Addition;
+        int Damage = (int)Addition;
         DragingDatas token;
         Strike(false,Damage,true,token);
     }
@@ -118,7 +118,7 @@ public:
     void Skill() override{
         float Addition = m_attack *  StoneBreak(Type::Element_type::Dark,true);
         LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = Addition;
+        int Damage = (int)Addition;
         DragingDatas token;
         Strike(false,Damage,true,token);
     }
@@ -133,7 +133,7 @@ public:
     void Skill() override{
         float Addition = m_attack *  StoneBreak(Type::Element_type::Light,true);
         LOG_DEBUG("{} stones are erased",Addition);
-        int Damage = Addition;
+        int Damage = (int)Addition;
         DragingDatas token;
         Strike(false,Damage,true,token);
     }
@@ -189,17 +189,58 @@ class DarkBeast:public Member,StoneTurn{
         Turn(Type::Element_type::Light,Type::Element_type::Heart, false);
     }
 };
-/*
+
 //DefentDragon
 class WDefentDragon:public Member{
-    explicit WDefentDragon(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1068,3489,30,data),
-          DealDamage(std::move(data.m_Enchant), this->GetAtk(), this.){};
+    explicit WDefentDragon(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1068,3489,30,data){};
     void Skill() override{
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 30;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Water;
         Strike(false,Damage,true,token);
     }
 };
-*/
-
+class FDefentDragon:public Member{
+    explicit FDefentDragon(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Dragon,1142,3672,26,data){};
+    void Skill() override{
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 30;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Fire;
+        Strike(false,Damage,true,token);
+    }
+};
+class GDefentDragon:public Member{
+    explicit GDefentDragon(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Dragon,983,4036,28,data){};
+    void Skill() override{
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 30;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Fire;
+        Strike(false,Damage,true,token);
+    }
+};
+class LDefentDragon:public Member{
+    explicit LDefentDragon(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Dragon,994,3635,30,data){};
+    void Skill() override{
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 30;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Light;
+        Strike(false,Damage,true,token);
+    }
+};
+class DDefentDragon:public Member{
+    explicit DDefentDragon(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Dragon,1174,3417,28,data){};
+    void Skill() override{
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 30;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Dark;
+        Strike(false,Damage,true,token);
+    }
+};
 //Titan
 class WaterTitan:public Member,StoneTurn{
 public:
@@ -376,14 +417,55 @@ public:
 };
 class DarkSlime:public Member,StoneTurn{
 public:
-    explicit DarkSlime(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Fairy,1107,1980,384,data),
+    explicit DarkSlime(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Fairy,1107,1980,384,data),
           StoneTurn(std::move(data.m_Enchant)){
         std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
         m_LeaderSkill.push_back(token);
           };
     void Skill() override{
-        Turn(Type::Element_type::Light,Type::Element_type::Heart,true);
+        Turn(Type::Element_type::Light,Type::Element_type::Dark,true);
     }
 };
-
+//Gnome
+class WGnome:public Member,StoneTurn{
+public:
+    explicit WGnome(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Fairy,528,1064,372,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Water, false);
+    }
+};
+class FGnome:public Member,StoneTurn{
+public:
+    explicit FGnome(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Fairy,564,1120,331,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Fire, false);
+    }
+};
+class GGnome:public Member,StoneTurn{
+public:
+    explicit GGnome(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Fairy,486,1231,349,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Grass, false);
+    }
+};
+class LGnome:public Member,StoneTurn{
+public:
+    explicit LGnome(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Fairy,491,1108,383,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Light, false);
+    }
+};
+class DGnome:public Member,StoneTurn{
+public:
+    explicit DGnome(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Fairy,580,1042,345,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Dark, false);
+    }
+};
+// chinese protoss
 #endif
