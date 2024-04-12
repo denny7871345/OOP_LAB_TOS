@@ -20,6 +20,8 @@ void Enchant::Start() {
             m_Array[i][j]->Start(i,j,m_TypeGeneration);
         }
     }
+    m_DragTimeText->Start();
+    m_DragTimeText->SetColor(Util::Colors::WHITE);
     m_state = state::Keeping;
     this->Draw();
 }
@@ -244,6 +246,16 @@ void Enchant::KeepingStateUpdate() {
 }
 
 void Enchant::DraggingStateUpdate() {
+
+    if(m_unlimited){
+        auto delta = static_cast<float>(Util::Time::GetDeltaTime());
+        m_DraggingTime -= delta;
+    }
+
+    m_DragTimeText->SetText(std::to_string(m_DraggingTime) + "S");
+    glm::vec2 DragTimePosition = {0,45};
+    m_DragTimeText->Update(DragTimePosition);
+
     if (Util::Input::IsMouseMoving()) {
         auto cursorPos = Util::Input::GetCursorPosition();
         int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
@@ -253,7 +265,6 @@ void Enchant::DraggingStateUpdate() {
             Change(m_StartPos, glm::vec2(i, j));
             m_NowPos = glm::vec2(i, j);
             if(! m_unlimited)m_DraggingTime = m_battleSystem->GetDraggingTime();
-
             m_state = state::Moving;
             return;
         }
@@ -271,6 +282,11 @@ void Enchant::DraggingStateUpdate() {
 }
 
 void Enchant::MovingStateUpdate() {
+    auto delta = static_cast<float>(Util::Time::GetDeltaTime());
+    m_DraggingTime -= delta;
+    m_DragTimeText->SetText(std::to_string(m_DraggingTime) + "S");
+    glm::vec2 DragTimePosition = {0,45};
+    m_DragTimeText->Update(DragTimePosition);
     if (Util::Input::IsMouseMoving()) {
         auto cursorPos = Util::Input::GetCursorPosition();
         int i = std::clamp(static_cast<int>(std::floor((cursorPos.x + 225) / 75)), 0, 5);
@@ -296,8 +312,7 @@ void Enchant::MovingStateUpdate() {
         }
 
     }
-    auto delta = static_cast<float>(Util::Time::GetDeltaTime());
-    m_DraggingTime -= delta;
+
     //LOG_DEBUG("U have {} S left",m_DraggingTime);
 }
 void Enchant::CheckingStateUpdate() {
@@ -317,7 +332,7 @@ void Enchant::CheckingStateUpdate() {
     }
 
     if(CheckFull()){
-        m_battleSystem->ShowData();
+        //m_battleSystem->ShowData();
         m_battleSystem->DamageSettle();
         m_battleSystem->ResetRound();
         m_state = state::Keeping;
@@ -377,6 +392,9 @@ void Enchant::FallingStateUpdate() {
 void Enchant::UnlimitedStateUpdate() {
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     m_DraggingTime -= delta;
+    m_DragTimeText->SetText(std::to_string(m_DraggingTime) + "S");
+    glm::vec2 DragTimePosition = {0,45};
+    m_DragTimeText->Update(DragTimePosition);
     //LOG_DEBUG("U have {} S left",m_DraggingTime);
     if(m_DraggingTime <= 0){
         m_state = state::Checking;
