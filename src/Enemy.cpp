@@ -99,8 +99,7 @@ void Enemy::Update() {
     auto &pos = m_Transform.translation;
     auto x_pos = WINDOW_WIDTH / (m_pos.y) ;
     m_Transform.translation = { -225 + x_pos * (0.5 + m_pos.x) ,200};
-
-    m_Transform.scale = { 1.0 / m_pos.y, 1.0 / m_pos.y};
+    //m_Transform.scale = { 1.0 / m_pos.y, 1.0 / m_pos.y};
     m_Transform.scale = {0.2,0.2};
     auto delta = static_cast<float>(Util::Time::GetDeltaTime());
     Util::Transform deltaTransform{

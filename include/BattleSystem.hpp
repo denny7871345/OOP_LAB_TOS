@@ -33,8 +33,10 @@ private:
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
     std::vector<std::shared_ptr<AbilityStatus>> m_status;
-    std::shared_ptr<std::vector<float>> m_Addition;
-    std::shared_ptr<std::vector<float>> m_FirstAddition;
+    std::shared_ptr<std::vector<float>> m_ElementAddition;
+    std::shared_ptr<std::vector<float>> m_FirstElementAddition;
+    std::shared_ptr<std::vector<float>> m_RaceAddition;
+    std::shared_ptr<std::vector<float>> m_FirstRaceAddition;
     std::shared_ptr<float> m_dealtDamageDecrease = std::make_shared<float>(0.0f);
     std::vector<float> m_StoneDamage={0,0,0,0,0,0};
     std::vector<int> m_totalErase={0,0,0,0,0,0};

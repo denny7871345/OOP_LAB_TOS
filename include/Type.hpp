@@ -11,7 +11,8 @@ public:
         Mortal,
         Beast,
         Dragon,
-        Fairy
+        Fairy,
+        Num_Race
     };
     enum Element_type{
         Fire,
@@ -49,6 +50,12 @@ public:
         static Element_type elements[NUM_ELEMENTS] = {Fire, Water, Grass, Light, Dark, Heart};
         return std::find(elements,elements+NUM_ELEMENTS,target) - elements;
     }
+
+    static int FindIndex(Race_type target){
+        static Race_type elements[Num_Race] = {Protoss,Demon,Mortal,Beast,Dragon,Fairy};
+        return std::find(elements,elements+Num_Race,target) - elements;
+    }
+
      std::string TypeString() {
         switch(m_type) {
             case Element_type::Fire:

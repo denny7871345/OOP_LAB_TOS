@@ -79,6 +79,16 @@ private:
     float m_increase;
 };
 
+class RaceUp: public LeaderSkill{
+public:
+    RaceUp(std::shared_ptr<std::vector<float>> target ,Type::Race_type type,float increase);
+    virtual void Skill() override;
+private:
+    std::shared_ptr<std::vector<float>> m_Addition;
+    Type::Race_type m_type;
+    float m_increase;
+};
+
 class Launch:public LeaderSkill{
 public:
     Launch(std::vector<std::shared_ptr<Member>> target ,float times);
