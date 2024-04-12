@@ -38,6 +38,7 @@ public:
 private:
     std::weak_ptr<Enchant> m_weakptr;
     std::shared_ptr<BattleSystem> m_battleSystem;
+    std::shared_ptr<GiraffeText> m_DragTimeText = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",15);
     std::vector<std::vector<std::shared_ptr<Stone>>> m_explosionBar;
     std::vector<std::vector<std::shared_ptr<Stone>>> m_Array;
     std::vector<std::vector<std::shared_ptr<Stone>>> organizePairs();
@@ -55,6 +56,7 @@ private:
     std::vector<int> m_TypeGeneration;
     std::vector<int> m_mustFallbyNormal;
     std::vector<int> m_mustFallbyPowerup;
+
     /*method*/
     std::weak_ptr<Enchant> getWeakPtr();
     void KeepingStateUpdate();

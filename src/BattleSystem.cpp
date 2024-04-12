@@ -4,13 +4,13 @@
 void BattleSystem::Start() {
     std::vector<float> vec = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     m_FirstElementAddition = std::make_shared<std::vector<float>>(vec);
-    std::vector<float> vec2 = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
+    std::vector<float> vec2 = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     m_FirstRaceAddition = std::make_shared<std::vector<float>>(vec2);
 
     m_DraggingTime = 5;
 
     //Enemy Setting
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Fire,10000,1000,1,1);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,10000,1000,1,1);
     Enemytoken->SetPos(0,1);
     /*auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
     Enemytoken2->SetPos(1,3);
@@ -26,17 +26,17 @@ void BattleSystem::Start() {
 
     //member Setting
     auto Membertoken = CreateMemberData();
-    std::shared_ptr<Mori> token = std::make_shared<Mori>(Membertoken);
-    m_team.push_back(token);
-    std::shared_ptr<Sean> token2 = std::make_shared<Sean>(Membertoken);
+    std::shared_ptr<WaterBeast> token1 = std::make_shared<WaterBeast>(Membertoken);
+    m_team.push_back(token1);
+    std::shared_ptr<Mori> token2 = std::make_shared<Mori>(Membertoken);
     m_team.push_back(token2);
-    std::shared_ptr<WaterSlime> token3 = std::make_shared<WaterSlime>(Membertoken);
+    std::shared_ptr<FireTitan> token3 = std::make_shared<FireTitan>(Membertoken);
     m_team.push_back(token3);
-    std::shared_ptr<WaterSlime> token4 = std::make_shared<WaterSlime>(Membertoken);
+    std::shared_ptr<DarkTitan> token4 = std::make_shared<DarkTitan>(Membertoken);
     m_team.push_back(token4);
     std::shared_ptr<WaterBeast> token5 = std::make_shared<WaterBeast>(Membertoken);
     m_team.push_back(token5);
-    std::shared_ptr<Mori> token6 = std::make_shared<Mori>(Membertoken);
+    std::shared_ptr<WaterBeast> token6 = std::make_shared<WaterBeast>(Membertoken);
     m_team.push_back(token6);
 
     // Leader Skill Setting
@@ -178,7 +178,9 @@ void BattleSystem::ShowData() {
     LOG_DEBUG("Total combo:{}",m_combo);
     LOG_DEBUG("Combo Addition:{}%",m_ComboAddition * 100);
     std::vector<float> &vecRef = *m_ElementAddition;
-    LOG_DEBUG("Leader Addition:[{},{},{},{},{}]", vecRef[0],vecRef[1],vecRef[2],vecRef[3],vecRef[4] );
+    LOG_DEBUG("Leader Element Addition:[{},{},{},{},{}]", vecRef[0],vecRef[1],vecRef[2],vecRef[3],vecRef[4] );
+    std::vector<float> &vecRef2 = *m_RaceAddition;
+    LOG_DEBUG("Leader Race Addition:[{},{},{},{},{},{}]", vecRef2[0],vecRef2[1],vecRef2[2],vecRef2[3],vecRef2[4],vecRef2[5] );
 }
 
 void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
@@ -186,15 +188,18 @@ void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
 }
 
 void BattleSystem::DamageSettle() {
+    ShowData();
     int totalHeal=0;
     DragingDatas token = GetDragDatas();
     for(int i=0;i < m_team.size() ;i++){
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         std::vector<float> &ElementAddition = *m_ElementAddition;
         std::vector<float> &RaceAddition = *m_RaceAddition;
+        LOG_DEBUG("[{},{},{},{},{},{}]",RaceAddition[0],RaceAddition[1],RaceAddition[2],RaceAddition[3],RaceAddition[4],RaceAddition[5]);
+        LOG_DEBUG("this member's Race Index is:{}", Type::FindIndex(m_team[i]->GetRace()) );
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] *
                      ElementAddition[Type::FindIndex(m_team[i]->GetType())] * RaceAddition[Type::FindIndex(m_team[i]->GetRace())];
-        LOG_DEBUG("Member{} deals {} damage",i,Damage);
+        LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{}) damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition);
         token.m_Attackertype = m_team[i]->GetType();
         m_team[i]->Strike(true,Damage,true,token);
     }

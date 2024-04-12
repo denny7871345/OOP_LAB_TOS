@@ -19,7 +19,7 @@ public:
     void Strike(bool onlyone,int damage,bool defence,DragingDatas datas);
     void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
         m_enemies = target;}
-    Member(Type::Element_type e_type, Type::Race_type r_type ,int attack,int life,int heal,MemberSettingData data): m_Etype(e_type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(data.m_Enchant){};
+    Member(Type::Element_type e_type, Type::Race_type r_type ,int attack,int life,int heal,MemberSettingData data): m_Etype(e_type),m_Rtype(r_type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(data.m_Enchant){};
 protected:
     std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
     std::shared_ptr<Enchant> m_Enchant;
@@ -144,8 +144,8 @@ class WaterBeast:public Member,StoneTurn{
 public:
     explicit WaterBeast(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,979,3199,78,data),
           StoneTurn(std::move(data.m_Enchant)){
-        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Water,2.5);
-        m_LeaderSkill.push_back(token);
+            std::shared_ptr<RaceUp> token = std::make_shared<RaceUp>(data.m_FirstRaceAddition,Type::Race_type::Dragon,2.5);
+            m_LeaderSkill.push_back(token);
           };
     void Skill() override{
         Turn(Type::Element_type::Heart,Type::Element_type::Water, false);
@@ -252,7 +252,7 @@ public:
 };
 class FireTitan:public Member,StoneTurn{
 public:
-    explicit FireTitan(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Beast,970,2471,21,data),
+    explicit FireTitan(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Dragon,970,2471,21,data),
           StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Grass,Type::Element_type::Fire, false);
@@ -276,7 +276,7 @@ public:
 };
 class DarkTitan:public Member,StoneTurn{
 public:
-    explicit DarkTitan(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,831,2420,20,data),
+    explicit DarkTitan(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Dragon,831,2420,20,data),
           StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Dark, false);
