@@ -175,7 +175,7 @@ class GrassBeast:public Member,StoneTurn{
 class LightBeast:public Member,StoneTurn{
     explicit LightBeast(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,874,2416,321,data),
           StoneTurn(std::move(data.m_Enchant)){
-        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2.5);
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Light,2.5);
         m_LeaderSkill.push_back(token);
           };
     void Skill() override{
@@ -252,7 +252,7 @@ public:
 };
 class FireTitan:public Member,StoneTurn{
 public:
-    explicit FireTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,970,2471,21,data),
+    explicit FireTitan(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Beast,970,2471,21,data),
           StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Grass,Type::Element_type::Fire, false);
@@ -260,7 +260,7 @@ public:
 };
 class GrassTitan:public Member,StoneTurn{
 public:
-    explicit GrassTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,810,1849,288,data),
+    explicit GrassTitan(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,810,1849,288,data),
           StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Water,Type::Element_type::Grass, false);
@@ -268,7 +268,7 @@ public:
 };
 class LightTitan:public Member,StoneTurn{
 public:
-    explicit LightTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,744,2053,107,data),
+    explicit LightTitan(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,744,2053,107,data),
           StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Dark,Type::Element_type::Light, false);
@@ -276,7 +276,7 @@ public:
 };
 class DarkTitan:public Member,StoneTurn{
 public:
-    explicit DarkTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,831,2420,20,data),
+    explicit DarkTitan(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,831,2420,20,data),
           StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Dark, false);
@@ -467,5 +467,61 @@ public:
         Turn(Type::Element_type::Heart,Type::Element_type::Dark, false);
     }
 };
-// chinese protoss
+//Matallic Beast
+class WaterShark:public Member{
+public:
+    explicit WaterShark(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,961,2430,296,data){};
+    void Skill() override{
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Water;
+        Strike(false,Damage,true,token);
+    }
+};
+class FireLion:public Member{
+public:
+    explicit FireLion(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Beast,1028,2556,263,data){};
+    void Skill() override {
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Fire;
+        Strike(false, Damage, true, token);
+    }
+};
+class GrassRhino:public Member{
+public:
+    explicit GrassRhino(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,885,2809,278,data){};
+    void Skill() override {
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Grass;
+        Strike(false, Damage, true, token);
+    }
+};
+class LightWolf:public Member{
+public:
+    explicit LightWolf(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,895,2531,304,data){};
+    void Skill() override {
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Light;
+        Strike(false, Damage, true, token);
+    }
+};
+class DarkCheetah:public Member{
+public:
+    explicit DarkCheetah(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,1057,2379,274,data){};
+    void Skill() override {
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Dark;
+        Strike(false, Damage, true, token);
+    }
+};
+
 #endif
