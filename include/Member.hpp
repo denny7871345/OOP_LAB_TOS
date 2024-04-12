@@ -73,7 +73,6 @@ public:
         int Damage = Addition;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Water;
-        token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
 };
@@ -90,7 +89,6 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = Addition;
         DragingDatas token;
-        token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
 };
@@ -106,7 +104,6 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = Addition;
         DragingDatas token;
-        token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
 };
@@ -122,7 +119,6 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = Addition;
         DragingDatas token;
-        token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
 };
@@ -138,7 +134,6 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = Addition;
         DragingDatas token;
-        token.m_Attackertype = GetType();
         Strike(false,Damage,true,token);
     }
 };
@@ -193,143 +188,145 @@ class DarkBeast:public Member,StoneTurn{
         Turn(Type::Element_type::Light,Type::Element_type::Heart, false);
     }
 };
-
-/*DefentDragon
+/*
+//DefentDragon
 class WDefentDragon:public Member{
-    explicit WDefentDragon(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1068,3489,30,target),
-          DealDamage(std::move(target), this->GetAtk(), this.){};
+    explicit WDefentDragon(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1068,3489,30,data),
+          DealDamage(std::move(data.m_Enchant), this->GetAtk(), this.){};
     void Skill() override{
-        Strike()
+        Strike(false,Damage,true,token);
     }
 };
 */
-/*
+
 //Titan
 class WaterTitan:public Member,StoneTurn{
 public:
-    explicit WaterTitan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,799,1971,104,target),
-          StoneTurn(std::move(target)){};
+    explicit WaterTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,799,1971,104,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Fire,Type::Element_type::Water, false);
     }
 };
 class FireTitan:public Member,StoneTurn{
 public:
-    explicit FireTitan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,970,2471,21,target),
-          StoneTurn(std::move(target)){};
+    explicit FireTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,970,2471,21,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Grass,Type::Element_type::Fire, false);
     }
 };
 class GrassTitan:public Member,StoneTurn{
 public:
-    explicit GrassTitan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,810,1849,288,target),
-          StoneTurn(std::move(target)){};
+    explicit GrassTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,810,1849,288,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Water,Type::Element_type::Grass, false);
     }
 };
 class LightTitan:public Member,StoneTurn{
 public:
-    explicit LightTitan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,744,2053,107,target),
-          StoneTurn(std::move(target)){};
+    explicit LightTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,744,2053,107,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Dark,Type::Element_type::Light, false);
     }
 };
 class DarkTitan:public Member,StoneTurn{
 public:
-    explicit DarkTitan(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,831,2420,20,target),
-          StoneTurn(std::move(target)){};
+    explicit DarkTitan(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,831,2420,20,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Dark, false);
     }
 };
 
+
 //WestBeast
 class Cthulhu:public Member,StoneTurn{
 public:
-    explicit Cthulhu(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,940,2319,123,target),
-          StoneTurn(std::move(target)){};
+    explicit Cthulhu(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Beast,940,2319,123,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Fire,Type::Element_type::Heart, false);
     }
 };
 class Cerberus:public Member,StoneTurn{
 public:
-    explicit Cerberus(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1005,2440,109,target),
-          StoneTurn(std::move(target)){};
+    explicit Cerberus(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Beast,1005,2440,109,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Heart,Type::Element_type::Fire, false);
     }
 };
 class Medusa:public Member,StoneTurn{
 public:
-    explicit Medusa(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,865,2681,115,target),
-          StoneTurn(std::move(target)){};
+    explicit Medusa(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,865,2681,115,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         //Todo
     }
 };
 class Griffin:public Member,StoneTurn{
 public:
-    explicit Griffin(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,874,2416,126,target),
-          StoneTurn(std::move(target)){};
+    explicit Griffin(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,874,2416,126,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Dark,Type::Element_type::Heart, false);
     }
 };
 class Baphomet:public Member,StoneTurn{
 public:
-    explicit Baphomet(std::shared_ptr<Enchant> target): Member(Type::Element_type::Dark,1033,2271,114,target),
-          StoneTurn(std::move(target)){};
+    explicit Baphomet(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,1033,2271,114,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Heart,Type::Element_type::Dark, false);
     }
 };
 
+
 //Norse Mythology
 class Freyr:public Member,StoneTurn{
 public:
-    explicit Freyr(std::shared_ptr<Enchant> target): Member(Type::Element_type::Water,1402,3161,442,target),
-          StoneTurn(std::move(target)){};
+    explicit Freyr(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Protoss,1402,3161,442,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Water,Type::Element_type::Water, true);
     }
 };
 class Tyr:public Member,StoneTurn{
 public:
-    explicit Tyr(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1499,3326,392,target),
-          StoneTurn(std::move(target)){};
+    explicit Tyr(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Protoss,1499,3326,392,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Fire,Type::Element_type::Fire, true);
     }
 };
 class Freyja:public Member,StoneTurn{
 public:
-    explicit Freyja(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,1291,3655,412,target),
-          StoneTurn(std::move(target)){};
+    explicit Freyja(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1291,3655,412,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Grass,Type::Element_type::Grass, true);
     }
 };
 class Thor:public Member,StoneTurn{
 public:
-    explicit Thor(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,1305,3293,453,target),
-          StoneTurn(std::move(target)){};
+    explicit Thor(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Protoss,1305,3293,453,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Light, true);
     }
 };
 class Loki:public Member,StoneTurn{
 public:
-    explicit Loki(std::shared_ptr<Enchant> target): Member(Type::Element_type::Dark,1540,3096,409,target),
-          StoneTurn(std::move(target)){};
+    explicit Loki(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Protoss,1540,3096,409,data),
+          StoneTurn(std::move(data.m_Enchant)){};
     void Skill() override{
         Turn(Type::Element_type::Dark,Type::Element_type::Dark, true);
     }
 };
-*/
+
 //Slime
 class WaterSlime:public Member,StoneTurn{
 public:
@@ -342,38 +339,50 @@ public:
         Turn(Type::Element_type::Fire,Type::Element_type::Heart,true);
     }
 };
-/*
+
 class FireSlime:public Member,StoneTurn{
 public:
-    explicit FireSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Fire,1107,1980,384,target),
-          StoneTurn(std::move(target)){};
+    explicit FireSlime(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Fairy,1107,1980,384,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Grass,Type::Element_type::Heart,true);
     }
 };
 class GrassSlime:public Member,StoneTurn{
 public:
-    explicit GrassSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Grass,1107,1980,384,target),
-          StoneTurn(std::move(target)){};
+    explicit GrassSlime(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Fairy,1107,1980,384,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Water,Type::Element_type::Heart,true);
     }
 };
 class LightSlime:public Member,StoneTurn{
 public:
-    explicit LightSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,1107,1980,384,target),
-          StoneTurn(std::move(target)){};
+    explicit LightSlime(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Fairy,1107,1980,384,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Dark,Type::Element_type::Heart,true);
     }
 };
 class DarkSlime:public Member,StoneTurn{
 public:
-    explicit DarkSlime(std::shared_ptr<Enchant> target): Member(Type::Element_type::Light,1107,1980,384,target),
-          StoneTurn(std::move(target)){};
+    explicit DarkSlime(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Fairy,1107,1980,384,data),
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.25);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Heart,true);
     }
 };
- */
+
 #endif
