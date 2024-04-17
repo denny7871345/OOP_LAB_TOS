@@ -11,18 +11,18 @@ void BattleSystem::Start() {
 
     //Enemy Setting
     auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,10000,1000,1,1);
-    Enemytoken->SetPos(0,1);
-    /*auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
+    Enemytoken->SetPos(0,3);
+    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
     Enemytoken2->SetPos(1,3);
     auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,200000,2300,10,2);
-    Enemytoken3->SetPos(2,3);*/
+    Enemytoken3->SetPos(2,3);
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
     /*auto Attacking = std::make_shared<DoubleStrike>();
     Enemytoken->SetAttackingMethod(Attacking); */
     m_enemy.push_back(Enemytoken);
-    /*m_enemy.push_back(Enemytoken2);
-    m_enemy.push_back(Enemytoken3);*/
+    m_enemy.push_back(Enemytoken2);
+    m_enemy.push_back(Enemytoken3);
 
     //member Setting
     auto Membertoken = CreateMemberData();
@@ -63,6 +63,16 @@ void BattleSystem::Start() {
     m_LifeDisplay->SetColor(Util::Colors::PINK);
     m_LifeDisplay->SetZIndex(5);
     m_LifeDisplay->SetText(lifeToken);
+    m_ComboDisplay->Start();
+    m_ComboDisplay->SetColor(Util::Colors::WHITE);
+    m_ComboDisplay->SetZIndex(5);
+    m_ComboDisplay->SetText("Ambatukam");
+    m_ComboAdditionDisplay->Start();
+    m_ComboAdditionDisplay->SetColor(Util::Colors::WHITE);
+    m_ComboAdditionDisplay->SetZIndex(5);
+    m_ComboAdditionDisplay->SetText("Ambatukam");
+    SetComboDisplay(false);
+
 }
 
 void BattleSystem::SkillTrigger(int index) {
@@ -111,13 +121,13 @@ void BattleSystem::ResetRound() {
 }
 bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
-        AddCombo(1);
         m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
         m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
         return true;
     }
     for(int i=0;i<Lists.size();i++){
         if(! Lists[i]->IsPlaying()){
+            SetComboDisplay(true);
             if(Lists[i]->IsPowerUp()){
                 m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.3;
                 m_powerUpBeenErase[Type::FindIndex(Lists[i]->GetType())] = true;
@@ -125,6 +135,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
             Lists[i]->SetPlaying(true);
             if(i==0){
                 if(Lists.size() >= 5){
+                    AddCombo(1);
                     m_Enchant->MustFall(Lists[0]->GetType(), true);
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
@@ -145,6 +156,7 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     }
     for(int i=0;i<Lists.size();i++){
         if(! Lists[i]->IsPlaying()){
+            SetComboDisplay(true);
             if(Lists[i]->IsPowerUp()){
                 m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.3;
                 m_powerUpBeenErase[Type::FindIndex(Lists[i]->GetType())] = true;
@@ -152,6 +164,7 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
             Lists[i]->SetPlaying(true);
             if(i==0){
                 if(Lists.size() >= 5){
+                    AddCombo(1);
                     m_Enchant->MustFall(Lists[0]->GetType(), true);
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
@@ -261,6 +274,12 @@ void BattleSystem::Update() {
     }
     glm::vec2 lifePosition = {135,45};
     m_LifeDisplay->Update(lifePosition);
+    lifePosition = {135,-250};
+    m_ComboDisplay->SetText(std::to_string(m_combo));
+    m_ComboDisplay->Update(lifePosition);
+    lifePosition = {180,-310};
+    m_ComboAdditionDisplay->SetText("+"+ std::to_string(int(m_ComboAddition*100)-100)+"%");
+    m_ComboAdditionDisplay->Update(lifePosition);
 }
 
 void BattleSystem::AddStatus(std::shared_ptr<AbilityStatus> target) {
@@ -281,4 +300,9 @@ MemberSettingData BattleSystem::CreateMemberData() {
     token.m_FirstRaceAddition = m_FirstRaceAddition;
     token.m_addCombo = m_addCombo;
     return token;
+}
+
+void BattleSystem::SetComboDisplay(bool visible) {
+    m_ComboDisplay->SetVisible(visible);
+    m_ComboAdditionDisplay->SetVisible(visible);
 }

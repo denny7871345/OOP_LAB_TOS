@@ -27,7 +27,7 @@ public:
     void DamageSettle();
     void AddStatus(std::shared_ptr<AbilityStatus> target);
     void AddStatusToEnemy(std::shared_ptr<AbilityStatus> target);
-
+    void SetComboDisplay(bool visible);
 private:
     DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
@@ -44,6 +44,8 @@ private:
     std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
     std::shared_ptr<Enchant> m_Enchant;
     std::shared_ptr<GiraffeText> m_LifeDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",15);
+    std::shared_ptr<GiraffeText> m_ComboDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",120);
+    std::shared_ptr<GiraffeText> m_ComboAdditionDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",30);
     std::vector<std::shared_ptr<Member>> m_team;
     std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
     int m_life;

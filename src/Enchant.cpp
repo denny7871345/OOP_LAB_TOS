@@ -335,6 +335,7 @@ void Enchant::CheckingStateUpdate() {
         //m_battleSystem->ShowData();
         m_battleSystem->DamageSettle();
         m_battleSystem->ResetRound();
+        m_battleSystem->SetComboDisplay(false);
         m_state = state::Keeping;
     }else{
         m_state = state::Falling;
