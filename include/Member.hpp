@@ -155,7 +155,7 @@ public:
 class FireBeast:public Member,StoneTurn{
     explicit FireBeast(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Beast,1105,2684,305,data),
           StoneTurn(std::move(data.m_Enchant)){
-        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Fire,2.5);
+        std::shared_ptr<RaceUp> token = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Beast,2.5);
         m_LeaderSkill.push_back(token);
           };
     void Skill() override{
@@ -165,7 +165,7 @@ class FireBeast:public Member,StoneTurn{
 class GrassBeast:public Member,StoneTurn{
     explicit GrassBeast(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,952,2949,322,data),
           StoneTurn(std::move(data.m_Enchant)){
-        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Grass,2.5);
+        std::shared_ptr<RaceUp> token = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Beast,2.5);
         m_LeaderSkill.push_back(token);
           };
     void Skill() override{
@@ -175,7 +175,7 @@ class GrassBeast:public Member,StoneTurn{
 class LightBeast:public Member,StoneTurn{
     explicit LightBeast(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,874,2416,321,data),
           StoneTurn(std::move(data.m_Enchant)){
-        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Light,2.5);
+        std::shared_ptr<RaceUp> token = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Beast,2.5);
         m_LeaderSkill.push_back(token);
           };
     void Skill() override{
@@ -184,7 +184,10 @@ class LightBeast:public Member,StoneTurn{
 };
 class DarkBeast:public Member,StoneTurn{
     explicit DarkBeast(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,1033,2271,289,data),
-          StoneTurn(std::move(data.m_Enchant)){};
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<RaceUp> token = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Beast,2.5);
+        m_LeaderSkill.push_back(token);
+          };
     void Skill() override{
         Turn(Type::Element_type::Light,Type::Element_type::Heart, false);
     }
