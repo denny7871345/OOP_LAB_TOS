@@ -57,7 +57,6 @@ private:
     std::shared_ptr<Enchant> m_Enchant;
 };
 
-
 //Charctor
 //MainCharacter
 class Mori:public Member,Boom{
@@ -565,5 +564,31 @@ public:
     void Skill() override{
         TheWorld(20);
     }
+};
+//Olympians
+class Poseidon:public Member{
+public:
+    explicit Poseidon(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Protoss,1508,2555,398,data){};
+    void Skill() override{};
+};
+class Hephaestus:public Member{
+public:
+    explicit Hephaestus(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Protoss,1612,2689,353,data){};
+    void Skill() override{};
+};
+class Athana:public Member{
+public:
+    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data){};
+    void Skill() override{};
+};
+class Apolo:public Member{
+public:
+    explicit Apolo(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Protoss,1403,2662,409,data){};
+    void Skill() override{};
+};
+class Artemis:public Member{
+public:
+    explicit Artemis(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Protoss,1657,2503,369,data){};
+    void Skill() override{};
 };
 #endif
