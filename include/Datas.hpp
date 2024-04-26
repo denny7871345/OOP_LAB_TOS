@@ -7,8 +7,8 @@
 class Enchant;
 
 struct DragingDatas{
-    std::vector<int> m_totalErase={0,0,0,0,0,0};
-    std::vector<int> m_firstErase={0,0,0,0,0,0};
+    std::shared_ptr<std::vector<int>> m_totalErase;
+    std::shared_ptr<std::vector<int>> m_firstErase;
     std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
     int m_combo = 0;
     int m_exCombo = 0;
@@ -31,7 +31,8 @@ struct MemberSettingData{
     std::shared_ptr<std::vector<float>> m_FirstRaceAddition;
     std::shared_ptr<float> m_dealtDamageDecrease = std::make_shared<float>(0.0f);
     std::shared_ptr<float> m_addCombo;
-
+    std::shared_ptr<std::vector<int>> m_totalErase;
+    std::shared_ptr<std::vector<int>> m_firstErase;
 };
 
 #endif

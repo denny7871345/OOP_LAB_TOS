@@ -578,7 +578,10 @@ public:
 };
 class Athana:public Member{
 public:
-    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data){};
+    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data){
+        std::shared_ptr<Olympians> token = std::make_shared<Olympians>(3,data,Type::Element_type::Grass);
+        m_LeaderSkill.push_back(token);
+    };
     void Skill() override{};
 };
 class Apolo:public Member{

@@ -64,6 +64,7 @@ private:
 class LeaderSkill{
 public:
     virtual void Skill() = 0;
+    virtual void SkillReset(){};
     AbilityType GetType();
 protected:
     AbilityType m_abilityType;
@@ -109,11 +110,14 @@ private:
 
 class Olympians: public LeaderSkill{
 public:
-    Olympians(int howmany,MemberSettingData target);
+    Olympians(int howmany,MemberSettingData target,Type::Element_type type);
     virtual void Skill() override;
+    virtual void SkillReset() override;
 private:
-    int m_Cum;
+    std::shared_ptr<std::vector<int>> m_totalErase;
+    int m_cum;
     int m_howmany;
+    int m_count;
     std::shared_ptr<Enchant> m_enchant;
     Type::Element_type m_Etype;
 };

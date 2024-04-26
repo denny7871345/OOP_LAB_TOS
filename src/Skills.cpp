@@ -56,7 +56,7 @@ bool FirstComboShield::SkillsCheck(DragingDatas datas) { //V
 
 bool EraseShield::SkillsCheck(DragingDatas datas) { //V
     if(m_firstCount){
-        m_howmuch -= datas.m_totalErase[Type::FindIndex(m_type)];
+        m_howmuch -= (*datas.m_totalErase)[Type::FindIndex(m_type)];
         m_firstCount = false;
     }
 
