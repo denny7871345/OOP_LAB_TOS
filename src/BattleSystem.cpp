@@ -142,7 +142,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
             if(i==0){
                 if(Lists.size() >= 5){
                     AddCombo(1);
-                    m_Enchant->MustFall(Lists[0]->GetType(), true);
+                    m_Enchant->MustFall(Lists[0]->GetType(), 1,true);
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
                 }else{
@@ -172,7 +172,7 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
             if(i==0){
                 if(Lists.size() >= 5){
                     AddCombo(1);
-                    m_Enchant->MustFall(Lists[0]->GetType(), true);
+                    m_Enchant->MustFall(Lists[0]->GetType(), 1,true);
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
                 }else{

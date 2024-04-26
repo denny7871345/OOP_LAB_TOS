@@ -17,12 +17,13 @@ public:
         Unlimited
     };
     int CountEmpty();
+    void SetFallingValue(std::vector<int> value);
     void Update();
     void Start();
     void CheckMatch();
     void DoFall();
     bool CheckFall();
-    void MustFall(Type::Element_type type,bool powerup);
+    void MustFall(Type::Element_type type,int howmuch,bool powerup);
     void GenerateFall(bool powerup);
     void SetDraggingTime(int time);
     void SetState(state target);
