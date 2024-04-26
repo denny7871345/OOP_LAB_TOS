@@ -1,6 +1,7 @@
 #include "AbilityStatus.hpp"
 #include "Enemy.hpp"
 #include "Member.hpp"
+#include "Enchant.hpp"
 
 AbilityStatus::AbilityStatus(AbilityType type, int CountDown) {
     m_abilityType = type;
@@ -87,4 +88,13 @@ ComboUp::ComboUp(std::shared_ptr<float> target, float howmuch):m_increase(howmuc
 
 void ComboUp::Skill() {
     *(m_addCombo) += m_increase;
+}
+
+Olympians::Olympians(int howmany,MemberSettingData target):m_howmany(howmany) {
+    m_abilityType = AbilityType::EraseOfStone;
+    m_Cum = 0;
+}
+
+void Olympians::Skill() {
+    m_enchant->MustFall(m_Etype, true);
 }

@@ -15,6 +15,7 @@ public:
     void SetEnchant(std::shared_ptr<Enchant> target);
     float GetDraggingTime();
     void AddDraggingTime();
+    void StateTrigger(AbilityType state);
     void Start();
     void ShowData();
     void ResetRound();

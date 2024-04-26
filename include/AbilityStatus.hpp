@@ -106,4 +106,15 @@ private:
     std::shared_ptr<float> m_addCombo;
     float m_increase;
 };
+
+class Olympians: public LeaderSkill{
+public:
+    Olympians(int howmany,MemberSettingData target);
+    virtual void Skill() override;
+private:
+    int m_Cum;
+    int m_howmany;
+    std::shared_ptr<Enchant> m_enchant;
+    Type::Element_type m_Etype;
+};
 #endif

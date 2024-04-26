@@ -26,7 +26,7 @@ void BattleSystem::Start() {
 
     //member Setting
     auto Membertoken = CreateMemberData();
-    std::shared_ptr<WaterBeast> token1 = std::make_shared<WaterBeast>(Membertoken);
+    std::shared_ptr<WaterSlime> token1 = std::make_shared<WaterSlime>(Membertoken);
     m_team.push_back(token1);
     std::shared_ptr<Mori> token2 = std::make_shared<Mori>(Membertoken);
     m_team.push_back(token2);
@@ -52,11 +52,8 @@ void BattleSystem::Start() {
     m_life = m_MaxLife;
     m_audioSystem.Start();
 
-    for(int i=0;i<m_LeaderSkill.size();i++){
-        if(m_LeaderSkill[i]->GetType() == AbilityType::Setting){
-            m_LeaderSkill[i]->Skill();
-        }
-    }
+    StateTrigger(AbilityType::Setting);
+
     ResetRound();
     std::string lifeToken = std::to_string(m_life) + "/"  +std::to_string(m_MaxLife);
     m_LifeDisplay->Start();
@@ -305,4 +302,12 @@ MemberSettingData BattleSystem::CreateMemberData() {
 void BattleSystem::SetComboDisplay(bool visible) {
     m_ComboDisplay->SetVisible(visible);
     m_ComboAdditionDisplay->SetVisible(visible);
+}
+
+void BattleSystem::StateTrigger(AbilityType state) {
+    for(int i=0;i<m_LeaderSkill.size();i++){
+        if(m_LeaderSkill[i]->GetType() == state){
+            m_LeaderSkill[i]->Skill();
+        }
+    }
 }
