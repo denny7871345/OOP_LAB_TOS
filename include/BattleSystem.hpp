@@ -40,8 +40,8 @@ private:
     std::shared_ptr<std::vector<float>> m_FirstRaceAddition;
     std::shared_ptr<float> m_dealtDamageDecrease = std::make_shared<float>(0.0f);
     std::vector<float> m_StoneDamage={0,0,0,0,0,0};
-    std::vector<int> m_totalErase={0,0,0,0,0,0};
-    std::vector<int> m_firstErase={0,0,0,0,0,0};
+    std::shared_ptr<std::vector<int>> m_totalErase;
+    std::shared_ptr<std::vector<int>> m_firstErase;
     std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
     std::shared_ptr<Enchant> m_Enchant;
     std::shared_ptr<GiraffeText> m_LifeDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",15);

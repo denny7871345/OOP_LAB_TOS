@@ -6,7 +6,9 @@ void BattleSystem::Start() {
     m_FirstElementAddition = std::make_shared<std::vector<float>>(vec);
     std::vector<float> vec2 = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     m_FirstRaceAddition = std::make_shared<std::vector<float>>(vec2);
-
+    std::vector<int> vec3 = {0,0,0,0,0,0};
+    m_totalErase = std::make_shared<std::vector<int>>(vec3);
+    m_firstErase = std::make_shared<std::vector<int>>(vec3);
     m_DraggingTime = 5;
 
     //Enemy Setting
@@ -26,7 +28,7 @@ void BattleSystem::Start() {
 
     //member Setting
     auto Membertoken = CreateMemberData();
-    std::shared_ptr<WaterSlime> token1 = std::make_shared<WaterSlime>(Membertoken);
+    std::shared_ptr<Athana> token1 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token1);
     std::shared_ptr<Mori> token2 = std::make_shared<Mori>(Membertoken);
     m_team.push_back(token2);
@@ -36,7 +38,7 @@ void BattleSystem::Start() {
     m_team.push_back(token4);
     std::shared_ptr<WaterBeast> token5 = std::make_shared<WaterBeast>(Membertoken);
     m_team.push_back(token5);
-    std::shared_ptr<WaterBeast> token6 = std::make_shared<WaterBeast>(Membertoken);
+    std::shared_ptr<Athana> token6 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token6);
 
     // Leader Skill Setting
@@ -103,8 +105,10 @@ void BattleSystem::ResetRound() {
     m_exCombo = 0;
     m_ElementAddition = m_FirstElementAddition;
     m_RaceAddition = m_FirstRaceAddition;
-    m_firstErase = {0,0,0,0,0,0};
-    m_totalErase = {0,0,0,0,0,0};
+    for(int i=0;i<6;i++){
+        (*m_totalErase)[i] = 0;
+        (*m_firstErase)[i] = 0;
+    }
     m_StoneDamage = {0,0,0,0,0,0};
     m_powerUpBeenErase = {false,false,false,false,false,false};
 
@@ -114,12 +118,17 @@ void BattleSystem::ResetRound() {
             m_status.erase(m_status.begin()+i);
         }
     }
+    for(int i=0;i<m_LeaderSkill.size();i++){
+        m_LeaderSkill[i]->SkillReset();
+    }
 
 }
 bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
         m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
-        m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+        (*m_totalErase)[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+        LOG_DEBUG("total erase:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
+        StateTrigger(AbilityType::EraseOfStone);
         return true;
     }
     for(int i=0;i<Lists.size();i++){
@@ -140,7 +149,6 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
                     AddCombo(1);
                 }
                 m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
-                m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
                 m_audioSystem.PlayComboSound(m_combo);
             }
         }
@@ -149,6 +157,8 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
 }
 bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
+        LOG_DEBUG("total erase:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
+        StateTrigger(AbilityType::EraseOfStone);
         return true;
     }
     for(int i=0;i<Lists.size();i++){
@@ -170,9 +180,9 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
                     m_audioSystem.PlayComboSound(m_combo);
                 }
                 m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
-                m_totalErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+                (*m_totalErase)[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
                 m_firstCombo +=1 ;
-                m_firstErase[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
+                (*m_firstErase)[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
             }
         }
     }
@@ -180,8 +190,8 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
 }
 
 void BattleSystem::ShowData() {
-    LOG_DEBUG("first erase:[{},{},{},{},{},{}]",m_firstErase[0],m_firstErase[1],m_firstErase[2],m_firstErase[3],m_firstErase[4],m_firstErase[5]);
-    LOG_DEBUG("total erase:[{},{},{},{},{},{}]",m_totalErase[0],m_totalErase[1],m_totalErase[2],m_totalErase[3],m_totalErase[4],m_totalErase[5]);
+    LOG_DEBUG("first erase:[{},{},{},{},{},{}]",(*m_firstErase)[0],(*m_firstErase)[1],(*m_firstErase)[2],(*m_firstErase)[3],(*m_firstErase)[4],(*m_firstErase)[5]);
+    LOG_DEBUG("total erase:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
     LOG_DEBUG("total StoneDamage:[{}%,{}%,{}%,{}%,{}%,{}%]",m_StoneDamage[0]*100,m_StoneDamage[1]*100,m_StoneDamage[2]*100,m_StoneDamage[3]*100,m_StoneDamage[4]*100,m_StoneDamage[5]*100);
     LOG_DEBUG("PowerUP Erase:[{},{},{},{},{},{}]",m_powerUpBeenErase[0],m_powerUpBeenErase[1],m_powerUpBeenErase[2],m_powerUpBeenErase[3],m_powerUpBeenErase[4],m_powerUpBeenErase[5]);
     LOG_DEBUG("first combo:{}",m_firstCombo);
@@ -205,11 +215,11 @@ void BattleSystem::DamageSettle() {
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         std::vector<float> &ElementAddition = *m_ElementAddition;
         std::vector<float> &RaceAddition = *m_RaceAddition;
-        LOG_DEBUG("[{},{},{},{},{},{}]",RaceAddition[0],RaceAddition[1],RaceAddition[2],RaceAddition[3],RaceAddition[4],RaceAddition[5]);
-        LOG_DEBUG("this member's Race Index is:{}", Type::FindIndex(m_team[i]->GetRace()) );
+        //LOG_DEBUG("[{},{},{},{},{},{}]",RaceAddition[0],RaceAddition[1],RaceAddition[2],RaceAddition[3],RaceAddition[4],RaceAddition[5]);
+        //LOG_DEBUG("this member's Race Index is:{}", Type::FindIndex(m_team[i]->GetRace()) );
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] *
                      ElementAddition[Type::FindIndex(m_team[i]->GetType())] * RaceAddition[Type::FindIndex(m_team[i]->GetRace())];
-        LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{}) damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition);
+        //LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{}) damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition);
         token.m_Attackertype = m_team[i]->GetType();
         m_team[i]->Strike(true,Damage,true,token);
     }
@@ -241,7 +251,7 @@ void BattleSystem::DamageSettle() {
             m_enemy[i]->AddCD(2);
         }
         m_enemy[i]->RoundUp();
-        LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
+        //LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
     }
     std::string lifeToken = std::to_string(m_life) + "/"  +std::to_string(m_MaxLife);
     m_LifeDisplay->SetText(lifeToken);
@@ -255,6 +265,7 @@ float BattleSystem::GetDraggingTime() {
 DragingDatas BattleSystem::GetDragDatas() {
     DragingDatas token;
     token.m_totalErase = m_totalErase;
+    token.m_firstErase = m_firstErase;
     token.m_firstCombo = m_firstCombo;
     token.m_powerUpBeenErase = m_powerUpBeenErase;
     token.m_combo = m_combo;
@@ -296,6 +307,8 @@ MemberSettingData BattleSystem::CreateMemberData() {
     token.m_FirstAddition = m_FirstElementAddition;
     token.m_FirstRaceAddition = m_FirstRaceAddition;
     token.m_addCombo = m_addCombo;
+    token.m_firstErase = m_firstErase;
+    token.m_totalErase = m_totalErase;
     return token;
 }
 
