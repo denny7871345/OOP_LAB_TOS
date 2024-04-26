@@ -50,6 +50,7 @@ private:
 };
 
 class Dio{
+public:
     Dio(std::shared_ptr<Enchant> target):m_Enchant(std::move(target)){};
     void TheWorld(int seconds);
 private:
@@ -523,5 +524,46 @@ public:
         Strike(false, Damage, true, token);
     }
 };
+//chinese
+class AoXing:public Member,StoneTurn{
+public:
+    explicit AoXing(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1133,3608,34,data),
+        StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Water, false);
+        Turn(Type::Element_type::Fire,Type::Element_type::Water, false);
+    }
+};
 
+class NaZha:public Member,StoneTurn{
+public:
+    explicit NaZha(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Mortal,1377,2464,397,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Fire, false);
+        Turn(Type::Element_type::Grass,Type::Element_type::Fire, false);
+    }
+};
+
+class Eduard:public Member,StoneTurn{
+public:
+    explicit Eduard(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,1083,3323,140,data),
+          StoneTurn(std::move(data.m_Enchant)){};
+    void Skill() override{
+        Turn(Type::Element_type::Heart,Type::Element_type::Grass, false);
+        Turn(Type::Element_type::Water,Type::Element_type::Grass, false);
+    }
+};
+//Son Goku
+class DaJi:public Member,Dio{
+public:
+    explicit DaJi(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,1083,3323,140,data),
+          Dio(std::move(data.m_Enchant)){
+        std::shared_ptr<ComboUp> token = std::make_shared<ComboUp>(data.m_addCombo,0.75);
+        m_LeaderSkill.push_back(token);
+          };
+    void Skill() override{
+        TheWorld(20);
+    }
+};
 #endif
