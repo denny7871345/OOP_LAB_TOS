@@ -474,10 +474,14 @@ void Enchant::SetState(Enchant::state target) {
     if(m_state == state::Unlimited) m_unlimited = true;
 }
 
-void Enchant::MustFall(Type::Element_type type, bool powerup) {
+void Enchant::MustFall(Type::Element_type type,int howmuch ,bool powerup) {
     if(powerup){
-        m_mustFallbyPowerup[Type::FindIndex(type)] ++;
+        m_mustFallbyPowerup[Type::FindIndex(type)] += howmuch;
     }else{
-        m_mustFallbyNormal[Type::FindIndex(type)] ++;
+        m_mustFallbyNormal[Type::FindIndex(type)] += howmuch;
     }
+}
+
+void Enchant::SetFallingValue(std::vector<int> value) {
+    m_TypeGeneration = value;
 }

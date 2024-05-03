@@ -99,12 +99,12 @@ Olympians::Olympians(int howmany,MemberSettingData data,Type::Element_type type)
 }
 
 void Olympians::Skill() {
-    LOG_DEBUG("Olympians Skill Trigger!!");
-    LOG_DEBUG("m_Cum:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
+    //LOG_DEBUG("Olympians Skill Trigger!!");
+    //LOG_DEBUG("m_Cum:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
     m_cum += (*m_totalErase)[Type::FindIndex(m_Etype)] - m_count * m_howmany;
-    LOG_DEBUG("{},{}",m_cum,(*m_totalErase)[Type::FindIndex(m_Etype)]);
+    //LOG_DEBUG("{},{}",m_cum,(*m_totalErase)[Type::FindIndex(m_Etype)]);
     for(   ;m_cum >= 3;m_cum -= 3 ){
-        m_enchant->MustFall(m_Etype, true);
+        m_enchant->MustFall(m_Etype,1,true);
         m_count ++;
     }
 }
