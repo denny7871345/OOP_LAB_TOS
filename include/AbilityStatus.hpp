@@ -26,9 +26,11 @@ public:
     virtual void Trigger() = 0;
     virtual void Reset(){};
     bool RoundUp();
+    AbilityType GetType();
 protected:
     AbilityType m_abilityType;
     int m_countDown;
+    bool m_reset;
 };
 
 class PowerRaise: public AbilityStatus{
@@ -58,6 +60,18 @@ public:
 private:
     std::shared_ptr<Enemy> m_enemy;
     float m_value;
+};
+
+class OlympianSkill: public AbilityStatus{
+public:
+    OlympianSkill(Type::Element_type type,MemberSettingData data);
+    virtual void Trigger() override;
+private:
+    std::vector<std::shared_ptr<AbilityStatus>> m_status;
+    std::shared_ptr<std::vector<float>> m_ElementAddition;
+    std::shared_ptr<std::vector<int>> m_totalErase;
+    Type::Element_type m_type;
+    int m_Cum;
 };
 
 //隊長技能
@@ -121,4 +135,5 @@ private:
     std::shared_ptr<Enchant> m_enchant;
     Type::Element_type m_Etype;
 };
+
 #endif

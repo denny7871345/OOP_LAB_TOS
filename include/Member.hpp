@@ -57,6 +57,13 @@ private:
     std::shared_ptr<Enchant> m_Enchant;
 };
 
+class AddStatus{
+public:
+    AddStatus(MemberSettingData data):m_status(data.m_status){};
+protected:
+    std::shared_ptr<std::vector<std::shared_ptr<AbilityStatus>>> m_status;
+};
+
 //Charctor
 //MainCharacter
 class Mori:public Member,Boom{
@@ -576,13 +583,21 @@ public:
     explicit Hephaestus(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Protoss,1612,2689,353,data){};
     void Skill() override{};
 };
-class Athana:public Member{
+class Athana:public Member,public AddStatus{
 public:
-    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data){
+    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data),
+          AddStatus(data){
+        m_data = data;
         std::shared_ptr<Olympians> token = std::make_shared<Olympians>(3,data,Type::Element_type::Grass);
         m_LeaderSkill.push_back(token);
     };
-    void Skill() override{};
+    void Skill() override{
+        std::shared_ptr<OlympianSkill> token = std::make_shared<OlympianSkill>(m_Etype,m_data);
+        m_status->push_back(token);
+        LOG_DEBUG("Olympian Skill Trigger!!???");
+    };
+private:
+    MemberSettingData m_data;
 };
 class Apolo:public Member{
 public:

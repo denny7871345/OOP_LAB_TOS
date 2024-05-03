@@ -3,6 +3,7 @@
 #include "Enchant.hpp"
 #include "AbilityStatus.hpp"
 
+
 void Member::Strike(bool onlyone, int damage, bool defence,DragingDatas datas) {
     if(onlyone){
         for(int i=0;i<m_enemies.size();i++){
@@ -25,6 +26,8 @@ int Boom::StoneBreak(Type::Element_type Lvalue,bool powerup) {
 void StoneTurn::Turn(Type::Element_type Lvalue, Type::Element_type Rvalue, bool powerup) {
     m_Enchant->StoneTurn(Lvalue,Rvalue,0,powerup);
 }
+
+
 
 bool Skills::SkillsCheck(DragingDatas datas) {
     LOG_DEBUG("NothingHappens!!");

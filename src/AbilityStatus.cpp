@@ -8,7 +8,12 @@ AbilityStatus::AbilityStatus(AbilityType type, int CountDown) {
     m_countDown = CountDown;
 }
 
+AbilityType AbilityStatus::GetType() {
+    return m_abilityType;
+}
+
 bool AbilityStatus::RoundUp() {
+    if(m_reset) return true;
     if(m_countDown == -1){
         return false;
     }else{
@@ -50,6 +55,25 @@ void ShiledBreak::Trigger() {
 
 void ShiledBreak::Reset() {
     m_enemy->DefReset();
+}
+
+OlympianSkill::OlympianSkill(Type::Element_type type,MemberSettingData data): AbilityStatus(AbilityType::DamageSettle,-1),m_type(type) {
+    m_ElementAddition = data.m_ElementAddition;
+    m_totalErase = data.m_totalErase;
+    m_Cum = 0;
+    m_reset = false;
+}
+void OlympianSkill::Trigger() {
+    m_Cum += (*m_totalErase)[Type::FindIndex(m_type)];
+    LOG_DEBUG("OlympianSkill Trigger, m_Cum is {}",m_Cum);
+
+    if((*m_totalErase)[Type::FindIndex(m_type)] == 0){
+        m_reset = true;
+        m_Cum = 0;
+    }else{
+        if(m_Cum > 60) m_Cum = 60;
+        (*m_ElementAddition)[Type::FindIndex(m_type)] *= float(1 + 0.05 * m_Cum);
+    }
 }
 
 AbilityType LeaderSkill::GetType() {
