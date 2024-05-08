@@ -36,25 +36,33 @@ void PowerRaise::Trigger() {
 }
 
 
-DamageDecrease::DamageDecrease(std::shared_ptr<float> target, float Decrease, int CountDown):
-      AbilityStatus(AbilityType::DealtDamageEffect,CountDown),m_DamageDecrease(target),m_value(Decrease){
-
+DamageDecrease::DamageDecrease(std::shared_ptr<float> target, int CountDown):
+      AbilityStatus(AbilityType::DealtDamageEffect,CountDown){
+    m_DamageDecrease = target;
 }
 
 void DamageDecrease::Trigger() {
-    *m_DamageDecrease = m_value;
+    m_reset = false;
 }
 
-ShiledBreak::ShiledBreak(std::shared_ptr<Enemy> target, float value, int CountDown):
-      AbilityStatus(AbilityType::EnemyValueChange,CountDown),m_enemy(target),m_value(value) {
+void DamageDecrease::Reset() {
+    (*m_DamageDecrease) = 0;
+}
+
+ShiledBreak::ShiledBreak(std::vector<std::shared_ptr<Enemy>> enemy,int CountDown):
+      AbilityStatus(AbilityType::EnemyValueChange,CountDown),m_enemy(enemy){
+
 }
 
 void ShiledBreak::Trigger() {
-    m_enemy->SetDef(m_value);
+
 }
 
 void ShiledBreak::Reset() {
-    m_enemy->DefReset();
+    for(int i=0;i<m_enemy.size();i++){
+        m_enemy[i]->DefReset();
+    }
+    LOG_DEBUG("Def Reset");
 }
 
 OlympianSkill::OlympianSkill(Type::Element_type type,MemberSettingData data): AbilityStatus(AbilityType::DamageSettle,-1),m_type(type) {

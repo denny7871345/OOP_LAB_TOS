@@ -30,7 +30,7 @@ public:
 protected:
     AbilityType m_abilityType;
     int m_countDown;
-    bool m_reset;
+    bool m_reset = false;
 };
 
 class PowerRaise: public AbilityStatus{
@@ -45,21 +45,20 @@ protected:
 
 class DamageDecrease: public AbilityStatus{
 public:
-    DamageDecrease(std::shared_ptr<float> target, float Decrease, int CountDown);
+    DamageDecrease(std::shared_ptr<float> target, int CountDown);
     virtual void Trigger() override;
+    virtual void Reset() override;
 private:
     std::shared_ptr<float> m_DamageDecrease;
-    float m_value;
 };
 
 class ShiledBreak: public AbilityStatus{
 public:
-    ShiledBreak(std::shared_ptr<Enemy> target,float value, int CountDown);
+    ShiledBreak(std::vector<std::shared_ptr<Enemy>> enemy,int CountDown);
     virtual void Trigger() override;
     virtual void Reset() override;
 private:
-    std::shared_ptr<Enemy> m_enemy;
-    float m_value;
+    std::vector<std::shared_ptr<Enemy>> m_enemy;
 };
 
 class OlympianSkill: public AbilityStatus{
