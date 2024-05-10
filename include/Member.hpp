@@ -189,7 +189,7 @@ public:
     };
     void Skill() override{
         for(int i=0;i<m_enemies.size();i++){
-            m_enemies[i]->SetDef(0.25);
+            m_enemies[i]->SetDef(0.1);
         }
         std::shared_ptr<ShiledBreak> token = std::make_shared<ShiledBreak>(m_enemies,3);
         m_status->push_back(token);
@@ -618,6 +618,23 @@ public:
     }
 };
 //Son Goku
+class Goku:public Member,AddStatus{
+public:
+    explicit Goku(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,1226,2698,382,data),
+          AddStatus(data){
+
+    };
+    void Skill() override{
+        for(int i=0;i<m_enemies.size();i++){
+            m_enemies[i]->SetDef(0.0);
+        }
+        std::shared_ptr<ShiledBreak> token = std::make_shared<ShiledBreak>(m_enemies,1);
+        m_status->push_back(token);
+        LOG_DEBUG("Goku's Skill Trigger!!");
+    }
+private:
+
+};
 class DaJi:public Member,Dio{
 public:
     explicit DaJi(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,1083,3323,140,data),
