@@ -735,13 +735,6 @@ public:
     };
 };
 //Ranger
-class WRanger:public Member{
-public:
-    explicit WRanger(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Mortal,1190,2164,418,data){};
-    void Skill() override{};
-};
-
-//Ranger
 
 class WaterRanger: public Member,AddStatus{
 public:
@@ -758,5 +751,59 @@ public:
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;
 };
+class FireRanger: public Member,AddStatus{
+public:
+    explicit FireRanger(MemberSettingData data): Member(Type::Element_type::Fire,Type::Race_type::Mortal,1273,2277,372,data),
+          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
 
+    }
+    void Skill() override{
+
+    }
+private:
+    std::shared_ptr<float> m_dealtDamageDecrease;
+};
+class GrassRanger: public Member,AddStatus{
+public:
+    explicit GrassRanger(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Mortal,1096,2502,390,data),
+          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
+
+    }
+    void Skill() override{
+
+    }
+private:
+    std::shared_ptr<float> m_dealtDamageDecrease;
+};
+
+class LightRanger: public Member,AddStatus{
+public:
+    explicit LightRanger(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Mortal,1107,2254,429,data),
+          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
+
+    }
+    void Skill() override{
+        (*m_dealtDamageDecrease) = 0.5;
+        std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
+        m_status->push_back(token);
+        LOG_DEBUG("FRanger Skill Trigger!!");
+    }
+private:
+    std::shared_ptr<float> m_dealtDamageDecrease;
+};
+class DarkRanger: public Member,AddStatus{
+public:
+    explicit DarkRanger(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Mortal,1308,2119,387,data),
+          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
+
+    }
+    void Skill() override{
+        (*m_dealtDamageDecrease) = 0.5;
+        std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
+        m_status->push_back(token);
+        LOG_DEBUG("FRanger Skill Trigger!!");
+    }
+private:
+    std::shared_ptr<float> m_dealtDamageDecrease;
+};
 #endif
