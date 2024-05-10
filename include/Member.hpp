@@ -211,7 +211,9 @@ class DarkBeast:public Member,StoneTurn{
 
 //DefentDragon
 class WDefentDragon:public Member{
-    explicit WDefentDragon(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1068,3489,30,data){};
+    explicit WDefentDragon(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1068,3489,30,data){
+
+          };
     void Skill() override{
         float Addition = (int)m_attack;
         int Damage = (int)Addition * 30;
