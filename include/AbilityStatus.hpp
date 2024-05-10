@@ -43,7 +43,7 @@ protected:
 
 class DamageDecrease: public AbilityStatus{
 public:
-    DamageDecrease(std::shared_ptr<float> target, float Decrease, int CountDown);
+    DamageDe crease(std::shared_ptr<float> target, float Decrease, int CountDown);
     virtual void Trigger() override;
 private:
     std::shared_ptr<float> m_DamageDecrease;
