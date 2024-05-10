@@ -18,7 +18,8 @@ public:
     int GetHeal(){return m_heal;}
     void Strike(bool onlyone,int damage,bool defence,DragingDatas datas);
     void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
-        m_enemies = target;}
+        m_enemies = target;
+    }
     Member(Type::Element_type e_type, Type::Race_type r_type ,int attack,int life,int heal,MemberSettingData data): m_Etype(e_type),m_Rtype(r_type),m_attack(attack),m_life(life),m_heal(heal),m_Enchant(data.m_Enchant){};
 protected:
     std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
@@ -55,6 +56,13 @@ public:
     void TheWorld(int seconds);
 private:
     std::shared_ptr<Enchant> m_Enchant;
+};
+
+class AddStatus{
+public:
+    AddStatus(MemberSettingData data):m_status(data.m_status){};
+protected:
+    std::shared_ptr<std::vector<std::shared_ptr<AbilityStatus>>> m_status;
 };
 
 //Charctor
@@ -172,15 +180,23 @@ class GrassBeast:public Member,StoneTurn{
         //todo
     }
 };
-class LightBeast:public Member,StoneTurn{
+class LightBeast:public Member,AddStatus{
+public:
     explicit LightBeast(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Beast,874,2416,321,data),
-          StoneTurn(std::move(data.m_Enchant)){
-        std::shared_ptr<RaceUp> token = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Beast,2.5);
+          AddStatus(data){
+        std::shared_ptr<PowerUp> token = std::make_shared<PowerUp>(data.m_FirstAddition,Type::Element_type::Light,2.5);
         m_LeaderSkill.push_back(token);
-          };
+    };
     void Skill() override{
-        //Todo
+        for(int i=0;i<m_enemies.size();i++){
+            m_enemies[i]->SetDef(0.25);
+        }
+        std::shared_ptr<ShiledBreak> token = std::make_shared<ShiledBreak>(m_enemies,3);
+        m_status->push_back(token);
+        LOG_DEBUG("BaiHu Skill Trigger!!");
     }
+private:
+
 };
 class DarkBeast:public Member,StoneTurn{
     explicit DarkBeast(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Beast,1033,2271,289,data),
@@ -630,13 +646,21 @@ public:
           };
     void Skill() override{};
 };
-class Athana:public Member{
+class Athana:public Member,public AddStatus{
 public:
-    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data){
+    explicit Athana(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Protoss,1389,2955,373,data),
+          AddStatus(data){
+        m_data = data;
         std::shared_ptr<Olympians> token = std::make_shared<Olympians>(3,data,Type::Element_type::Grass);
         m_LeaderSkill.push_back(token);
     };
-    void Skill() override{};
+    void Skill() override{
+        std::shared_ptr<OlympianSkill> token = std::make_shared<OlympianSkill>(m_Etype,m_data);
+        m_status->push_back(token);
+        LOG_DEBUG("Olympian Skill Trigger!!");
+    };
+private:
+    MemberSettingData m_data;
 };
 class Apolo:public Member{
 public:
@@ -716,4 +740,23 @@ public:
     explicit WRanger(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Mortal,1190,2164,418,data){};
     void Skill() override{};
 };
+
+//Ranger
+
+class WaterRanger: public Member,AddStatus{
+public:
+    explicit WaterRanger(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Mortal,1190,2164,418,data),
+          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
+
+    }
+    void Skill() override{
+        (*m_dealtDamageDecrease) = 0.5;
+        std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
+        m_status->push_back(token);
+        LOG_DEBUG("WRanger Skill Trigger!!");
+    }
+private:
+    std::shared_ptr<float> m_dealtDamageDecrease;
+};
+
 #endif

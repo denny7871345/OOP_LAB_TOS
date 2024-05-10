@@ -4,39 +4,41 @@
 void BattleSystem::Start() {
     std::vector<float> vec = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     m_FirstElementAddition = std::make_shared<std::vector<float>>(vec);
+    m_ElementAddition = std::make_shared<std::vector<float>>(vec);
     std::vector<float> vec2 = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     m_FirstRaceAddition = std::make_shared<std::vector<float>>(vec2);
+    m_RaceAddition = std::make_shared<std::vector<float>>(vec2);
     std::vector<int> vec3 = {0,0,0,0,0,0};
     m_totalErase = std::make_shared<std::vector<int>>(vec3);
     m_firstErase = std::make_shared<std::vector<int>>(vec3);
     m_DraggingTime = 5;
-
+    m_status =  std::make_shared<std::vector<std::shared_ptr<AbilityStatus>>>();
     //Enemy Setting
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,10000,1000,1,1);
-    Enemytoken->SetPos(0,3);
-    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
+    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,1000000,1000,100000,1);
+    Enemytoken->SetPos(0,1);
+    /*auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
     Enemytoken2->SetPos(1,3);
     auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,200000,2300,10,2);
-    Enemytoken3->SetPos(2,3);
+    Enemytoken3->SetPos(2,3);*/
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
     /*auto Attacking = std::make_shared<DoubleStrike>();
     Enemytoken->SetAttackingMethod(Attacking); */
     m_enemy.push_back(Enemytoken);
-    m_enemy.push_back(Enemytoken2);
-    m_enemy.push_back(Enemytoken3);
+    /*m_enemy.push_back(Enemytoken2);
+    m_enemy.push_back(Enemytoken3);*/
 
     //member Setting
     auto Membertoken = CreateMemberData();
     std::shared_ptr<Athana> token1 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token1);
-    std::shared_ptr<Mori> token2 = std::make_shared<Mori>(Membertoken);
+    std::shared_ptr<Eduard> token2 = std::make_shared<Eduard>(Membertoken);
     m_team.push_back(token2);
-    std::shared_ptr<FireTitan> token3 = std::make_shared<FireTitan>(Membertoken);
+    std::shared_ptr<LightBeast> token3 = std::make_shared<LightBeast>(Membertoken);
     m_team.push_back(token3);
-    std::shared_ptr<DarkTitan> token4 = std::make_shared<DarkTitan>(Membertoken);
+    std::shared_ptr<GrassSlime> token4 = std::make_shared<GrassSlime>(Membertoken);
     m_team.push_back(token4);
-    std::shared_ptr<WaterBeast> token5 = std::make_shared<WaterBeast>(Membertoken);
+    std::shared_ptr<WaterRanger> token5 = std::make_shared<WaterRanger>(Membertoken);
     m_team.push_back(token5);
     std::shared_ptr<Athana> token6 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token6);
@@ -103,19 +105,20 @@ void BattleSystem::ResetRound() {
     m_firstCombo = 0;
     m_combo = 0;
     m_exCombo = 0;
-    m_ElementAddition = m_FirstElementAddition;
     m_RaceAddition = m_FirstRaceAddition;
     for(int i=0;i<6;i++){
         (*m_totalErase)[i] = 0;
         (*m_firstErase)[i] = 0;
+        if(i<5)(*m_ElementAddition)[i] = (*m_FirstElementAddition)[i];
+        (*m_RaceAddition)[i] = (*m_FirstRaceAddition)[i];
     }
     m_StoneDamage = {0,0,0,0,0,0};
     m_powerUpBeenErase = {false,false,false,false,false,false};
 
-    for(int i=0;i<m_status.size();i++){
-        if(m_status[i]->RoundUp()){
-            m_status[i]->Reset();
-            m_status.erase(m_status.begin()+i);
+    for(int i=0;i<m_status->size();i++){
+        if((*m_status)[i]->RoundUp()){
+            (*m_status)[i]->Reset();
+            (*m_status).erase((*m_status).begin()+i);
         }
     }
     for(int i=0;i<m_LeaderSkill.size();i++){
@@ -190,6 +193,7 @@ bool BattleSystem::DealFirstPiar(std::vector<std::shared_ptr<Stone>> Lists) {
 }
 
 void BattleSystem::ShowData() {
+    LOG_DEBUG("U have {} AblityStatus",(*m_status).size());
     LOG_DEBUG("first erase:[{},{},{},{},{},{}]",(*m_firstErase)[0],(*m_firstErase)[1],(*m_firstErase)[2],(*m_firstErase)[3],(*m_firstErase)[4],(*m_firstErase)[5]);
     LOG_DEBUG("total erase:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
     LOG_DEBUG("total StoneDamage:[{}%,{}%,{}%,{}%,{}%,{}%]",m_StoneDamage[0]*100,m_StoneDamage[1]*100,m_StoneDamage[2]*100,m_StoneDamage[3]*100,m_StoneDamage[4]*100,m_StoneDamage[5]*100);
@@ -210,6 +214,7 @@ void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
 void BattleSystem::DamageSettle() {
     ShowData();
     int totalHeal=0;
+    StateTrigger(AbilityType::DamageSettle);
     DragingDatas token = GetDragDatas();
     for(int i=0;i < m_team.size() ;i++){
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
@@ -219,7 +224,7 @@ void BattleSystem::DamageSettle() {
         //LOG_DEBUG("this member's Race Index is:{}", Type::FindIndex(m_team[i]->GetRace()) );
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] *
                      ElementAddition[Type::FindIndex(m_team[i]->GetType())] * RaceAddition[Type::FindIndex(m_team[i]->GetRace())];
-        //LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{}) damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition);
+        LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{})={} damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition,Damage);
         token.m_Attackertype = m_team[i]->GetType();
         m_team[i]->Strike(true,Damage,true,token);
     }
@@ -245,7 +250,7 @@ void BattleSystem::DamageSettle() {
 
             for(int j=0;j<damage.size();j++){
                 //LOG_DEBUG("U are dealt {} damages.",damage[j]);
-                m_life -= damage[j];
+                m_life -= damage[j] * ( 1 - (*m_dealtDamageDecrease));
                 //LOG_DEBUG("U have {} life left.",m_life);
             }
             m_enemy[i]->AddCD(2);
@@ -291,7 +296,7 @@ void BattleSystem::Update() {
 }
 
 void BattleSystem::AddStatus(std::shared_ptr<AbilityStatus> target) {
-    m_status.push_back(target);
+    (*m_status).push_back(target);
 }
 
 void BattleSystem::AddStatusToEnemy(std::shared_ptr<AbilityStatus> target) {
@@ -302,10 +307,13 @@ void BattleSystem::AddStatusToEnemy(std::shared_ptr<AbilityStatus> target) {
 
 MemberSettingData BattleSystem::CreateMemberData() {
     MemberSettingData token;
+    token.m_status = m_status;
     token.m_Enchant = m_Enchant;
     token.m_dealtDamageDecrease = m_dealtDamageDecrease;
     token.m_FirstAddition = m_FirstElementAddition;
     token.m_FirstRaceAddition = m_FirstRaceAddition;
+    token.m_ElementAddition = m_ElementAddition;
+    token.m_RaceAddition = m_RaceAddition;
     token.m_addCombo = m_addCombo;
     token.m_firstErase = m_firstErase;
     token.m_totalErase = m_totalErase;
@@ -321,6 +329,11 @@ void BattleSystem::StateTrigger(AbilityType state) {
     for(int i=0;i<m_LeaderSkill.size();i++){
         if(m_LeaderSkill[i]->GetType() == state){
             m_LeaderSkill[i]->Skill();
+        }
+    }
+    for(int i=0;i<m_status->size();i++){
+        if((*m_status)[i]->GetType() == state){
+            (*m_status)[i]->Trigger();
         }
     }
 }

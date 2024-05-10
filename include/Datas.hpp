@@ -5,7 +5,7 @@
 #include "pch.hpp"
 #include "Type.hpp"
 class Enchant;
-
+class AbilityStatus;
 struct DragingDatas{
     std::shared_ptr<std::vector<int>> m_totalErase;
     std::shared_ptr<std::vector<int>> m_firstErase;
@@ -26,13 +26,18 @@ struct EnemyDatas{
 };
 
 struct MemberSettingData{
+
+    std::shared_ptr<std::vector<std::shared_ptr<AbilityStatus>>> m_status;
     std::shared_ptr<Enchant> m_Enchant;
     std::shared_ptr<std::vector<float>> m_FirstAddition;
     std::shared_ptr<std::vector<float>> m_FirstRaceAddition;
-    std::shared_ptr<float> m_dealtDamageDecrease = std::make_shared<float>(0.0f);
+    std::shared_ptr<std::vector<float>> m_ElementAddition;
+    std::shared_ptr<std::vector<float>> m_RaceAddition;
+    std::shared_ptr<float> m_dealtDamageDecrease;
     std::shared_ptr<float> m_addCombo;
     std::shared_ptr<std::vector<int>> m_totalErase;
     std::shared_ptr<std::vector<int>> m_firstErase;
+
 };
 
 #endif

@@ -33,7 +33,7 @@ private:
     DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
-    std::vector<std::shared_ptr<AbilityStatus>> m_status;
+    std::shared_ptr<std::vector<std::shared_ptr<AbilityStatus>>> m_status;
     std::shared_ptr<std::vector<float>> m_ElementAddition;
     std::shared_ptr<std::vector<float>> m_FirstElementAddition;
     std::shared_ptr<std::vector<float>> m_RaceAddition;

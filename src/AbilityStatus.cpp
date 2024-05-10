@@ -8,7 +8,12 @@ AbilityStatus::AbilityStatus(AbilityType type, int CountDown) {
     m_countDown = CountDown;
 }
 
+AbilityType AbilityStatus::GetType() {
+    return m_abilityType;
+}
+
 bool AbilityStatus::RoundUp() {
+    if(m_reset) return true;
     if(m_countDown == -1){
         return false;
     }else{
@@ -31,25 +36,52 @@ void PowerRaise::Trigger() {
 }
 
 
-DamageDecrease::DamageDecrease(std::shared_ptr<float> target, float Decrease, int CountDown):
-      AbilityStatus(AbilityType::DealtDamageEffect,CountDown),m_DamageDecrease(target),m_value(Decrease){
-
+DamageDecrease::DamageDecrease(std::shared_ptr<float> target, int CountDown):
+      AbilityStatus(AbilityType::DealtDamageEffect,CountDown){
+    m_DamageDecrease = target;
 }
 
 void DamageDecrease::Trigger() {
-    *m_DamageDecrease = m_value;
+    m_reset = false;
 }
 
-ShiledBreak::ShiledBreak(std::shared_ptr<Enemy> target, float value, int CountDown):
-      AbilityStatus(AbilityType::EnemyValueChange,CountDown),m_enemy(target),m_value(value) {
+void DamageDecrease::Reset() {
+    (*m_DamageDecrease) = 0;
+}
+
+ShiledBreak::ShiledBreak(std::vector<std::shared_ptr<Enemy>> enemy,int CountDown):
+      AbilityStatus(AbilityType::EnemyValueChange,CountDown),m_enemy(enemy){
+
 }
 
 void ShiledBreak::Trigger() {
-    m_enemy->SetDef(m_value);
+
 }
 
 void ShiledBreak::Reset() {
-    m_enemy->DefReset();
+    for(int i=0;i<m_enemy.size();i++){
+        m_enemy[i]->DefReset();
+    }
+    LOG_DEBUG("Def Reset");
+}
+
+OlympianSkill::OlympianSkill(Type::Element_type type,MemberSettingData data): AbilityStatus(AbilityType::DamageSettle,-1),m_type(type) {
+    m_ElementAddition = data.m_ElementAddition;
+    m_totalErase = data.m_totalErase;
+    m_Cum = 0;
+    m_reset = false;
+}
+void OlympianSkill::Trigger() {
+    m_Cum += (*m_totalErase)[Type::FindIndex(m_type)];
+    LOG_DEBUG("OlympianSkill Trigger, m_Cum is {}",m_Cum);
+
+    if((*m_totalErase)[Type::FindIndex(m_type)] == 0){
+        m_reset = true;
+        m_Cum = 0;
+    }else{
+        if(m_Cum > 60) m_Cum = 60;
+        (*m_ElementAddition)[Type::FindIndex(m_type)] *= float(1 + 0.05 * m_Cum);
+    }
 }
 
 AbilityType LeaderSkill::GetType() {

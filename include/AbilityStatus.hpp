@@ -26,9 +26,11 @@ public:
     virtual void Trigger() = 0;
     virtual void Reset(){};
     bool RoundUp();
+    AbilityType GetType();
 protected:
     AbilityType m_abilityType;
     int m_countDown;
+    bool m_reset = false;
 };
 
 class PowerRaise: public AbilityStatus{
@@ -43,21 +45,34 @@ protected:
 
 class DamageDecrease: public AbilityStatus{
 public:
-    DamageDe crease(std::shared_ptr<float> target, float Decrease, int CountDown);
+
+    DamageDecrease(std::shared_ptr<float> target, int CountDown);
+
     virtual void Trigger() override;
+    virtual void Reset() override;
 private:
     std::shared_ptr<float> m_DamageDecrease;
-    float m_value;
 };
 
 class ShiledBreak: public AbilityStatus{
 public:
-    ShiledBreak(std::shared_ptr<Enemy> target,float value, int CountDown);
+    ShiledBreak(std::vector<std::shared_ptr<Enemy>> enemy,int CountDown);
     virtual void Trigger() override;
     virtual void Reset() override;
 private:
-    std::shared_ptr<Enemy> m_enemy;
-    float m_value;
+    std::vector<std::shared_ptr<Enemy>> m_enemy;
+};
+
+class OlympianSkill: public AbilityStatus{
+public:
+    OlympianSkill(Type::Element_type type,MemberSettingData data);
+    virtual void Trigger() override;
+private:
+    std::vector<std::shared_ptr<AbilityStatus>> m_status;
+    std::shared_ptr<std::vector<float>> m_ElementAddition;
+    std::shared_ptr<std::vector<int>> m_totalErase;
+    Type::Element_type m_type;
+    int m_Cum;
 };
 
 //隊長技能
@@ -121,4 +136,5 @@ private:
     std::shared_ptr<Enchant> m_enchant;
     Type::Element_type m_Etype;
 };
+
 #endif
