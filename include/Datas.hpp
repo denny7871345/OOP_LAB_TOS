@@ -6,6 +6,7 @@
 #include "Type.hpp"
 class Enchant;
 class AbilityStatus;
+class BattleSystem;
 struct DragingDatas{
     std::shared_ptr<std::vector<int>> m_totalErase;
     std::shared_ptr<std::vector<int>> m_firstErase;
@@ -26,7 +27,8 @@ struct EnemyDatas{
 };
 
 struct MemberSettingData{
-
+    typedef void (BattleSystem::*FuncPtr)(int);
+    FuncPtr GetDamage = nullptr;
     std::shared_ptr<std::vector<std::shared_ptr<AbilityStatus>>> m_status;
     std::shared_ptr<Enchant> m_Enchant;
     std::shared_ptr<std::vector<float>> m_FirstAddition;

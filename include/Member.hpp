@@ -625,7 +625,8 @@ class WaterRanger: public Member,AddStatus{
 public:
     explicit WaterRanger(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Mortal,1190,2164,418,data),
           AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
-
+        std::shared_ptr<NotDie> token = std::make_shared<NotDie>(0.5,data);
+        m_LeaderSkill.push_back(token);
     }
     void Skill() override{
         (*m_dealtDamageDecrease) = 0.5;

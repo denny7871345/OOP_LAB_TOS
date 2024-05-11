@@ -1,6 +1,7 @@
 #ifndef BATTLESYSTEM_HPP
 #define BATTLESYSTEM_HPP
 
+#include "iostream"
 #include "Stone.hpp"
 #include "Member.hpp"
 #include "AudioSystem.hpp"
@@ -10,6 +11,7 @@ class Enchant;
 
 class BattleSystem {
 public:
+    typedef void (BattleSystem::*FuncPtr)(int);
     MemberSettingData CreateMemberData();
     void Update();
     void SetEnchant(std::shared_ptr<Enchant> target);
@@ -29,7 +31,11 @@ public:
     void AddStatus(std::shared_ptr<AbilityStatus> target);
     void AddStatusToEnemy(std::shared_ptr<AbilityStatus> target);
     void SetComboDisplay(bool visible);
+    void NormalTeamGetDamage(int Damage);
+    void SpecialTeamGetDamage(int Damage);
+    FuncPtr GetDamage = &BattleSystem::NormalTeamGetDamage;
 private:
+
     DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
@@ -49,8 +55,8 @@ private:
     std::shared_ptr<GiraffeText> m_ComboAdditionDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",30);
     std::vector<std::shared_ptr<Member>> m_team;
     std::vector<std::shared_ptr<LeaderSkill>> m_LeaderSkill;
-    int m_life;
-    int m_MaxLife;
+    std::shared_ptr<int> m_life = std::make_shared<int>(0);
+    std::shared_ptr<int> m_MaxLife= std::make_shared<int>(0);
     int m_combo;
     int m_exCombo;
     int m_firstCombo;
