@@ -14,6 +14,7 @@ public:
     typedef void (BattleSystem::*FuncPtr)(int);
     MemberSettingData CreateMemberData();
     void Update();
+    void CheatCodeOfKill();
     void SetEnchant(std::shared_ptr<Enchant> target);
     float GetDraggingTime();
     void AddDraggingTime();

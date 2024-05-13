@@ -30,6 +30,7 @@ public:
     void DefReset();
     void AtkReset();
     void AddStatus(const std::shared_ptr<AbilityStatus>& target);
+    void DieNow();
 private:
     void SkillReset();
     EnemyDatas MyData();

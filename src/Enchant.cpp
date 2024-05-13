@@ -227,6 +227,9 @@ void Enchant::KeepingStateUpdate() {
         auto cursorPos = Util::Input::GetCursorPosition();
         LOG_DEBUG("[{},{}]",cursorPos.x,cursorPos.y);
     }
+    if (Util::Input::IsKeyDown(Util::Keycode::Z)) {
+        m_battleSystem->CheatCodeOfKill();
+    }
     if (Util::Input::IsKeyDown(Util::Keycode::M)) {
         SetDraggingTime(20);
         SetState(state::Unlimited);

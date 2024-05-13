@@ -211,7 +211,7 @@ void BattleSystem::SetEnchant(std::shared_ptr<Enchant> target) {
 }
 
 void BattleSystem::DamageSettle() {
-    ShowData();
+    //ShowData();
     int totalHeal=0;
     StateTrigger(AbilityType::DamageSettle);
     DragingDatas token = GetDragDatas();
@@ -223,7 +223,7 @@ void BattleSystem::DamageSettle() {
         //LOG_DEBUG("this member's Race Index is:{}", Type::FindIndex(m_team[i]->GetRace()) );
         int Damage = m_team[i]->GetAtk() * m_ComboAddition * m_StoneDamage[Type::FindIndex(m_team[i]->GetType())] *
                      ElementAddition[Type::FindIndex(m_team[i]->GetType())] * RaceAddition[Type::FindIndex(m_team[i]->GetRace())];
-        LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{})={} damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition,Damage);
+        //LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{})={} damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition,Damage);
         token.m_Attackertype = m_team[i]->GetType();
         m_team[i]->Strike(true,Damage,true,token);
     }
@@ -236,21 +236,19 @@ void BattleSystem::DamageSettle() {
     }
     //Enemy's turn
     for(int i=0; i < m_enemy.size();i++){
-
         if(m_enemy[i]->GetLife() <= 0){
-            m_enemy[i]->SetPlaying(true);
             continue;
         }
         m_enemy[i]->AddCD(-1);
         if(m_enemy[i]->GetCD() == 0){
-            //LOG_DEBUG("Enemy Attack!!!");
+            LOG_DEBUG("Enemy Attack!!!");
 
             auto damage = m_enemy[i]->Attack(token);
 
             for(int j=0;j<damage.size();j++){
-                //LOG_DEBUG("U are dealt {} damages.",damage[j]);
+                LOG_DEBUG("U may dealt {} damages.",damage[j]);
                 (this->*GetDamage)(damage[j]);
-                //LOG_DEBUG("U have {} life left.",(*m_life));
+                LOG_DEBUG("U have {} life left.",(*m_life));
             }
             m_enemy[i]->AddCD(2);
         }
@@ -259,7 +257,6 @@ void BattleSystem::DamageSettle() {
     }
     std::string lifeToken = std::to_string((*m_life)) + "/"  +std::to_string(*m_MaxLife);
     m_LifeDisplay->SetText(lifeToken);
-
 }
 
 float BattleSystem::GetDraggingTime() {
@@ -281,7 +278,14 @@ void BattleSystem::Update() {
     for(int i=0;i<m_enemy.size();i++){
         if(m_enemy[i] != nullptr){
             m_enemy[i]->Update();
-            if(m_enemy[i]->IfAnimationEnds()) m_enemy.erase(m_enemy.begin() + i);
+            if(m_enemy[i]->IfAnimationEnds()){
+                m_enemy.erase(m_enemy.begin() + i);
+                continue;
+            }
+            if(m_enemy[i]->GetLife() <= 0){
+                m_enemy[i]->SetPlaying(true);
+                continue;
+            }
         }
     }
     glm::vec2 lifePosition = {135,45};
@@ -339,12 +343,20 @@ void BattleSystem::StateTrigger(AbilityType state) {
 }
 
 void BattleSystem::NormalTeamGetDamage(int Damage) {
+    LOG_DEBUG("Normal Damage Protect!!");
     (*m_life) -= Damage * (1-(*m_dealtDamageDecrease));
 }
 
 void BattleSystem::SpecialTeamGetDamage(int Damage) {
+    LOG_DEBUG("Special Damage Protect!!");
     bool flag = false;
     flag = ((*m_life) >= (*m_MaxLife) * 0.5);
     (*m_life) -= Damage * (1-(*m_dealtDamageDecrease));
     if(flag && (*m_life<=0)) (*m_life) = 1;
+}
+
+void BattleSystem::CheatCodeOfKill() {
+    for(int i=0;i<m_enemy.size();i++){
+        m_enemy[i]->DieNow();
+    }
 }

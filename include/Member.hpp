@@ -766,7 +766,6 @@ public:
         (*m_dealtDamageDecrease) = 0.5;
         std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
         m_status->push_back(token);
-        LOG_DEBUG("WRanger Skill Trigger!!");
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;

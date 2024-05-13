@@ -174,4 +174,7 @@ int Enemy::Conflict(Type::Element_type type, int Damage) {
     return flag * Damage;
 }
 
+void Enemy::DieNow() {
+    m_life = -99999999;
+}
 
