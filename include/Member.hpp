@@ -780,7 +780,11 @@ public:
 
     }
     void Skill() override{
-
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 5;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Fire;
+        Strike(false,Damage,false,token);
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;
@@ -792,7 +796,11 @@ public:
 
     }
     void Skill() override{
-
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Grass;
+        Strike(true,Damage,false,token);
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;

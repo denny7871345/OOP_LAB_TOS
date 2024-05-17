@@ -25,9 +25,6 @@ void Enchant::Start() {
     m_state = state::Keeping;
     this->Draw();
 }
-
-
-
 void Enchant::Update() {
     m_battleSystem->Update();
     for (int i = 0; i < m_row; ++i) {

@@ -147,18 +147,16 @@ void Olympians::SkillReset() {
 }
 
 NotDie::NotDie(float persentage, MemberSettingData target) {
-
-    m_triggerLife = AbilityType::Setting;
+    m_abilityType = AbilityType::Setting;
     m_triggerLife = persentage;
     GetDamage = target.GetDamage;
-    LOG_DEBUG("Not Die LeaderSkill Setting!!");
-    SetGetDamage(&BattleSystem::SpecialTeamGetDamage);
 }
 
 void NotDie::Skill() {
-
+    SetGetDamage(&BattleSystem::SpecialTeamGetDamage);
 }
 
 void NotDie::SetGetDamage(void (BattleSystem::*funcPtr)(int)) {
-    GetDamage = funcPtr;
+    LOG_DEBUG("Not Die LeaderSkill Setting!!");
+    (*GetDamage) = funcPtr;
 }
