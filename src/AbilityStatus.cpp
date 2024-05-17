@@ -112,7 +112,8 @@ void Launch::Skill() {
     int damage = m_team[0]->GetAtk() * m_times;
     DragingDatas token;
     token.m_Attackertype = Type::Element_type::Heart;
-    m_team[0]->Strike(false,damage, true,token);
+    token.onlyone = false;
+    m_team[0]->Strike(damage, true,token);
 }
 
 ComboUp::ComboUp(std::shared_ptr<float> target, float howmuch):m_increase(howmuch),m_addCombo(target) {

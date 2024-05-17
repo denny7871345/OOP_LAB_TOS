@@ -4,8 +4,8 @@
 #include "AbilityStatus.hpp"
 
 
-void Member::Strike(bool onlyone, int damage, bool defence,DragingDatas datas) {
-    if(onlyone){
+void Member::Strike(int damage, bool defence,DragingDatas datas) {
+    if(datas.onlyone){
         for(int i=0;i<m_enemies.size();i++){
             if(m_enemies[i]->GetLife() > 0){
                 m_enemies[i]->DealtDamage(damage,defence,datas);

@@ -16,7 +16,7 @@ public:
     int GetAtk(){return m_attack;}
     int GetLife(){return m_life;}
     int GetHeal(){return m_heal;}
-    void Strike(bool onlyone,int damage,bool defence,DragingDatas datas);
+    void Strike(int damage,bool defence,DragingDatas datas);
     void SetEnemy(std::vector<std::shared_ptr<Enemy>> target){
         m_enemies = target;
     }
@@ -82,7 +82,8 @@ public:
         int Damage = (int)Addition;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Water;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 
@@ -98,7 +99,8 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = (int)Addition;
         DragingDatas token;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class Dunkan:public Member,Boom{
@@ -113,7 +115,8 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = (int)Addition;
         DragingDatas token;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class Nathaniel:public Member,Boom{
@@ -128,7 +131,8 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = (int)Addition;
         DragingDatas token;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class Ando:public Member,Boom{
@@ -143,7 +147,8 @@ public:
         LOG_DEBUG("{} stones are erased",Addition);
         int Damage = (int)Addition;
         DragingDatas token;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 
@@ -223,7 +228,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Water;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class FDefentDragon:public Member{
@@ -234,7 +240,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Fire;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class GDefentDragon:public Member{
@@ -247,7 +254,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Fire;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class LDefentDragon:public Member{
@@ -258,7 +266,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Light;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class DDefentDragon:public Member{
@@ -269,7 +278,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Dark;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 //Titan
@@ -552,7 +562,8 @@ public:
         int Damage = (int)Addition * 15;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Water;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     }
 };
 class FireLion:public Member{
@@ -563,7 +574,8 @@ public:
         int Damage = (int)Addition * 15;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Fire;
-        Strike(false, Damage, true, token);
+        token.onlyone = false;
+        Strike( Damage, true, token);
     }
 };
 class GrassRhino:public Member{
@@ -574,7 +586,8 @@ public:
         int Damage = (int)Addition * 15;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Grass;
-        Strike(false, Damage, true, token);
+        token.onlyone = false;
+        Strike(Damage, true, token);
     }
 };
 class LightWolf:public Member{
@@ -585,7 +598,8 @@ public:
         int Damage = (int)Addition * 15;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Light;
-        Strike(false, Damage, true, token);
+        token.onlyone = false;
+        Strike(Damage, true, token);
     }
 };
 class DarkCheetah:public Member{
@@ -596,7 +610,8 @@ public:
         int Damage = (int)Addition * 15;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Dark;
-        Strike(false, Damage, true, token);
+        token.onlyone = false;
+        Strike(Damage, true, token);
     }
 };
 //chinese
@@ -728,7 +743,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Water;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     };
 };
 class Isolde:public Member{
@@ -739,7 +755,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Fire;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     };
 };
 class Cassidy:public Member{
@@ -750,7 +767,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Grass;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     };
 };
 class Terenas:public Member{
@@ -761,7 +779,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Grass;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     };
 };
 class Lerim:public Member{
@@ -772,7 +791,8 @@ public:
         int Damage = (int)Addition * 30;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Grass;
-        Strike(false,Damage,true,token);
+        token.onlyone = false;
+        Strike(Damage,true,token);
     };
 };
 //Ranger
@@ -803,7 +823,8 @@ public:
         int Damage = (int)Addition * 5;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Fire;
-        Strike(false,Damage,false,token);
+        token.onlyone = false;
+        Strike(Damage,false,token);
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;
@@ -819,7 +840,8 @@ public:
         int Damage = (int)Addition * 15;
         DragingDatas token;
         token.m_Attackertype = Type::Element_type::Grass;
-        Strike(true,Damage,false,token);
+        token.onlyone = true;
+        Strike(Damage,false,token);
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;
