@@ -15,30 +15,30 @@ void BattleSystem::Start() {
     m_status =  std::make_shared<std::vector<std::shared_ptr<AbilityStatus>>>();
     //Enemy Setting
     auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,1000000,99999,100000,1);
-    Enemytoken->SetPos(0,1);
-    /*auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
+    Enemytoken->SetPos(0,3);
+    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
     Enemytoken2->SetPos(1,3);
     auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,200000,2300,10,2);
-    Enemytoken3->SetPos(2,3);*/
+    Enemytoken3->SetPos(2,3);
     /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
     Enemytoken->AddSkill(ShieldToken1);*/
     /*auto Attacking = std::make_shared<DoubleStrike>();
     Enemytoken->SetAttackingMethod(Attacking); */
     m_enemy.push_back(Enemytoken);
-    /*m_enemy.push_back(Enemytoken2);
-    m_enemy.push_back(Enemytoken3);*/
+    m_enemy.push_back(Enemytoken2);
+    m_enemy.push_back(Enemytoken3);
 
     //member Setting
     auto Membertoken = CreateMemberData();
     std::shared_ptr<WaterRanger> token1 = std::make_shared<WaterRanger>(Membertoken);
     m_team.push_back(token1);
-    std::shared_ptr<Eduard> token2 = std::make_shared<Eduard>(Membertoken);
+    std::shared_ptr<DarkRanger> token2 = std::make_shared<DarkRanger>(Membertoken);
     m_team.push_back(token2);
-    std::shared_ptr<LightBeast> token3 = std::make_shared<LightBeast>(Membertoken);
+    std::shared_ptr<LightRanger> token3 = std::make_shared<LightRanger>(Membertoken);
     m_team.push_back(token3);
     std::shared_ptr<GrassSlime> token4 = std::make_shared<GrassSlime>(Membertoken);
     m_team.push_back(token4);
-    std::shared_ptr<WaterRanger> token5 = std::make_shared<WaterRanger>(Membertoken);
+    std::shared_ptr<GDefentDragon> token5 = std::make_shared<GDefentDragon>(Membertoken);
     m_team.push_back(token5);
     std::shared_ptr<Athana> token6 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token6);
@@ -129,7 +129,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
     if(Lists[0]->IfAnimationEnds()){
         m_StoneDamage[Type::FindIndex(Lists[0]->GetType())] += 0.5 + (0.25 * (Lists.size()-1));
         (*m_totalErase)[Type::FindIndex(Lists[0]->GetType())] += Lists.size();
-        LOG_DEBUG("total erase:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
+        //LOG_DEBUG("total erase:[{},{},{},{},{},{}]",(*m_totalErase)[0],(*m_totalErase)[1],(*m_totalErase)[2],(*m_totalErase)[3],(*m_totalErase)[4],(*m_totalErase)[5]);
         StateTrigger(AbilityType::EraseOfStone);
         return true;
     }
@@ -255,8 +255,7 @@ void BattleSystem::DamageSettle() {
         m_enemy[i]->RoundUp();
         //LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
     }
-    std::string lifeToken = std::to_string((*m_life)) + "/"  +std::to_string(*m_MaxLife);
-    m_LifeDisplay->SetText(lifeToken);
+
 }
 
 float BattleSystem::GetDraggingTime() {
@@ -294,6 +293,8 @@ void BattleSystem::Update() {
     m_ComboDisplay->SetText(std::to_string(m_combo));
     m_ComboDisplay->Update(lifePosition);
     lifePosition = {180,-310};
+    std::string lifeToken = std::to_string((*m_life)) + "/"  +std::to_string(*m_MaxLife);
+    m_LifeDisplay->SetText(lifeToken);
     m_ComboAdditionDisplay->SetText("+"+ std::to_string(int(m_ComboAddition*100)-100)+"%");
     m_ComboAdditionDisplay->Update(lifePosition);
 }
@@ -321,6 +322,8 @@ MemberSettingData BattleSystem::CreateMemberData() {
     token.m_firstErase = m_firstErase;
     token.m_totalErase = m_totalErase;
     token.GetDamage = GetDamage;
+    token.m_life = m_life;
+    token.m_MaxLife = m_MaxLife;
     return token;
 }
 

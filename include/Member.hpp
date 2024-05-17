@@ -233,7 +233,10 @@ class FDefentDragon:public Member{
     }
 };
 class GDefentDragon:public Member{
-    explicit GDefentDragon(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Dragon,983,4036,28,data){};
+public:
+    explicit GDefentDragon(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Dragon,983,4036,28,data){
+
+          };
     void Skill() override{
         float Addition = (int)m_attack;
         int Damage = (int)Addition * 30;
@@ -798,31 +801,31 @@ private:
 class LightRanger: public Member,AddStatus{
 public:
     explicit LightRanger(MemberSettingData data): Member(Type::Element_type::Light,Type::Race_type::Mortal,1107,2254,429,data),
-          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
+          AddStatus(data),m_life(data.m_life),m_MaxLife(data.m_MaxLife){
 
     }
     void Skill() override{
-        (*m_dealtDamageDecrease) = 0.5;
-        std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
-        m_status->push_back(token);
-        LOG_DEBUG("FRanger Skill Trigger!!");
+        LOG_DEBUG("LRanger trigger, {} to {}",(*m_life),(*m_MaxLife));
+        (*m_life) = (*m_MaxLife);
     }
 private:
-    std::shared_ptr<float> m_dealtDamageDecrease;
+    std::shared_ptr<int> m_life;
+    std::shared_ptr<int> m_MaxLife;
 };
 class DarkRanger: public Member,AddStatus{
 public:
     explicit DarkRanger(MemberSettingData data): Member(Type::Element_type::Dark,Type::Race_type::Mortal,1308,2119,387,data),
-          AddStatus(data),m_dealtDamageDecrease(data.m_dealtDamageDecrease){
+          AddStatus(data){
 
     }
     void Skill() override{
-        (*m_dealtDamageDecrease) = 0.5;
-        std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
-        m_status->push_back(token);
-        LOG_DEBUG("FRanger Skill Trigger!!");
+        for(int i=0;i<m_enemies.size();i++){
+            if(m_enemies[i]->GetLifePercentage() <= 20){
+                m_enemies[i]->DieNow();
+            }
+        }
     }
 private:
-    std::shared_ptr<float> m_dealtDamageDecrease;
+
 };
 #endif

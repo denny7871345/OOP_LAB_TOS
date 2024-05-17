@@ -39,7 +39,8 @@ struct MemberSettingData{
     std::shared_ptr<float> m_addCombo;
     std::shared_ptr<std::vector<int>> m_totalErase;
     std::shared_ptr<std::vector<int>> m_firstErase;
-
+    std::shared_ptr<int> m_life;
+    std::shared_ptr<int> m_MaxLife;
 };
 
 #endif
