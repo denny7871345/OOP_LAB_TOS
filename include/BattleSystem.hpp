@@ -6,6 +6,7 @@
 #include "Member.hpp"
 #include "AudioSystem.hpp"
 #include "AbilityStatus.hpp"
+#include "Battlefield.hpp"
 
 class Enchant;
 
