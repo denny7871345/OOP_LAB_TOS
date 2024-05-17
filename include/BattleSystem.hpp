@@ -50,6 +50,7 @@ private:
     std::shared_ptr<std::vector<int>> m_totalErase;
     std::shared_ptr<std::vector<int>> m_firstErase;
     std::vector<bool>m_powerUpBeenErase={false,false,false,false,false,false};
+    std::vector<bool>m_eraseMoreThan5 = {false,false,false,false,false,false};
     std::shared_ptr<Enchant> m_Enchant;
     std::shared_ptr<GiraffeText> m_LifeDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",15);
     std::shared_ptr<GiraffeText> m_ComboDisplay = std::make_shared<GiraffeText>("../assets/fonts/Inter.ttf",120);

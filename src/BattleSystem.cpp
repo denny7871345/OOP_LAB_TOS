@@ -31,11 +31,11 @@ void BattleSystem::Start() {
 
     //member Setting
     auto Membertoken = CreateMemberData();
-    std::shared_ptr<WaterRanger> token1 = std::make_shared<WaterRanger>(Membertoken);
+    std::shared_ptr<Athana> token1 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token1);
-    std::shared_ptr<DarkRanger> token2 = std::make_shared<DarkRanger>(Membertoken);
+    std::shared_ptr<GDefentDragon> token2 = std::make_shared<GDefentDragon>(Membertoken);
     m_team.push_back(token2);
-    std::shared_ptr<LightRanger> token3 = std::make_shared<LightRanger>(Membertoken);
+    std::shared_ptr<Eduard> token3 = std::make_shared<Eduard>(Membertoken);
     m_team.push_back(token3);
     std::shared_ptr<GrassSlime> token4 = std::make_shared<GrassSlime>(Membertoken);
     m_team.push_back(token4);
@@ -114,7 +114,7 @@ void BattleSystem::ResetRound() {
     }
     m_StoneDamage = {0,0,0,0,0,0};
     m_powerUpBeenErase = {false,false,false,false,false,false};
-
+    m_eraseMoreThan5 = {false,false,false,false,false,false};
     for(int i=0;i<m_status->size();i++){
         if((*m_status)[i]->RoundUp()){
             (*m_status)[i]->Reset();
@@ -145,6 +145,7 @@ bool BattleSystem::DealPair(std::vector<std::shared_ptr<Stone>> Lists) {
             if(i==0){
                 if(Lists.size() >= 5){
                     AddCombo(1);
+                    m_eraseMoreThan5[Type::FindIndex(Lists[0]->GetType())] = true;
                     m_Enchant->MustFall(Lists[0]->GetType(), 1,true);
                     static auto SFX = Util::SFX("../assets/audio/Combo/eat5Gem.wav");
                     SFX.Play();
@@ -226,7 +227,8 @@ void BattleSystem::DamageSettle() {
                      ElementAddition[Type::FindIndex(m_team[i]->GetType())] * RaceAddition[Type::FindIndex(m_team[i]->GetRace())];
         //LOG_DEBUG("Member{} deals ({}*{}*{}(E)*{}(R)*{})={} damage",i+1,m_team[i]->GetAtk(),m_StoneDamage[Type::FindIndex(m_team[i]->GetType())],ElementAddition[Type::FindIndex(m_team[i]->GetType())],RaceAddition[Type::FindIndex(m_team[i]->GetRace())],m_ComboAddition,Damage);
         token.m_Attackertype = m_team[i]->GetType();
-        m_team[i]->Strike(true,Damage,true,token);
+        token.onlyone = !(m_eraseMoreThan5[Type::FindIndex(m_team[i]->GetType())]);
+        m_team[i]->Strike(Damage,true,token);
     }
     if((*m_life) + totalHeal * m_ComboAddition > (*m_MaxLife)){
         (*m_life) = (*m_MaxLife);
@@ -269,6 +271,7 @@ DragingDatas BattleSystem::GetDragDatas() {
     token.m_firstErase = m_firstErase;
     token.m_firstCombo = m_firstCombo;
     token.m_powerUpBeenErase = m_powerUpBeenErase;
+    token.m_eraseMoreThan5 = m_eraseMoreThan5;
     token.m_combo = m_combo;
     token.m_exCombo = m_exCombo;
     return token;
