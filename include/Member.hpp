@@ -593,7 +593,13 @@ public:
 class AoXing:public Member,StoneTurn{
 public:
     explicit AoXing(MemberSettingData data): Member(Type::Element_type::Water,Type::Race_type::Dragon,1133,3608,34,data),
-        StoneTurn(std::move(data.m_Enchant)){};
+        StoneTurn(std::move(data.m_Enchant)){
+            std::shared_ptr<RaceUp> token1 = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Dragon,2.5);
+            std::shared_ptr<RaceUp> token2 = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Protoss,2.5);
+
+            m_LeaderSkill.push_back(token1);
+            m_LeaderSkill.push_back(token2);
+          };
     void Skill() override{
         Turn(Type::Element_type::Heart,Type::Element_type::Water, false);
         Turn(Type::Element_type::Fire,Type::Element_type::Water, false);
@@ -613,7 +619,13 @@ public:
 class Eduard:public Member,StoneTurn{
 public:
     explicit Eduard(MemberSettingData data): Member(Type::Element_type::Grass,Type::Race_type::Beast,1083,3323,140,data),
-          StoneTurn(std::move(data.m_Enchant)){};
+          StoneTurn(std::move(data.m_Enchant)){
+        std::shared_ptr<RaceUp> token1 = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Beast,2.5);
+        std::shared_ptr<RaceUp> token2 = std::make_shared<RaceUp>(data.m_FirstAddition,Type::Race_type::Fairy,2.5);
+
+        m_LeaderSkill.push_back(token1);
+        m_LeaderSkill.push_back(token2);
+          };
     void Skill() override{
         Turn(Type::Element_type::Heart,Type::Element_type::Grass, false);
         Turn(Type::Element_type::Water,Type::Element_type::Grass, false);
