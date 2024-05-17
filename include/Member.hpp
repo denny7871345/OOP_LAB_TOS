@@ -777,7 +777,11 @@ public:
 
     }
     void Skill() override{
-
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 5;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Fire;
+        Strike(false,Damage,false,token);
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;
@@ -789,7 +793,11 @@ public:
 
     }
     void Skill() override{
-
+        float Addition = (int)m_attack;
+        int Damage = (int)Addition * 15;
+        DragingDatas token;
+        token.m_Attackertype = Type::Element_type::Grass;
+        Strike(true,Damage,false,token);
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;
@@ -802,10 +810,7 @@ public:
 
     }
     void Skill() override{
-        (*m_dealtDamageDecrease) = 0.5;
-        std::shared_ptr<DamageDecrease> token = std::make_shared<DamageDecrease>(m_dealtDamageDecrease,3);
-        m_status->push_back(token);
-        LOG_DEBUG("FRanger Skill Trigger!!");
+
     }
 private:
     std::shared_ptr<float> m_dealtDamageDecrease;

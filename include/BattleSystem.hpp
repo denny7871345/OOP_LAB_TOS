@@ -34,7 +34,7 @@ public:
     void SetComboDisplay(bool visible);
     void NormalTeamGetDamage(int Damage);
     void SpecialTeamGetDamage(int Damage);
-    FuncPtr GetDamage = &BattleSystem::NormalTeamGetDamage;
+    std::shared_ptr<FuncPtr> GetDamage = std::make_shared<FuncPtr>(&BattleSystem::NormalTeamGetDamage) ;
 private:
 
     DragingDatas GetDragDatas();
@@ -66,5 +66,7 @@ private:
     float m_DraggingTime;
 
 };
+
+
 
 #endif

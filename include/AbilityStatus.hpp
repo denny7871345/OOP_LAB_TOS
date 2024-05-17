@@ -141,9 +141,9 @@ class NotDie: public LeaderSkill{
 public:
     NotDie(float persentage,MemberSettingData target);
     virtual void Skill() override;
-private:
     void SetGetDamage(void (BattleSystem::*funcPtr)(int));
-    void (BattleSystem::*GetDamage)(int) = nullptr;
+private:
+    std::shared_ptr<FuncPtr> GetDamage;
     float m_triggerLife;
 };
 

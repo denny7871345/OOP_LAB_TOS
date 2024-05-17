@@ -13,6 +13,7 @@ void BattleSystem::Start() {
     m_firstErase = std::make_shared<std::vector<int>>(vec3);
     m_DraggingTime = 5;
     m_status =  std::make_shared<std::vector<std::shared_ptr<AbilityStatus>>>();
+    //(GetDamage) = &BattleSystem::SpecialTeamGetDamage;
     //Enemy Setting
     auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,1000000,99999,100000,1);
     Enemytoken->SetPos(0,1);
@@ -247,7 +248,7 @@ void BattleSystem::DamageSettle() {
 
             for(int j=0;j<damage.size();j++){
                 LOG_DEBUG("U may dealt {} damages.",damage[j]);
-                (this->*GetDamage)(damage[j]);
+                (this->*(*GetDamage))(damage[j]);
                 LOG_DEBUG("U have {} life left.",(*m_life));
             }
             m_enemy[i]->AddCD(2);
@@ -320,7 +321,9 @@ MemberSettingData BattleSystem::CreateMemberData() {
     token.m_addCombo = m_addCombo;
     token.m_firstErase = m_firstErase;
     token.m_totalErase = m_totalErase;
-    token.GetDamage = GetDamage;
+    token.GetDamage = (GetDamage);
+    token.m_MaxLife = m_MaxLife;
+    token.m_life = m_life;
     return token;
 }
 
