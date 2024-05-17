@@ -29,6 +29,8 @@ void StoneTurn::Turn(Type::Element_type Lvalue, Type::Element_type Rvalue, bool 
 
 
 
+
+
 bool Skills::SkillsCheck(DragingDatas datas) {
     LOG_DEBUG("NothingHappens!!");
     return true;

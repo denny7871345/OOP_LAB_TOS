@@ -137,4 +137,14 @@ private:
     Type::Element_type m_Etype;
 };
 
+class NotDie: public LeaderSkill{
+public:
+    NotDie(float persentage,MemberSettingData target);
+    virtual void Skill() override;
+    void SetGetDamage(void (BattleSystem::*funcPtr)(int));
+private:
+    std::shared_ptr<FuncPtr> GetDamage;
+    float m_triggerLife;
+};
+
 #endif

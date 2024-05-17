@@ -19,6 +19,8 @@ Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD)
           "../assets/sprites/pet/ShutDown/Nomal_1/结束动画表情2_010_125.png",
           "../assets/sprites/pet/ShutDown/Nomal_1/结束动画表情2_011_125.png"
       }){
+
+
     SetZIndex(5);
     m_Animation->SetLooping(true);
     m_Animation->SetInterval(100);
@@ -71,8 +73,6 @@ void Enemy::DealtDamage(int Damage, bool Defence, DragingDatas datas) {
 void Enemy::RoundUp() {
     m_hasBeenHit = false;
     std::string token;
-    token = std::to_string(m_life * 100 / m_firstLife) + "%(" + std::to_string(m_CD) + ")";
-    m_text->SetText(token);
     SkillReset();
 }
 
@@ -107,6 +107,10 @@ void Enemy::Update() {
         glm::vec2(0.5, 0.5) };
     pos += deltaTransform.translation;
     this->Draw();
+
+    std::string token;
+    token = std::to_string(m_life * 100 / m_firstLife) + "%(" + std::to_string(m_CD) + ")";
+    m_text->SetText(token);
     m_text->Update(m_Transform);
 }
 
@@ -174,4 +178,10 @@ int Enemy::Conflict(Type::Element_type type, int Damage) {
     return flag * Damage;
 }
 
+void Enemy::DieNow() {
+    m_life = -99999999;
+}
 
+int Enemy::GetLifePercentage() {
+    return m_life * 100.0 / m_firstLife;
+}

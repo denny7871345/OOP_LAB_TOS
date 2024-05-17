@@ -2,6 +2,7 @@
 #include "Enemy.hpp"
 #include "Member.hpp"
 #include "Enchant.hpp"
+#include "BattleSystem.hpp"
 
 AbilityStatus::AbilityStatus(AbilityType type, int CountDown) {
     m_abilityType = type;
@@ -143,4 +144,19 @@ void Olympians::Skill() {
 void Olympians::SkillReset() {
     m_cum = 0;
     m_count = 0;
+}
+
+NotDie::NotDie(float persentage, MemberSettingData target) {
+    m_abilityType = AbilityType::Setting;
+    m_triggerLife = persentage;
+    GetDamage = target.GetDamage;
+}
+
+void NotDie::Skill() {
+    SetGetDamage(&BattleSystem::SpecialTeamGetDamage);
+}
+
+void NotDie::SetGetDamage(void (BattleSystem::*funcPtr)(int)) {
+    LOG_DEBUG("Not Die LeaderSkill Setting!!");
+    (*GetDamage) = funcPtr;
 }

@@ -25,9 +25,6 @@ void Enchant::Start() {
     m_state = state::Keeping;
     this->Draw();
 }
-
-
-
 void Enchant::Update() {
     m_battleSystem->Update();
     for (int i = 0; i < m_row; ++i) {
@@ -226,6 +223,9 @@ void Enchant::KeepingStateUpdate() {
     if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
         auto cursorPos = Util::Input::GetCursorPosition();
         LOG_DEBUG("[{},{}]",cursorPos.x,cursorPos.y);
+    }
+    if (Util::Input::IsKeyDown(Util::Keycode::Z)) {
+        m_battleSystem->CheatCodeOfKill();
     }
     if (Util::Input::IsKeyDown(Util::Keycode::M)) {
         SetDraggingTime(20);
