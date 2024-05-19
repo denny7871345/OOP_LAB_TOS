@@ -21,6 +21,7 @@ std::shared_ptr<Enemy> Battlefield::RandomEnemy() {
 void Wave::AddEnemy(std::shared_ptr<Enemy> target) {
     m_EnemyList.push_back(target);
 }
+
 //https://www.tosapp.tw/task-c-43.html
 sample::sample(): Battlefield(7) {
 

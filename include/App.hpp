@@ -5,6 +5,7 @@
 
 #include "Util/Root.hpp"
 #include "BackgroundImage.hpp"
+#include "Battlefield.hpp"
 #include "AnimatedCharacter.hpp"
 #include "Cat.hpp"
 #include "Giraffe.hpp"

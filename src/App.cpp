@@ -7,12 +7,16 @@
 
 #include "GiraffeText.hpp"
 
+
 void App::Start() {
     LOG_TRACE("Start");
     m_enchant->SetSystem(m_battleSystem);
     m_enchant->Start();
     m_battleSystem->SetEnchant(m_enchant);
     m_battleSystem->Start();
+
+    auto token = std::make_shared<sample>();
+
     /*m_Giraffe->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
     m_Giraffe->SetZIndex(10);
