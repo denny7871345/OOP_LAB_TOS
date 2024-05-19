@@ -32,9 +32,9 @@ public:
     void AddStatus(const std::shared_ptr<AbilityStatus>& target);
     void DieNow();
     int GetLifePercentage();
+    EnemyDatas MyData();
 private:
     void SkillReset();
-    EnemyDatas MyData();
     std::vector<std::shared_ptr<AbilityStatus>> m_status;
     std::shared_ptr<AttackSkill> m_attackSkill = std::make_shared<AttackSkill>();
     std::vector<std::shared_ptr<Skills>> m_SkillList;
@@ -52,6 +52,27 @@ private:
     std::shared_ptr<GiraffeText> m_text;
     glm::vec2 m_pos;
 };
+
+class EnemyLightGirl: public Enemy{
+public:
+    EnemyLightGirl();
+};
+
+class EnemyLightWerewolf: public Enemy{
+public:
+    EnemyLightWerewolf();
+};
+
+class EnemyLightSlime: public Enemy{
+public:
+    EnemyLightSlime();
+};
+
+class EnemyLightElf: public Enemy{
+public:
+    EnemyLightElf();
+};
+
 
 
 #endif

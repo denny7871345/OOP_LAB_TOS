@@ -81,7 +81,7 @@ void Enemy::SkillReset() {
 }
 
 EnemyDatas Enemy::MyData() {
-    EnemyDatas token{m_firstLife,m_life,m_attack,m_defence,m_CD,m_hasBeenHit};
+    EnemyDatas token{m_firstLife,m_life,m_attack,m_defence,m_CD,m_hasBeenHit,m_SkillList,m_attackSkill};
     return token;
 }
 
@@ -184,4 +184,21 @@ void Enemy::DieNow() {
 
 int Enemy::GetLifePercentage() {
     return m_life * 100.0 / m_firstLife;
+}
+
+EnemyLightGirl::EnemyLightGirl(): Enemy(Type::Element_type::Light,89000,2320,10,1){
+    auto AttackToken = std::make_shared<DoubleStrike>();
+    this->SetAttackingMethod(AttackToken);
+}
+
+EnemyLightWerewolf::EnemyLightWerewolf(): Enemy(Type::Element_type::Light,69000,4216,39,2) {
+
+}
+
+EnemyLightElf::EnemyLightElf(): Enemy(Type::Element_type::Light,100000,4603,500,1) {
+
+}
+
+EnemyLightSlime::EnemyLightSlime(): Enemy(Type::Element_type::Light,12,50000,80000,4){
+
 }

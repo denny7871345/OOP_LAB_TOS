@@ -72,6 +72,15 @@ public:
 private:
     float m_times=1;
 };
+
+class PercentageAttacking:public AttackSkill{
+public:
+    PercentageAttacking(float percentage);
+    std::vector<int> Attack(EnemyDatas enemyDatas,DragingDatas dragingDatas) override;
+private:
+    float m_percentage;
+};
+
 //敵技(反擊)
 class Counter{
 public:

@@ -113,6 +113,14 @@ std::vector<int> KeepFight::Attack(EnemyDatas enemyDatas,DragingDatas dragingDat
     return damages;
 }
 
+PercentageAttacking::PercentageAttacking(float percentage):m_percentage(percentage) {}
+
+std::vector<int> PercentageAttacking::Attack(EnemyDatas enemyDatas, DragingDatas dragingDatas) {
+    std::vector<int> damages;
+    damages.push_back((*dragingDatas.m_MaxLife) * m_percentage );
+    return  damages;
+}
+
 Counter::Counter(int percentage) {
     m_percentage = percentage;
 }

@@ -217,6 +217,7 @@ void BattleSystem::DamageSettle() {
     int totalHeal=0;
     StateTrigger(AbilityType::DamageSettle);
     DragingDatas token = GetDragDatas();
+
     for(int i=0;i < m_team.size() ;i++){
         totalHeal += m_team[i]->GetHeal() * m_StoneDamage[5] ;
         std::vector<float> &ElementAddition = *m_ElementAddition;
@@ -267,6 +268,7 @@ float BattleSystem::GetDraggingTime() {
 
 DragingDatas BattleSystem::GetDragDatas() {
     DragingDatas token;
+
     token.m_totalErase = m_totalErase;
     token.m_firstErase = m_firstErase;
     token.m_firstCombo = m_firstCombo;
@@ -274,6 +276,7 @@ DragingDatas BattleSystem::GetDragDatas() {
     token.m_eraseMoreThan5 = m_eraseMoreThan5;
     token.m_combo = m_combo;
     token.m_exCombo = m_exCombo;
+    token.m_MaxLife = m_MaxLife;
     return token;
 }
 

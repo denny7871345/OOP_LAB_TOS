@@ -14,12 +14,17 @@ private:
     std::vector<std::shared_ptr<Enemy>> m_EnemyList;
 };
 
+using EnemyFactory = std::function<std::shared_ptr<Enemy>()>;
+
 class Battlefield{
 public:
-    Battlefield();
-
+    Battlefield(int waves);
+    void addEnemyFactory(const EnemyFactory& factory);
+    std::shared_ptr<Enemy> RandomEnemy();
 protected:
     std::vector<std::shared_ptr<Wave>> m_waves;
+    std::vector<EnemyFactory> m_EnemyFactories;
+    int m_total;
 };
 
 class sample : public Battlefield{
