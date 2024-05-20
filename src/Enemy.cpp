@@ -28,7 +28,7 @@ Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD)
     m_firstLife = m_life;
     m_FirstAttack = m_attack;
     m_FirstCD = m_CD;
-
+    m_Transform.scale = {0.2,0.2};
     m_FirstDefence = m_defence;
     m_firstType = m_type;
     m_FirstCD = m_CD;
@@ -39,6 +39,7 @@ Enemy::Enemy(Type::Element_type type, int life, int attack, int defence, int CD)
     std::string token;
     token = std::to_string(m_life * 100 / m_firstLife) + "%(" + std::to_string(m_FirstCD) + ")";
     m_text->SetText(token);
+
 }
 
 void Enemy::DealtDamage(int Damage, bool Defence, DragingDatas datas) {
@@ -95,17 +96,7 @@ void Enemy::SetAttackingMethod(std::shared_ptr<AttackSkill> target) {
 }
 
 void Enemy::Update() {
-    static glm::vec2 dir = {0, 0};
-    auto &pos = m_Transform.translation;
-    auto x_pos = WINDOW_WIDTH / (m_pos.y) ;
-    m_Transform.translation = { -225 + x_pos * (0.5 + m_pos.x) ,200};
-    //m_Transform.scale = { 1.0 / m_pos.y, 1.0 / m_pos.y};
-    m_Transform.scale = {0.2,0.2};
-    auto delta = static_cast<float>(Util::Time::GetDeltaTime());
-    Util::Transform deltaTransform{
-        dir * delta * 100.0F, 2 * delta,
-        glm::vec2(0.5, 0.5) };
-    pos += deltaTransform.translation;
+
     this->Draw();
 
     std::string token;
@@ -116,6 +107,9 @@ void Enemy::Update() {
 
 void Enemy::SetPos(int x, int y) {
     m_pos = {x,y};
+    auto &pos = m_Transform.translation;
+    auto x_pos = WINDOW_WIDTH / (m_pos.y) ;
+    m_Transform.translation = { -225 + x_pos * (0.5 + m_pos.x) ,180};
 }
 
 void Enemy::SetDef(float value) {
@@ -187,18 +181,51 @@ int Enemy::GetLifePercentage() {
 }
 
 EnemyLightGirl::EnemyLightGirl(): Enemy(Type::Element_type::Light,89000,2320,10,1){
+    std::vector<std::string> list = {"../assets/sprites/Characters/93n.png",
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    SetDrawable(m_Animation);
+    m_Animation->Pause();
     auto AttackToken = std::make_shared<DoubleStrike>();
     this->SetAttackingMethod(AttackToken);
 }
 
 EnemyLightWerewolf::EnemyLightWerewolf(): Enemy(Type::Element_type::Light,69000,4216,39,2) {
-
+    std::vector<std::string> list = {"../assets/sprites/Characters/113n.png",
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
 }
 
 EnemyLightElf::EnemyLightElf(): Enemy(Type::Element_type::Light,100000,4603,500,1) {
-
+    std::vector<std::string> list = {"../assets/sprites/Characters/73n.png",
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
 }
 
 EnemyLightSlime::EnemyLightSlime(): Enemy(Type::Element_type::Light,12,50000,80000,4){
+    std::vector<std::string> list = {"../assets/sprites/Characters/103n.png",
+        "../assets/sprites/Characters/1.png",
+        "../assets/sprites/Characters/2.png",
+        "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
+}
 
+void Enemy::SetYpos(float y) {
+    m_Transform.translation.y = y;
 }

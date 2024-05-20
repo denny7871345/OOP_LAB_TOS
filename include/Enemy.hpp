@@ -33,6 +33,7 @@ public:
     void DieNow();
     int GetLifePercentage();
     EnemyDatas MyData();
+    void SetYpos(float y);
 private:
     void SkillReset();
     std::vector<std::shared_ptr<AbilityStatus>> m_status;

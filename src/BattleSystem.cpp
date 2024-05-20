@@ -1,4 +1,6 @@
 #include "BattleSystem.hpp"
+
+#include <utility>
 #include "Enchant.hpp"
 #include "Enemy.hpp"
 void BattleSystem::Start() {
@@ -15,20 +17,7 @@ void BattleSystem::Start() {
     m_status =  std::make_shared<std::vector<std::shared_ptr<AbilityStatus>>>();
     //(GetDamage) = &BattleSystem::SpecialTeamGetDamage;
     //Enemy Setting
-    auto Enemytoken = std::make_shared<Enemy>(Type::Element_type::Light,1000000,99999,100000,1);
-    Enemytoken->SetPos(0,3);
-    auto Enemytoken2 = std::make_shared<Enemy>(Type::Element_type::Grass,100000,2300,10,2);
-    Enemytoken2->SetPos(1,3);
-    auto Enemytoken3 = std::make_shared<Enemy>(Type::Element_type::Water,200000,2300,10,2);
-    Enemytoken3->SetPos(2,3);
-    /*auto ShieldToken1 = std::make_shared<FirstComboShield>(6);
-    Enemytoken->AddSkill(ShieldToken1);*/
-    /*auto Attacking = std::make_shared<DoubleStrike>();
-    Enemytoken->SetAttackingMethod(Attacking); */
-    m_enemy.push_back(Enemytoken);
-    m_enemy.push_back(Enemytoken2);
-    m_enemy.push_back(Enemytoken3);
-
+    //LoadWave(0);
     //member Setting
     auto Membertoken = CreateMemberData();
     std::shared_ptr<Athana> token1 = std::make_shared<Athana>(Membertoken);
@@ -52,7 +41,6 @@ void BattleSystem::Start() {
 
     for(int i=0;i < m_team.size();i++){
         (*m_MaxLife) += m_team[i]->GetLife();
-        m_team[i]->SetEnemy(m_enemy);
     }
     (*m_life) = (*m_MaxLife);
     m_audioSystem.Start();
@@ -281,19 +269,30 @@ DragingDatas BattleSystem::GetDragDatas() {
 }
 
 void BattleSystem::Update() {
-    for(int i=0;i<m_enemy.size();i++){
-        if(m_enemy[i] != nullptr){
-            m_enemy[i]->Update();
-            if(m_enemy[i]->IfAnimationEnds()){
-                m_enemy.erase(m_enemy.begin() + i);
-                continue;
-            }
-            if(m_enemy[i]->GetLife() <= 0){
-                m_enemy[i]->SetPlaying(true);
-                continue;
+
+    if(m_enemy.size() == 0){
+        if(m_nowWave == m_battlefield->Size()){
+            LOG_DEBUG("You Pass!!!");
+        }else{
+            LoadWave(m_nowWave);
+            m_nowWave++;
+        }
+
+    }else{
+        for(int i=0;i<m_enemy.size();i++){
+            if(m_enemy[i] != nullptr){
+                m_enemy[i]->Update();
+
+                if(m_enemy[i]->IfAnimationEnds()){
+                    m_enemy.erase(m_enemy.begin() + i);
+                }
+                if(m_enemy[i]->GetLife() <= 0){
+                    m_enemy[i]->SetPlaying(true);
+                }
             }
         }
     }
+
     glm::vec2 lifePosition = {135,45};
     m_LifeDisplay->Update(lifePosition);
     lifePosition = {135,-250};
@@ -371,4 +370,17 @@ void BattleSystem::CheatCodeOfKill() {
     for(int i=0;i<m_enemy.size();i++){
         m_enemy[i]->DieNow();
     }
+}
+
+void BattleSystem::LoadBattlefield(std::shared_ptr<Battlefield> target) {
+    m_battlefield = target;
+}
+
+void BattleSystem::LoadWave(int num) {
+    for(int i=0;i< m_battlefield->GetWave(num)->Size();i++){
+        m_enemy.push_back(m_battlefield->GetWave(num)->GetEnemy(i));
+        m_enemy[i]->SetVisible(true);
+    }
+    for(int i=0;i< m_team.size();i++) m_team[i]->SetEnemy(m_enemy);
+    LOG_DEBUG("Now Load the {} Wave",m_nowWave+1);
 }

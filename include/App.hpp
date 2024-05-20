@@ -11,6 +11,7 @@
 #include "Giraffe.hpp"
 #include "GiraffeText.hpp"
 #include "Enchant.hpp"
+
 class App {
 public:
     enum class State {
@@ -32,7 +33,9 @@ private:
     std::shared_ptr<Giraffe> m_Giraffe = std::make_shared<Giraffe>();
     //    std::shared_ptr<GiraffeText> m_GiraffeText =
     //    std::make_shared<GiraffeText>();
+
     std::shared_ptr<BackgroundImage> m_BG = std::make_shared<BackgroundImage>();
+    std::shared_ptr<BattlefieldIMG> m_BG2 = std::make_shared<BattlefieldIMG>();
     Util::Root m_Root;
 };
 

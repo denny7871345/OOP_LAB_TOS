@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <memory>
 
 #include "Util/Animation.hpp"
 #include "Util/GameObject.hpp"
@@ -34,6 +35,11 @@ public:
         }
     }
     [[nodiscard]] bool IfAnimationEnds() const;
+
+    void SetAnimation(std::shared_ptr<Util::Animation> target){
+        m_Animation = target;
+        SetDrawable(m_Animation);
+    }
 
 protected:
     std::shared_ptr<Util::Animation> m_Animation;

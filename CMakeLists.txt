@@ -57,7 +57,7 @@ set(SRC_FILES
     ${SRC_DIR}/Stone.cpp
         ${SRC_DIR}/Enemy.cpp
     ${SRC_DIR}/StoneSystem.cpp
-
+        ${SRC_DIR}/Battlefield.cpp
         ${SRC_DIR}/AudioSystem.cpp
         ${SRC_DIR}/BattleSystem.cpp
     ${SRC_DIR}/Enchant.cpp
@@ -103,6 +103,7 @@ set(INCLUDE_FILES
         ${INCLUDE_DIR}/Skills.hpp
         ${INCLUDE_DIR}/Enemy.hpp
         ${INCLUDE_DIR}/AbilityStatus.hpp
+        ${INCLUDE_DIR}/Battlefield.hpp
     ${INCLUDE_DIR}/BattleSystem.hpp
     ${INCLUDE_DIR}/Enchant.hpp
         ${INCLUDE_DIR}/Datas.hpp

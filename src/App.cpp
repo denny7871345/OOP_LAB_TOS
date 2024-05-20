@@ -13,10 +13,9 @@ void App::Start() {
     m_enchant->SetSystem(m_battleSystem);
     m_enchant->Start();
     m_battleSystem->SetEnchant(m_enchant);
+    std::shared_ptr<sample> token = std::make_shared<sample>();
+    m_battleSystem->LoadBattlefield(token);
     m_battleSystem->Start();
-
-    auto token = std::make_shared<sample>();
-
     /*m_Giraffe->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
     m_Giraffe->SetZIndex(10);
@@ -24,6 +23,7 @@ void App::Start() {
 
     m_BG->SetZIndex(-50);
     m_Root.AddChild(m_BG);
+    m_Root.AddChild(m_BG2);
     //m_Root.AddChild(m_stone);
     m_CurrentState = State::UPDATE;
 }

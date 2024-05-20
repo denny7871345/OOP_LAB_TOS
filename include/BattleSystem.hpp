@@ -35,9 +35,12 @@ public:
     void SetComboDisplay(bool visible);
     void NormalTeamGetDamage(int Damage);
     void SpecialTeamGetDamage(int Damage);
+    void LoadBattlefield(std::shared_ptr<Battlefield> target);
+    void LoadWave(int num);
     std::shared_ptr<FuncPtr> GetDamage = std::make_shared<FuncPtr>(&BattleSystem::NormalTeamGetDamage) ;
 private:
-
+    std::shared_ptr<Battlefield> m_battlefield = nullptr;
+    int m_nowWave = 0;
     DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;

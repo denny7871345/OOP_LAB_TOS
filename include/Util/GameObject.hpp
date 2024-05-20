@@ -61,14 +61,14 @@ public:
      * @return The z-index of the game object.
      */
     float GetZIndex() const { return m_ZIndex; }
-
+    void SetScale(float x){ m_Transform.scale = {x,x}; }
     /**
      * @brief Get the transform of the game object.
      *
      * @return The transform of the game object.
      */
     Transform GetTransform() const { return m_Transform; }
-
+    void SetTranslation(float x, float y);
     /**
      * @brief Get the size of its drawable component.
      *
@@ -111,7 +111,7 @@ public:
      * @param visible The new visibility of the game object.
      */
     void SetVisible(const bool visible) { m_Visible = visible; }
-
+    bool GetVisible() { return m_Visible;}
     /**
      * @brief Add a child to the game object.
      *
