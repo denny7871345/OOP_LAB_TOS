@@ -216,7 +216,7 @@ EnemyLightElf::EnemyLightElf(): Enemy(Type::Element_type::Light,100000,4603,500,
 }
 
 EnemyLightSlime::EnemyLightSlime(): Enemy(Type::Element_type::Light,12,50000,80000,4){
-    std::vector<std::string> list = {"../assets/sprites/Characters/103n.png",
+    std::vector<std::string> list = {"../assets/sprites/Characters/332n.png",
         "../assets/sprites/Characters/1.png",
         "../assets/sprites/Characters/2.png",
         "../assets/sprites/Characters/3.png"};

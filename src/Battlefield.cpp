@@ -99,6 +99,7 @@ sample::sample(): Battlefield(7) {
             "../assets/sprites/Characters/1.png",
             "../assets/sprites/Characters/2.png",
             "../assets/sprites/Characters/3.png"};
+
     token  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
     token->Pause();
     Boss->SetScale(0.8);
