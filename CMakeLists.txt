@@ -117,6 +117,7 @@ set(TEST_FILES
         src/stone.cpp
         src/AbilityStatus.cpp
         include/Battlefield.hpp
+        include/SelectTeammate.hpp
 
 )
 
@@ -124,6 +125,7 @@ add_executable(Sample
     ${SRC_FILES}
     ${SRC_DIR}/main.cpp
         src/Battlefield.cpp
+        src/SelectTeammate.cpp
 )
 target_link_libraries(Sample
     SDL2::SDL2main # IDK what happens if we don't link SDL2main
