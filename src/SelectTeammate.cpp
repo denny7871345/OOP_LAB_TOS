@@ -1,8 +1,6 @@
 //
 // Created by fungp on 2024/5/24.
 //
-#ifndef SELECTTEAMMATE_HPP
-#define SELECTTEAMMATE_HPP
 
 #include "iostream"
 #include "memory"
@@ -15,7 +13,7 @@ std::vector<std::shared_ptr<Member>> Team::GetTeam() {
     return m_MemberList;
 }
 
-void Team::LoadMemberFile() {
+void Team::LoadMemberFile(MemberSettingData target) {
     m_Data = target;
 }
 
