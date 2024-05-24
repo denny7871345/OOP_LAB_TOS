@@ -13,7 +13,7 @@ void App::Start() {
     m_enchant->SetSystem(m_battleSystem);
     m_enchant->Start();
     m_battleSystem->SetEnchant(m_enchant);
-    std::shared_ptr<sample> token = std::make_shared<sample>();
+    std::shared_ptr<alpha> token = std::make_shared<alpha>();
     m_battleSystem->LoadBattlefield(token);
     m_battleSystem->Start();
     /*m_Giraffe->SetDrawable(

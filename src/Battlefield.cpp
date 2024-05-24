@@ -115,3 +115,36 @@ sample::sample(): Battlefield(7) {
 std::shared_ptr<Wave> Battlefield::GetWave(int num) {
     return m_waves[num];
 }
+alpha::alpha() : Battlefield(7){
+    this->addEnemyFactory([]() { return std::make_shared<EnemyFireGirl>(); });
+    this->addEnemyFactory([]() { return std::make_shared<EnemyWaterLizard>(); });
+    this->addEnemyFactory([]() { return std::make_shared<EnemyWaterFairy>(); });
+    this->addEnemyFactory([]() { return std::make_shared<EnemyWaterGnome>(); });
+
+    //setting Random Enemy
+    for (int i = 0; i < 5; ++i) {
+
+        for(int j=0;j<3;j++){
+            std::shared_ptr<Enemy> enemy = RandomEnemy();
+            enemy->SetPos(j,3);
+            m_waves[i]->AddEnemy(enemy);
+        }
+    }
+    auto Boss = std::make_shared<Enemy>(Type::Element_type::Water,90000,6584,40,3);
+    auto AttackingToken1 = std::make_shared<PercentageAttacking>(0.5);
+    Boss->SetAttackingMethod(AttackingToken1);
+    Boss->SetPos(0,1);
+
+    std::vector<std::string> list = {"../assets/sprites/Characters/133n.png",
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    auto token  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    token  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    token->Pause();
+    Boss->SetScale(0.8);
+    Boss->SetYpos(250);
+    Boss->SetAnimation(token);
+
+    m_waves[6]->AddEnemy(Boss);
+}

@@ -74,6 +74,24 @@ public:
     EnemyLightElf();
 };
 
-
-
+class EnemyWaterGnome: public Enemy{
+public:
+    EnemyWaterGnome();
+};
+class EnemyWaterFairy: public Enemy{
+public:
+    EnemyWaterFairy();
+};
+class EnemyWaterLizard: public Enemy{
+public:
+    EnemyWaterLizard();
+};
+class EnemyWaterChineseBeast: public Enemy{
+public:
+    EnemyWaterChineseBeast();
+};
+class EnemyFireGirl: public Enemy{
+public:
+    EnemyFireGirl();
+};
 #endif

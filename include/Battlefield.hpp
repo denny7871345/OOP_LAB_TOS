@@ -38,4 +38,8 @@ class sample : public Battlefield{
 public:
     sample();
 };
+class alpha : public Battlefield{
+public:
+    alpha();
+};
 #endif // BATTLEFIELD_HPP

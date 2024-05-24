@@ -226,6 +226,56 @@ EnemyLightSlime::EnemyLightSlime(): Enemy(Type::Element_type::Light,12,50000,800
     SetDrawable(m_Animation);
 }
 
+EnemyWaterGnome::EnemyWaterGnome() : Enemy(Type::Element_type::Water,9567,2068,30,3){
+    std::vector<std::string> list = {"../assets/sprites/Characters/107n.png",//not Gnome img
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
+}
+EnemyWaterFairy::EnemyWaterFairy() : Enemy(Type::Element_type::Water,25943,966,61,2){
+    std::vector<std::string> list = {"../assets/sprites/Characters/67n.png",//not Gnome img
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
+}
+EnemyWaterLizard::EnemyWaterLizard() : Enemy(Type::Element_type::Water,14509,2996,20,4){
+    std::vector<std::string> list = {"../assets/sprites/Characters/67n.png",//not Gnome img
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
+}
+EnemyWaterChineseBeast::EnemyWaterChineseBeast() : Enemy(Type::Element_type::Water,88572,3893,141,3){
+    std::vector<std::string> list = {"../assets/sprites/Characters/23n.png",
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
+}
+EnemyFireGirl::EnemyFireGirl() : Enemy(Type::Element_type::Fire,163761,808,10,1){
+    std::vector<std::string> list = {"../assets/sprites/Characters/89n.png",
+                                     "../assets/sprites/Characters/1.png",
+                                     "../assets/sprites/Characters/2.png",
+                                     "../assets/sprites/Characters/3.png"};
+    m_Animation  = std::make_shared<Util::Animation>(list, false, 200, false, 0);
+    m_Transform.scale = {0.8,0.8};
+    m_Animation->Pause();
+    SetDrawable(m_Animation);
+}
 void Enemy::SetYpos(float y) {
     m_Transform.translation.y = y;
 }
