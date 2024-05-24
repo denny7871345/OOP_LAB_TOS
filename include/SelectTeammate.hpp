@@ -1,14 +1,15 @@
 //
 // Created by fungp on 2024/5/24.
 //
+#ifndef SELECTEAMMATE_HPP
+#define SELECTEAMMATE_HPP
 #include "iostream"
 #include "memory"
 #include "vector"
 #include <functional>
 #include "Member.hpp"
 #include "Datas.hpp"
-#ifndef SELECTTEAMMATE_HPP
-#define SELECTTEAMMATE_HPP
+
 
 
 class Team{

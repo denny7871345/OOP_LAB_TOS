@@ -1,6 +1,9 @@
 //
 // Created by fungp on 2024/5/24.
 //
+#ifndef SELECTTEAMMATE_HPP
+#define SELECTTEAMMATE_HPP
+
 #include "iostream"
 #include "memory"
 #include "vector"
@@ -12,8 +15,10 @@ std::vector<std::shared_ptr<Member>> Team::GetTeam() {
     return m_MemberList;
 }
 
+void Team::LoadMemberFile() {
+    m_Data = target;
+}
 
-
-//NorthTeam::NorthTeam() {
+NorthTeam::NorthTeam() {
     //std::shared_ptr<Member> Loki = std::make_shared<Loki>();
-//}
+}
