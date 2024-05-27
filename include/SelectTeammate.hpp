@@ -17,7 +17,6 @@ public:
 
     std::vector<std::shared_ptr<Member>>  GetTeam();
     int Size();
-    void LoadMemberFile(MemberSettingData target);
 protected:
     std::vector<std::shared_ptr<Member>> m_MemberList;
     MemberSettingData m_Data;
@@ -25,6 +24,23 @@ protected:
 
 class NorthTeam : public Team{
 public:
-    NorthTeam();
+    NorthTeam(MemberSettingData target);
 };
+
+class OlympianTeam : public Team{
+public:
+    OlympianTeam(MemberSettingData target);
+};
+
+class BeastTeam: public Team{
+public:
+    BeastTeam(MemberSettingData target);
+};
+
+class LoDaTeam: public Team{
+public:
+    LoDaTeam(MemberSettingData target);
+};
+
+
 #endif // SELECTTEAMMATE_HPP

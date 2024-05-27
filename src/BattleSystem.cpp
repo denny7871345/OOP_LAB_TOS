@@ -3,7 +3,8 @@
 #include <utility>
 #include "Enchant.hpp"
 #include "Enemy.hpp"
-void BattleSystem::Start() {
+
+BattleSystem::BattleSystem() {
     std::vector<float> vec = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
     m_FirstElementAddition = std::make_shared<std::vector<float>>(vec);
     m_ElementAddition = std::make_shared<std::vector<float>>(vec);
@@ -15,10 +16,15 @@ void BattleSystem::Start() {
     m_firstErase = std::make_shared<std::vector<int>>(vec3);
     m_DraggingTime = 5;
     m_status =  std::make_shared<std::vector<std::shared_ptr<AbilityStatus>>>();
-    //(GetDamage) = &BattleSystem::SpecialTeamGetDamage;
+
+}
+
+void BattleSystem::Start() {
     //Enemy Setting
     //LoadWave(0);
     //member Setting
+
+    /*
     auto Membertoken = CreateMemberData();
     std::shared_ptr<Athana> token1 = std::make_shared<Athana>(Membertoken);
     m_team.push_back(token1);
@@ -31,7 +37,7 @@ void BattleSystem::Start() {
     std::shared_ptr<GDefentDragon> token5 = std::make_shared<GDefentDragon>(Membertoken);
     m_team.push_back(token5);
     std::shared_ptr<Athana> token6 = std::make_shared<Athana>(Membertoken);
-    m_team.push_back(token6);
+    m_team.push_back(token6);*/
 
     // Leader Skill Setting
     auto LeaderToken = m_team[0]->GetLeaderSkill();
@@ -374,6 +380,7 @@ void BattleSystem::CheatCodeOfKill() {
 
 void BattleSystem::LoadBattlefield(std::shared_ptr<Battlefield> target) {
     m_battlefield = target;
+    LoadWave(0);
 }
 
 void BattleSystem::LoadWave(int num) {
@@ -383,4 +390,8 @@ void BattleSystem::LoadWave(int num) {
     }
     for(int i=0;i< m_team.size();i++) m_team[i]->SetEnemy(m_enemy);
     LOG_DEBUG("Now Load the {} Wave",m_nowWave+1);
+}
+
+void BattleSystem::LoadTeam(std::shared_ptr<Team> target) {
+    m_team = target->GetTeam();
 }

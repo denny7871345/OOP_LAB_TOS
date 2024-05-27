@@ -33,6 +33,7 @@ std::shared_ptr<Enemy> Battlefield::RandomEnemy() {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(0, m_EnemyFactories.size() - 1);
     int randomIndex = dis(gen);
+    LOG_DEBUG("create enemy from index {}",randomIndex);
     return m_EnemyFactories[randomIndex]();
 }
 
@@ -105,9 +106,6 @@ sample::sample(): Battlefield(7) {
     Boss->SetScale(0.8);
     Boss->SetYpos(250);
     Boss->SetAnimation(token);
-
-
-
     m_waves[6]->AddEnemy(Boss);
 
 }
@@ -116,6 +114,8 @@ std::shared_ptr<Wave> Battlefield::GetWave(int num) {
     return m_waves[num];
 }
 alpha::alpha() : Battlefield(7){
+
+    //Setting the monster may appear in this Battlefield
     this->addEnemyFactory([]() { return std::make_shared<EnemyFireGirl>(); });
     this->addEnemyFactory([]() { return std::make_shared<EnemyWaterLizard>(); });
     this->addEnemyFactory([]() { return std::make_shared<EnemyWaterFairy>(); });
