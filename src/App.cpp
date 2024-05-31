@@ -21,6 +21,7 @@ void App::Start() {
     m_Giraffe->SetZIndex(10);
     m_Giraffe->Start();*/
 
+
     m_BG->SetZIndex(-50);
     m_Root.AddChild(m_BG);
     m_Root.AddChild(m_BG2);
@@ -57,6 +58,9 @@ void App::Update() {
    // m_Giraffe->Update();
     m_enchant->Update();
     m_Root.Update();
+    m_test->Update();
+    m_test1->Update();
+    m_test2->Update();
 }
 
 void App::End() { // NOLINT(this method will mutate members in the future)

@@ -11,6 +11,7 @@
 #include "Giraffe.hpp"
 #include "GiraffeText.hpp"
 #include "Enchant.hpp"
+#include "UI.hpp"
 
 class App {
 public:
@@ -37,6 +38,10 @@ private:
     std::shared_ptr<BackgroundImage> m_BG = std::make_shared<BackgroundImage>();
     std::shared_ptr<BattlefieldIMG> m_BG2 = std::make_shared<BattlefieldIMG>();
     Util::Root m_Root;
+    std::shared_ptr<UI> m_UI = std::make_shared<UI>();
+    std::shared_ptr<Choice> m_test = std::make_shared<Choice>("../assets/sprites/Characters/107n.png",1,1);
+    std::shared_ptr<Choice> m_test1 = std::make_shared<Choice>("../assets/sprites/Characters/107n.png",2,1);
+    std::shared_ptr<Choice> m_test2 = std::make_shared<Choice>("../assets/sprites/Characters/107n.png",3,1);
 };
 
 #endif

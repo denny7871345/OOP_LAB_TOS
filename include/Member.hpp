@@ -682,7 +682,7 @@ public:
         m_LeaderSkill.push_back(token);
           };
     void Skill() override{
-        TheWorld(20);
+        //TheWorld(20);
     }
 };
 //Olympians
