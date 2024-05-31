@@ -27,7 +27,10 @@ void StoneTurn::Turn(Type::Element_type Lvalue, Type::Element_type Rvalue, bool 
     m_Enchant->StoneTurn(Lvalue,Rvalue,0,powerup);
 }
 
-
+void Dio::TheWorld(int seconds) {
+    m_Enchant->SetDraggingTime(20);
+    m_Enchant->SetState(Enchant::state::Unlimited);
+}
 
 
 

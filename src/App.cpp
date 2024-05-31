@@ -4,7 +4,7 @@
 #include "Util/Input.hpp"
 #include "Util/Keycode.hpp"
 #include "Util/Logger.hpp"
-
+#include "SelectTeammate.hpp"
 #include "GiraffeText.hpp"
 
 
@@ -13,7 +13,9 @@ void App::Start() {
     m_enchant->SetSystem(m_battleSystem);
     m_enchant->Start();
     m_battleSystem->SetEnchant(m_enchant);
-    std::shared_ptr<alpha> token = std::make_shared<alpha>();
+    std::shared_ptr<NorthTeam> Teamtoken = std::make_shared<NorthTeam>(m_battleSystem->CreateMemberData());
+    m_battleSystem->LoadTeam(Teamtoken);
+    std::shared_ptr<sample> token = std::make_shared<sample>();
     m_battleSystem->LoadBattlefield(token);
     m_battleSystem->Start();
     /*m_Giraffe->SetDrawable(
@@ -62,6 +64,7 @@ void App::Update() {
     m_test1->Update();
     m_test2->Update();
 }
+
 
 void App::End() { // NOLINT(this method will mutate members in the future)
     LOG_TRACE("End");

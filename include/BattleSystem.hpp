@@ -7,11 +7,13 @@
 #include "AudioSystem.hpp"
 #include "AbilityStatus.hpp"
 #include "Battlefield.hpp"
+#include "SelectTeammate.hpp"
 
 class Enchant;
 
 class BattleSystem {
 public:
+    BattleSystem();
     typedef void (BattleSystem::*FuncPtr)(int);
     MemberSettingData CreateMemberData();
     void Update();
@@ -37,6 +39,7 @@ public:
     void SpecialTeamGetDamage(int Damage);
     void LoadBattlefield(std::shared_ptr<Battlefield> target);
     void LoadWave(int num);
+    void LoadTeam(std::shared_ptr<Team> target);
     std::shared_ptr<FuncPtr> GetDamage = std::make_shared<FuncPtr>(&BattleSystem::NormalTeamGetDamage) ;
 private:
     std::shared_ptr<Battlefield> m_battlefield = nullptr;
