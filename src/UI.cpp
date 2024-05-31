@@ -41,6 +41,7 @@ void UI::Start() {
     m_test1 = std::make_shared<Choice>("../assets/sprites/Levels/Sample.png",2);
     m_levels.push_back(m_test);
     m_levels.push_back(m_test1);
+    LOG_DEBUG("Choose the Battlefield.");
 }
 
 void UI::Update() {
@@ -79,10 +80,14 @@ void UI::Update() {
             if(m_state == State::Level){
                 if(m_LevelIndex != -1){
                     NextPage();
+                }else{
+                    LOG_DEBUG("Please select your battlefield!!!!");
                 }
             }else if(m_state == State::Team){
                 if(m_TeamIndex != -1){
                     NextPage();
+                }else{
+                    LOG_DEBUG("Please select your team!!!!");
                 }
             }
         }
@@ -92,6 +97,7 @@ void UI::Update() {
 void UI::NextPage() {
     if(m_state == State::Level){
         m_state = State::Team;
+        LOG_DEBUG("Good,Then choose your Team");
     }else if(m_state == State::Team){
         for(int i=0;i<2;i++){
             m_levels[i]->SetVisible(false);

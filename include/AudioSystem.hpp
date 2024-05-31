@@ -10,6 +10,7 @@ public:
     void SetBGM(std::string path);
     void PlayComboSound(int num);
     void PlaySound(std::string path);
+    void PlayVictory();
 private:
     Util::BGM m_bgm = Util::BGM("../assets/audio/BATTLE_DUNGEON.wav");
 

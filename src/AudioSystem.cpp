@@ -68,3 +68,10 @@ void AudioSystem::Start() {
 void AudioSystem::SetBGM(std::string path) {
     m_bgm.LoadMedia(path);
 }
+
+void AudioSystem::PlayVictory() {
+    m_bgm.FadeOut(1500);
+    static auto SFX1 = Util::SFX("../assets/audio/victory.wav");
+    SFX1.SetVolume(60);
+    SFX1.Play();
+}
