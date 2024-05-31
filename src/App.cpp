@@ -9,26 +9,32 @@
 
 
 void App::Start() {
-    LOG_TRACE("Start");
+    m_UI->Start();
     m_enchant->SetSystem(m_battleSystem);
-    m_enchant->Start();
     m_battleSystem->SetEnchant(m_enchant);
-    std::shared_ptr<NorthTeam> Teamtoken = std::make_shared<NorthTeam>(m_battleSystem->CreateMemberData());
-    m_battleSystem->LoadTeam(Teamtoken);
-    std::shared_ptr<sample> token = std::make_shared<sample>();
-    m_battleSystem->LoadBattlefield(token);
-    m_battleSystem->Start();
     /*m_Giraffe->SetDrawable(
         std::make_shared<Util::Image>("../assets/sprites/giraffe.png"));
     m_Giraffe->SetZIndex(10);
     m_Giraffe->Start();*/
 
+    m_CurrentState = State::GameSetting;
 
-    m_BG->SetZIndex(-50);
-    m_Root.AddChild(m_BG);
-    m_Root.AddChild(m_BG2);
-    //m_Root.AddChild(m_stone);
-    m_CurrentState = State::UPDATE;
+    addLevelFactory([]() { return std::make_shared<alpha>(); });
+    addLevelFactory([]() { return std::make_shared<sample>(); });
+
+    MemberSettingData token = m_battleSystem->CreateMemberData();
+    addTeamFactory([](MemberSettingData data) { return std::make_shared<NorthTeam>(data); });
+    addTeamFactory([](MemberSettingData data) { return std::make_shared<LoDaTeam>(data); });
+    addTeamFactory([](MemberSettingData data) { return std::make_shared<NorthTeam>(data); });
+    addTeamFactory([](MemberSettingData data) { return std::make_shared<OlympianTeam>(data); });
+
+}
+
+void App::Setting() {
+    m_UI->Update();
+    if(m_UI->Complete()){
+        m_CurrentState = State::START;
+    }
 }
 
 void App::Update() {
@@ -46,12 +52,10 @@ void App::Update() {
     /*if (Util::Input::IsMouseMoving()) {
         //LOG_DEBUG("Mouse moving! x:{}, y{}", cursorPos.x, cursorPos.y);
     }*/
-
     if (Util::Input::IsKeyUp(Util::Keycode::ESCAPE) ||
         Util::Input::IfExit()) {
         m_CurrentState = State::END;
     }
-
     /*if (Util::Input::IsKeyPressed(Util::Keycode::B)) {
         LOG_DEBUG("B Pressed. Setting the cursor to (0, 0).");
         Util::Input::SetCursorPosition({0.0F, 0.0F});
@@ -60,12 +64,41 @@ void App::Update() {
    // m_Giraffe->Update();
     m_enchant->Update();
     m_Root.Update();
-    m_test->Update();
-    m_test1->Update();
-    m_test2->Update();
+    m_UI->Update();
 }
 
 
 void App::End() { // NOLINT(this method will mutate members in the future)
     LOG_TRACE("End");
+}
+
+void App::Selecting() {
+
+    m_enchant->Start();
+    std::shared_ptr<Team> Teamtoken = SelectedTeam(m_UI->GetTeam());
+    m_battleSystem->LoadTeam(Teamtoken);
+    std::shared_ptr<Battlefield> token = SelectedLevel(m_UI->GetLevel());
+    m_battleSystem->LoadBattlefield(token);
+    m_battleSystem->Start();
+    m_BG->SetZIndex(-50);
+    m_Root.AddChild(m_BG);
+    m_Root.AddChild(m_BG2);
+    //m_Root.AddChild(m_stone);
+    m_CurrentState = State::UPDATE;
+}
+
+void App::addTeamFactory(const TeamFactory &factory) {
+    m_TeamFactories.push_back(factory);
+}
+
+std::shared_ptr<Team> App::SelectedTeam(int index){
+    return m_TeamFactories[index](m_battleSystem->CreateMemberData());
+}
+
+void App::addLevelFactory(const LevelFactory &factory) {
+    m_LevelFactories.push_back(factory);
+}
+
+std::shared_ptr<Battlefield> App::SelectedLevel(int index) {
+    return m_LevelFactories[index]();
 }

@@ -278,6 +278,8 @@ void BattleSystem::Update() {
 
     if(m_enemy.size() == 0){
         if(m_nowWave == m_battlefield->Size()){
+            static auto SFX1 = Util::SFX("../assets/audio/victory.wav");
+            SFX1.Play();
             LOG_DEBUG("You Pass!!!");
         }else{
             LoadWave(m_nowWave);

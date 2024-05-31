@@ -6,15 +6,27 @@
 int main(int, char **) {
     auto context = Core::Context::GetInstance();
     App app;
-    auto bgm = Util::BGM("../assets/audio/MAIN_THEME_NIGHT_OLD.wav");
+    app.Start();
+    Util::BGM bgm = Util::BGM("../assets/audio/BATTLE_DUNGEON.wav");
+    static auto start = Util::SFX("../assets/audio/gameStart.wav");
+    bgm.LoadMedia("../assets/audio/MAIN_THEME_NIGHT_OLD.wav");
+    //"../assets/audio/MAIN_THEME_NIGHT_OLD.wav"
+    bgm.Play();
     while (!context->GetExit()) {
         switch (app.GetCurrentState()) {
+        case App::State::GameSetting:
+            app.Setting();
+
+            break;
         case App::State::START:
-            app.Start();
-            bgm.Play();
+            bgm.FadeOut(3000);
+            app.Selecting();
+            start.Play();
             break;
 
         case App::State::UPDATE:
+
+
             app.Update();
             break;
 

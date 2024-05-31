@@ -13,16 +13,27 @@
 #include "Enchant.hpp"
 #include "UI.hpp"
 
+using TeamFactory = std::function<std::shared_ptr<Team>(MemberSettingData)>;
+
+using LevelFactory = std::function<std::shared_ptr<Battlefield>()>;
+
 class App {
 public:
     enum class State {
         START,
+        GameSetting,
         UPDATE,
         END,
     };
 
-    [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
+    void addTeamFactory(const TeamFactory &factory);
+    std::shared_ptr<Team> SelectedTeam(int index);
+    void addLevelFactory(const LevelFactory &factory);
+    std::shared_ptr<Battlefield> SelectedLevel(int index);
 
+    [[nodiscard]] State GetCurrentState() const { return m_CurrentState; }
+    void Setting();
+    void Selecting();
     void Start();
     void Update();
     void End(); // NOLINT(readability-convert-member-functions-to-static)
@@ -39,9 +50,9 @@ private:
     std::shared_ptr<BattlefieldIMG> m_BG2 = std::make_shared<BattlefieldIMG>();
     Util::Root m_Root;
     std::shared_ptr<UI> m_UI = std::make_shared<UI>();
-    std::shared_ptr<Choice> m_test = std::make_shared<Choice>("../assets/sprites/Characters/107n.png",1,1);
-    std::shared_ptr<Choice> m_test1 = std::make_shared<Choice>("../assets/sprites/Characters/107n.png",2,1);
-    std::shared_ptr<Choice> m_test2 = std::make_shared<Choice>("../assets/sprites/Characters/107n.png",3,1);
+    std::vector<TeamFactory> m_TeamFactories;
+    std::vector<LevelFactory > m_LevelFactories;
+
 };
 
 #endif

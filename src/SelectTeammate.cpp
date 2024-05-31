@@ -53,7 +53,7 @@ BeastTeam::BeastTeam(MemberSettingData target) {
     m_MemberList.push_back(token);
     token = std::make_shared<GrassBeast>(m_Data);
     m_MemberList.push_back(token);
-    token = std::make_shared<WaterBeast>(m_Data);
+    token = std::make_shared<Baphomet>(m_Data);
     m_MemberList.push_back(token);
     token = std::make_shared<LightBeast>(m_Data);
     m_MemberList.push_back(token);
