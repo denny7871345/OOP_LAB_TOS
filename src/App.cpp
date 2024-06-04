@@ -9,6 +9,9 @@
 
 
 void App::Start() {
+    m_GiraffeText->Start();
+    m_GiraffeText->SetZIndex(20);
+    m_GiraffeText->SetText("Press E to click");
     m_UI->Start();
     m_enchant->SetSystem(m_battleSystem);
     m_battleSystem->SetEnchant(m_enchant);
@@ -31,6 +34,7 @@ void App::Start() {
 }
 
 void App::Setting() {
+    m_GiraffeText->Update({0,375});
     m_UI->Update();
     if(m_UI->Complete()){
         m_CurrentState = State::START;
@@ -64,7 +68,7 @@ void App::Update() {
    // m_Giraffe->Update();
     m_enchant->Update();
     m_Root.Update();
-    m_UI->Update();
+    m_GiraffeText->Update();
 }
 
 
@@ -84,6 +88,7 @@ void App::Selecting() {
     m_Root.AddChild(m_BG);
     m_Root.AddChild(m_BG2);
     //m_Root.AddChild(m_stone);
+    m_GiraffeText->SetText("Press E to click \nPress Keyboard T to P to trigger Members' Skill");
     m_CurrentState = State::UPDATE;
 }
 

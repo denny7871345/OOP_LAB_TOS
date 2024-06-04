@@ -254,6 +254,7 @@ void BattleSystem::DamageSettle() {
         //LOG_DEBUG("Enemy has {} life left. And CD = {}",m_enemy[i]->GetLife(),m_enemy[i]->GetCD());
     }
 
+
 }
 
 float BattleSystem::GetDraggingTime() {
@@ -276,10 +277,31 @@ DragingDatas BattleSystem::GetDragDatas() {
 
 void BattleSystem::Update() {
 
+
+    if( (*m_life) <= 0){
+        if(m_playonce){
+            m_audioSystem.PlayLoss();
+            m_playonce = false;
+            LOG_DEBUG("You Loss...... \n Press Esc to exit \n Or Press space to Get one More Chance");
+        }
+
+        if (Util::Input::IsKeyDown(Util::Keycode::SPACE)) {
+            m_audioSystem.BackToGame();
+            (*m_life) = (*m_MaxLife);
+            m_playonce = true;
+        }
+
+        return;
+    }
+
     if(m_enemy.size() == 0){
         if(m_nowWave == m_battlefield->Size()){
-            m_audioSystem.PlayVictory();
-
+            if(m_playonce){
+                m_audioSystem.PlayVictory();
+                m_playonce = false;
+                LOG_DEBUG("You Win!!!!!\n Press Esc to exit");
+            }
+            return;
         }else{
             LoadWave(m_nowWave);
             m_nowWave++;
@@ -291,6 +313,9 @@ void BattleSystem::Update() {
                 m_enemy[i]->Update();
 
                 if(m_enemy[i]->IfAnimationEnds()){
+                    static auto SFX1 = Util::SFX("../assets/audio/monsterDie.wav");
+                    SFX1.SetVolume(60);
+                    SFX1.Play();
                     m_enemy.erase(m_enemy.begin() + i);
                 }
                 if(m_enemy[i]->GetLife() <= 0){

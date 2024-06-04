@@ -43,7 +43,7 @@ public:
     std::shared_ptr<FuncPtr> GetDamage = std::make_shared<FuncPtr>(&BattleSystem::NormalTeamGetDamage) ;
 private:
     std::shared_ptr<Battlefield> m_battlefield = nullptr;
-    int m_nowWave = 0;
+    int m_nowWave = 1;
     DragingDatas GetDragDatas();
     std::vector<std::shared_ptr<Enemy>> m_enemy;
     AudioSystem m_audioSystem;
@@ -72,7 +72,7 @@ private:
     std::shared_ptr<float> m_addCombo = std::make_shared<float>(0.25);
     float m_ComboAddition;
     float m_DraggingTime;
-
+    bool m_playonce = true;
 };
 
 

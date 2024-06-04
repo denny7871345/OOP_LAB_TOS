@@ -63,12 +63,20 @@ void UI::Update() {
             if(m_state == State::Level){
                 for(int i=0;i<2;i++) {
                     if (m_levels[i]->IsClicked()) {
+                        static auto SFX1 = Util::SFX("../assets/audio/MENUOPTION_CLICK.wav");
+                        SFX1.SetVolume(60);
+                        SFX1.Play();
+
                         m_LevelIndex = i;
                     }
                 }
             }else if(m_state == State::Team){
                 for(int i=0;i<4;i++) {
                     if (m_Teams[i]->IsClicked()) {
+                        static auto SFX1 = Util::SFX("../assets/audio/MENUOPTION_CLICK.wav");
+                        SFX1.SetVolume(60);
+                        SFX1.Play();
+
                         m_TeamIndex = i;
                     }
                 }
@@ -79,14 +87,28 @@ void UI::Update() {
         if(m_button->IsClicked()){
             if(m_state == State::Level){
                 if(m_LevelIndex != -1){
+                    static auto SFX1 = Util::SFX("../assets/audio/MENUOPTION_CLICK.wav");
+                    SFX1.SetVolume(60);
+                    SFX1.Play();
+
                     NextPage();
                 }else{
+                    static auto SFX1 = Util::SFX("../assets/audio/MENUITEM_BLOCK.wav");
+                    SFX1.SetVolume(60);
+                    SFX1.Play();
                     LOG_DEBUG("Please select your battlefield!!!!");
                 }
             }else if(m_state == State::Team){
                 if(m_TeamIndex != -1){
+                    static auto SFX1 = Util::SFX("../assets/audio/MENUOPTION_CLICK.wav");
+                    SFX1.SetVolume(60);
+                    SFX1.Play();
+
                     NextPage();
                 }else{
+                    static auto SFX1 = Util::SFX("../assets/audio/MENUITEM_BLOCK.wav");
+                    SFX1.SetVolume(60);
+                    SFX1.Play();
                     LOG_DEBUG("Please select your team!!!!");
                 }
             }
@@ -110,6 +132,7 @@ void UI::NextPage() {
         m_done = true;
         LOG_DEBUG("you chose {} Level and {} Team",m_LevelIndex+1, m_TeamIndex+1);
     }
+
 }
 
 bool UI::Complete() {

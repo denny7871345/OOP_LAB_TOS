@@ -75,3 +75,16 @@ void AudioSystem::PlayVictory() {
     SFX1.SetVolume(60);
     SFX1.Play();
 }
+
+void AudioSystem::PlayLoss() {
+    m_bgm.FadeOut(1500);
+    static auto SFX1 = Util::SFX("../assets/audio/gameOver.wav");
+    SFX1.SetVolume(60);
+    SFX1.Play();
+}
+
+void AudioSystem::BackToGame() {
+    m_bgm.FadeIn(500);
+    static auto SFX1 = Util::SFX("../assets/audio/CultistSpawn.wav");
+    SFX1.Play();
+}
